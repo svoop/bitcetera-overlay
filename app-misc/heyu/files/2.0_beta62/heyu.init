@@ -1,0 +1,20 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+start() {
+	ebegin "Starting heyu"
+	heyu stop
+	sleep 1
+	killall heyu 2>/dev/null
+	sleep 1
+	start-stop-daemon --start --quiet --exec /usr/bin/heyu -- engine
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping irserver"
+	start-stop-daemon --stop --quiet --exec /usr/bin/heyu
+	eend $?
+}

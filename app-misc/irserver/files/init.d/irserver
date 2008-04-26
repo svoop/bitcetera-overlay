@@ -1,0 +1,34 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+        before vdr
+}
+
+start() {
+	ebegin "Starting irserver"
+	start-stop-daemon --start --quiet --exec /usr/bin/irserver -- -daemon ${IRSERVER_OPTS}
+	eend $?
+	if [ -e "/usr/bin/irexec" ]; then
+		if [ -e "/etc/lircrc" ]; then
+			ebegin "Starting irexec"
+			start-stop-daemon --start --quiet --exec /usr/bin/irexec -- -d
+			eend $?
+		fi
+	fi
+}
+
+stop() {
+	ebegin "Stopping irserver"
+	start-stop-daemon --stop --quiet --exec /usr/bin/irserver
+	eend $?
+	if [ -e "/usr/bin/irexec" ]; then
+		if [ -e "/etc/lircrc" ]; then
+			ebegin "Stopping irexec"
+			start-stop-daemon --stop --quiet --oknodo --exec /usr/bin/irexec
+			eend $?
+		fi
+	fi
+}

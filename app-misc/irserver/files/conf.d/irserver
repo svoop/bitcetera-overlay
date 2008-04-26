@@ -1,0 +1,3 @@
+
+# Options to pass to the irserver process
+IRSERVER_OPTS="-no_web -logfile /var/log/irserver.log /dev/ttyUSB0"
