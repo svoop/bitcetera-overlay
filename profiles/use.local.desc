@@ -7,4 +7,18 @@
 
 # Keep it sorted.
 
-app-misc/irserver:ccf - Support loading codes used in .ccf files for the Philips Pronto(tm) into the IRTrans database
+app-misc/irserver:ccf - Support loading codes used in .ccf files for the Philips Pronto(tm) into the IRTrans database.
+
+net-misc/callweaver:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
+net-misc/callweaver:misdn - Support the new ISDN stack of Linux 2.6 kernels.
+net-misc/callweaver:postgres - Support PostgreSQL as the database backend.
+net-misc/callweaver:speex - Support the Speex codecs.
+net-misc/callweaver:t38 - Support T.38 fax over IP.
+net-misc/callweaver:zap - Support Zaptel POTS hardware from Digium.
+
+net-misc/callweaver-svn:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
+net-misc/callweaver-svn:misdn - Support the new ISDN stack of Linux 2.6 kernels.
+net-misc/callweaver-svn:postgres - Support PostgreSQL as the database backend.
+net-misc/callweaver-svn:speex - Support the Speex codecs.
+net-misc/callweaver-svn:t38 - Support T.38 fax over IP.
+net-misc/callweaver-svn:zap - Support Zaptel POTS hardware from Digium.

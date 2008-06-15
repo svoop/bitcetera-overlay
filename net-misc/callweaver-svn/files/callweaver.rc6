@@ -1,0 +1,235 @@
+#!/sbin/runscript
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+opts="${opts} forcestop reload"
+
+depend() {
+	need net
+	use zaptel mysql postgresql slapd capi
+}
+
+is_running() {
+	if [[ -z "$(pidof callweaver)" ]]; then
+		return 1
+	else
+		PID="$(cat /var/run/callweaver/callweaver.pid)"
+		for x in $(pidof callweaver); do
+			if [[ "${x}" = "${PID}" ]]; then
+				return 0
+			fi	
+		done
+	fi
+
+	return 1
+}
+
+callweaver_run_loop() {
+	local OPTS ARGS MSG NICE=""
+	local result=0 signal=0
+
+	# default options
+	OPTS="-f"  # don't fork / detach breaks wrapper script...
+
+	# filter (redundant) arguments
+	ARGS="$(echo "${@}" | sed -e "s:-c\|-f::g")"
+
+	# mangle yes/no options
+	CALLWEAVER_CONSOLE="$(echo ${CALLWEAVER_CONSOLE} | tr [:lower:] [:upper:])"
+
+	if [[ -n "${CALLWEAVER_CORE_SIZE}" ]] &&
+	   [[ "${CALLWEAVER_CORE_SIZE}" != "0" ]]; then
+		ulimit -c ${CALLWEAVER_CORE_SIZE}
+
+		if [[ -n "${CALLWEAVER_CORE_DIR}" ]] && \
+		   [[ ! -d "${CALLWEAVER_CORE_DIR}" ]]
+		then
+			mkdir -m750 -p "${CALLWEAVER_CORE_DIR}"
+
+			if [[ -n "${CALLWEAVER_USER}" ]]; then
+				chown -R "${CALLWEAVER_USER}" "${CALLWEAVER_CORE_DIR}"
+			fi
+		fi
+		CALLWEAVER_CORE_DIR="${CALLWEAVER_CORE_DIR:-/tmp}"
+
+		cd "${CALLWEAVER_CORE_DIR}"
+		echo "   Core dump size            : ${CALLWEAVER_CORE_SIZE}"
+		echo "   Core dump location        : ${CALLWEAVER_CORE_DIR}"
+	fi
+
+	if [[ -n "${CALLWEAVER_MAX_FD}" ]]; then
+		ulimit -n ${CALLWEAVER_MAX_FD}
+		echo "   Max open filedescriptors  : ${CALLWEAVER_MAX_FD}"
+	fi
+
+	if [[ -n "${CALLWEAVER_NICE}" ]]; then
+		echo "   Nice level                : ${CALLWEAVER_NICE}"
+		NICE="/bin/nice -n ${CALLWEAVER_NICE} --"
+	fi
+
+	if [[ -n "${CALLWEAVER_NOTIFY_EMAIL}" ]]; then
+		if [[ -x /usr/sbin/sendmail ]]; then
+			echo "   Email notifications go to : ${CALLWEAVER_NOTIFY_EMAIL}"
+		else
+			echo "   Notifications disabled, /usr/sbin/sendmail doesn't exist or is not executable!"
+			unset CALLWEAVER_NOTIFY_EMAIL
+		fi
+	fi
+
+	if [[ -n "${CALLWEAVER_TTY}" ]]; then
+		for x in ${CALLWEAVER_TTY} \
+			 /dev/tty${CALLWEAVER_TTY} \
+			 /dev/vc/${CALLWEAVER_TTY}
+		do
+			if [[ -c "${x}" ]]; then
+				TTY="${x}"
+			fi
+		done
+		[[ -n "${TTY}" ]] && \
+			echo "   Messages are sent to      : ${TTY}"
+	fi
+
+	if [[ "${CALLWEAVER_CONSOLE}" = "YES" ]] && [[ -n "${TTY}" ]]; then
+		echo "   Starting CallWeaver console : ${CALLWEAVER_CONSOLE}"
+		OPTS="${OPTS} -c"
+	fi
+
+	OPTS="${OPTS} ${ARGS}"
+
+	while :; do
+
+		if [[ -n "${TTY}" ]]; then
+			/usr/bin/stty -F ${TTY} sane
+			${NICE} /usr/sbin/callweaver ${OPTS} >${TTY} 2>&1 <${TTY}
+			result=$?
+		else
+			${NICE} /usr/sbin/callweaver ${OPTS} &>/dev/null
+			result=$?
+		fi		
+
+		if [[ $result -eq 0 ]]; then
+			echo "CallWeaver terminated normally"
+			break
+		else
+			if [[ $result -gt 128 ]]; then
+				signal=$((result -  128))
+				MSG="CallWeaver terminated with Signal: $signal"
+
+				CORE_TARGET="core-$(date "+%Y%m%d-%h%M%s")"
+
+				local CORE_DUMPED=0
+				if [[ -f "${CALLWEAVER_CORE_DIR}/core" ]]; then
+					mv "${CALLWEAVER_CORE_DIR}/core" \
+					   "${CALLWEAVER_CORE_DIR}/${CORE_TARGET}"
+					CORE_DUMPED=1
+
+				elif [[ -f "${CALLWEAVER_CORE_DIR}/core.${PID}" ]]; then
+					mv "${CALLWEAVER_CORE_DIR}/core.${PID}" \
+					   "${CALLWEAVER_CORE_DIR}/${CORE_TARGET}"
+					CORE_DUMPED=1
+
+				fi
+
+				[[ $CORE_DUMPED -eq 1 ]] && \
+					MSG="${MSG}\n\rCore dumped: ${CALLWEAVER_CORE_DIR}/${CORE_TARGET}"
+			else
+				MSG="CallWeaver terminated with return code: $result"
+			fi
+
+			# kill left-over tasks
+			for X in ${CALLWEAVER_CLEANUP_ON_CRASH}; do
+				kill -9 $(pidof ${X});
+			done
+		fi
+
+		[[ -n "${TTY}" ]] \
+			&& echo "${MSG}" >${TTY} \
+			|| echo "${MSG}"
+
+
+		if [[ -n "${CALLWEAVER_NOTIFY_EMAIL}" ]] && \
+		   [[ -x /usr/sbin/sendmail ]]; then
+			echo -e -n "Subject: CallWeaver crashed\n\r${MSG}\n\r" |\
+				 /usr/sbin/sendmail "${CALLWEAVER_NOTIFY_EMAIL}"
+		fi
+		sleep 5
+		echo "Restarting CallWeaver..."
+	done
+	return 0
+}
+
+start() {
+	local OPTS USER GROUP PID
+	local tmp x
+
+	if [[ -n "${CALLWEAVER_NICE}" ]]; then
+		if [[ ${CALLWEAVER_NICE} -ge -20 ]] && \
+		   [[ ${CALLWEAVER_NICE} -le  19 ]]; then 
+			OPTS="--nicelevel ${CALLWEAVER_NICE}"
+		else
+			eerror "Nice value must be between -20 and 19"
+			return 1
+		fi
+	fi
+
+	if [[ -n "${CALLWEAVER_USER}" ]]; then
+		USER=${CALLWEAVER_USER/:*/}
+		GROUP=$(echo $CALLWEAVER_USER | awk -F: '/.*:.*/ { print $2 }')
+		if [[ -n "${USER}" ]]; then
+			CALLWEAVER_OPTS="${CALLWEAVER_OPTS} -U ${USER}"
+		fi
+		if [[ -n "${GROUP}" ]]; then
+			CALLWEAVER_OPTS="${CALLWEAVER_OPTS} -G ${GROUP}"
+			GROUP=":${GROUP}"	# make it look nice...
+		fi
+		ebegin "Starting CallWeaver (as ${USER}${GROUP})"
+	else
+		ebegin "Starting CallWeaver (as root)"
+	fi
+
+	if [[ "$(echo ${CALLWEAVER_WRAPPER} | tr [:upper:] [:lower:])" != "yes" ]]; then
+		start-stop-daemon --start --exec /usr/sbin/callweaver \
+			${OPTS} -- ${CALLWEAVER_OPTS}
+	else
+		callweaver_run_loop ${CALLWEAVER_OPTS} 2>/dev/null &
+	fi
+
+	if [[ $result -eq 0 ]]; then
+		# 2 seconds should be enough for callweaver to start
+		sleep 2
+
+		result=$(is_running)
+	fi
+
+	eend $result
+}
+
+forcestop() {
+	ebegin "Stopping CallWeaver"
+	start-stop-daemon --stop --pidfile /var/run/callweaver/callweaver.pid
+	eend $?
+}
+
+stop() {
+
+	if is_running; then
+		ebegin "Stopping CallWeaver gracefully"
+		/usr/sbin/callweaver -r -x "stop gracefully" &>/dev/null
+		[[ $? -eq 0 ]] && svc_stop
+		eend
+	else
+
+		eerror "CallWeaver is not running!"
+	fi
+}
+
+reload() {
+	if is_running; then
+		ebegin "Forcing CallWeaver to reload configuration"
+		/usr/sbin/callweaver -r -x "reload" &>/dev/null
+		eend $?
+	else
+		eerror "CallWeaver is not running!"
+	fi
+}

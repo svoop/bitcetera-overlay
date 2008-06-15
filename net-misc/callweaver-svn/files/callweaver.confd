@@ -1,0 +1,98 @@
+# Copyright 1999-2004 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+#
+# Additional options for callweaver
+#
+# see "callweaver -h" for a list of options
+#
+CALLWEAVER_OPTS=""
+
+#
+# User and group to run callweaver as
+#
+# Value: double-colon separated list of user and group, or empty to run as root:
+#
+#
+# "callweaver:callweaver" to run as user "callweaver" and group "callweaver"
+#
+#         "callweaver" to run as user "callweaver" and default group of user callweaver
+#
+#        ":callweaver" to run as user "root" and group "callweaver"
+#
+#                "" to run as user "root" and group "root"
+#
+CALLWEAVER_USER="callweaver:callweaver"
+
+#
+# Nicelevel
+#
+# Set the priority of the callweaver process
+#
+# Value: (highest) -20..19 (lowest)
+#
+#CALLWEAVER_NICE="19"
+
+#
+# Wrapper script
+#
+# Value: yes or no/empty
+#
+CALLWEAVER_WRAPPER="yes"
+
+############# Wrapper script settings #############
+
+#
+# Send crash notifications emails to this address
+# (needs a working mail service and /usr/sbin/sendmail to do so (e.g. ssmtp))
+#
+# Value: Email address or empty to disable
+#
+CALLWEAVER_NOTIFY_EMAIL="your@email.here"
+
+#
+# Send callweaver's output to this terminal
+#
+# Value: Full path to device node or a number
+#
+#CALLWEAVER_TTY="/dev/tty9"
+
+#
+# Start an callweaver console on the terminal specified by CALLWEAVER_TTY
+#
+# Warning! Use only for debugging, this is a potential security issue!
+#
+# Value: yes or no/empty
+#
+CALLWEAVER_CONSOLE="no"
+
+#
+# Maximum size of core files. 
+#
+# Value: Size in bytes, unlimited for no limit or empty to disable.
+# 
+CALLWEAVER_CORE_SIZE="unlimited"
+
+#
+# CALLWEAVER_CORE_DIR
+#
+# Value: Directory (will be created if non-existant), default is /tmp
+#
+CALLWEAVER_CORE_DIR="/var/lib/callweaver/coredump"
+
+#
+# Max number of filedescriptors
+#
+# Value: Number of descriptors
+#
+#CALLWEAVER_MAX_FD="1024"
+
+#
+# Kill these tasks after callweaver crashed (CALLWEAVER_WRAPPER=yes only!)
+#
+# Warning! This will kill _ALL_ tasks with the specified names!
+#
+# Value: Space separated list of names in double quotes (e.g. "mpg123 mad")
+#
+#CALLWEAVER_CLEANUP_ON_CRASH="mpg123 mad"
