@@ -20,7 +20,6 @@ src_compile() {
 	./Configure										\
 		`if use kernel_FreeBSD; then echo "freebsd"; fi`				\
 		`if use kernel_linux; then echo "linux"; fi`					\
-		`if ! use kernel_FreeBSD -a ! use kernel_linux; then echo "generic"; fi`	\
 		`if ! use cm17a; then echo "-nocm17a"; fi`					\
 		`if ! use dmx; then echo "-nodmx"; fi`						\
 		`if ! use ext0; then echo "-noext0"; fi`					\
