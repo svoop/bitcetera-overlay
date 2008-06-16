@@ -20,20 +20,19 @@ DEPEND="virtual/libc"
 
 src_unpack() {
 	unpack ${A}
-	cp -r ${S} "${S}-original"
 	cd ${S}
-	sh ./Configure
+	mv x10config.sample x10.conf.sample
 }
 
 src_compile() {
-	X10CONFIG="${T}" heyu stop
-	econf \
-		`use_without cm17a nocm17a`		\
-		`use_without dmx nodmx`			\
-		`use_without ext0 noext0`		\
-		`use_without ore noore`			\
-		`use_without rfxm norfxm`		\
-		`use_without rfxs norfxs`		\
+	./Configure						\
+		linux						\
+		`if ! use cm17a; then echo "-nocm17a"; fi`	\
+		`if ! use dmx; then echo "-nodmx"; fi`		\
+		`if ! use ext0; then echo "-noext0"; fi`	\
+		`if ! use ore; then echo "-noore"; fi`		\
+		`if ! use rfxm; then echo "-norfxm"; fi`	\
+		`if ! use rfxs; then echo "-norfxs"; fi`	\
 		|| die "configure failed"
 	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" ${S}/Makefile
 	sed -i "s/CFLAGS\s*=.*/CFLAGS = ${CFLAGS} \$(DFLAGS)/" ${S}/Makefile
@@ -50,7 +49,7 @@ src_install() {
 	dodir /etc/heyu
 	insinto /etc/heyu
 	insopts -o root -g root -m 0644
-	doins x10.config.sample
+	doins x10.conf.sample
 	doins x10.sched.sample
 }
 
