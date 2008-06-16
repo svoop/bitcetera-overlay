@@ -11,20 +11,22 @@ SRC_URI="http://heyu.tanj.com/download/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="cm17a dmx ext0 ore rfxm rfxs"
+IUSE="kernel_FreeBSD kernel_linux cm17a dmx ext0 ore rfxm rfxs"
 
 RESTRICT="mirror"
 
 src_compile() {
 	mv x10config.sample x10.conf.sample
-	./Configure						\
-		linux						\
-		`if ! use cm17a; then echo "-nocm17a"; fi`	\
-		`if ! use dmx; then echo "-nodmx"; fi`		\
-		`if ! use ext0; then echo "-noext0"; fi`	\
-		`if ! use ore; then echo "-noore"; fi`		\
-		`if ! use rfxm; then echo "-norfxm"; fi`	\
-		`if ! use rfxs; then echo "-norfxs"; fi`	\
+	./Configure										\
+		`if use kernel_FreeBSD; then echo "freebsd"; fi`				\
+		`if use kernel_linux; then echo "linux"; fi`					\
+		`if ! use kernel_FreeBSD -a ! use kernel_linux; then echo "generic"; fi`	\
+		`if ! use cm17a; then echo "-nocm17a"; fi`					\
+		`if ! use dmx; then echo "-nodmx"; fi`						\
+		`if ! use ext0; then echo "-noext0"; fi`					\
+		`if ! use ore; then echo "-noore"; fi`						\
+		`if ! use rfxm; then echo "-norfxm"; fi`					\
+		`if ! use rfxs; then echo "-norfxs"; fi`					\
 		|| die "configure failed"
 	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" "${S}"/Makefile
 	sed -i "s/CFLAGS\s*=.*/CFLAGS = ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile
