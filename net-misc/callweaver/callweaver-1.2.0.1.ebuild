@@ -6,24 +6,20 @@ inherit eutils
 
 DESCRIPTION="CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project."
 HOMEPAGE="http://www.callweaver.org/"
-LICENSE="GPL-2"
-
 SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 
+LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
-
-# IUSE experimental, not tested appropriately!
-# IUSE="ael misdn postgres speex t38 zaptel exosip fax jabber mgr2 odbc"
-IUSE="ael misdn postgres speex t38 zaptel"
+KEYWORDS="~amd64 ~x86"
+IUSE="ael misdn postgres speex t38 zaptel"   # TODO: exosip fax jabber mgr2 odbc
 
 RDEPEND="!net-misc/callweaver-svn
-  >=media-libs/spandsp-0.0.5_pre3
-  >=sys-libs/libcap-1.10
-  misdn? ( =net-dialup/misdn-1.1.2 =net-dialup/misdnuser-1.1.2 )
-  speex? ( media-libs/speex )
-  postgres? ( dev-db/postgresql )
-  zaptel? ( net-misc/zaptel )"
+	>=media-libs/spandsp-0.0.5_pre3
+	>=sys-libs/libcap-1.10
+	misdn? ( =net-dialup/misdn-1.1.2 =net-dialup/misdnuser-1.1.2 )
+	speex? ( media-libs/speex )
+	postgres? ( dev-db/postgresql )
+	zaptel? ( net-misc/zaptel )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
@@ -33,7 +29,7 @@ DEPEND="${RDEPEND}
 	>=sys-devel/libtool-1.5.20"
 
 src_compile() {
-	ewarn "ALL IUSE ARE EXPERIMENTAL, NOT TESTED APPROPRIATELY!"
+	ewarn "All USE flags are experimental and have not been tested thoroughly!"
 	epause 5
 	econf \
 		--libdir=/usr/$(get_libdir)/callweaver	\
@@ -50,9 +46,11 @@ src_compile() {
 		`use_with t38 app_txfax`		\
 		`use_enable t38`			\
 		`use_with zaptel chan_zap`		\
+		`use_enable debug`			\
+		`use_enable profile`			\
 		|| die "configure failed"
 
-#		`use_with exosip chan_exosip`		\
+# TODO:		`use_with exosip chan_exosip`		\
 #		`use_with fax chan_fax`			\
 #		`use_with fax app_rxfax`		\
 #		`use_with fax app_txfax`		\
@@ -60,8 +58,6 @@ src_compile() {
 #		`use_with mgr2 chan_unicall`		\
 #		`use_with odbc res_odbc`		\
 #		`use_with odbc res_config_odbc`		\
-##		`use_enable debug`			\
-##		`use_enable profile`			\
 
 	emake || die "make failed"
 }
@@ -77,59 +73,53 @@ src_install() {
 	docinto samples
 	dodoc "${D}"etc/callweaver/*.sample
 
-	# remove dir
 	rm -rf ${D}var/lib/callweaver/doc
 
-	newinitd "${FILESDIR}"/callweaver.rc6	callweaver
+	newinitd "${FILESDIR}"/callweaver.rc6 callweaver
 	newconfd "${FILESDIR}"/callweaver.confd callweaver
 
-	# don't delete these
 	keepdir /var/{log,run,spool}/callweaver
 	keepdir /var/lib/callweaver/{images,keys}
 }
 
 pkg_preinst() {
 	if [[ -z "$(egetent passwd callweaver)" ]]; then
-		einfo "Creating callweaver group and user..."
+		elog "Creating callweaver group and user..."
 		enewgroup callweaver
 		enewuser callweaver -1 -1 /var/lib/callweaver callweaver
 	fi
 }
 
 pkg_postinst() {
-	# only change permissions if callweaver wasn't installed before
-	einfo "Fixing permissions..."
+	elog "Fixing permissions..."
 
-	chmod -R u=rwX,g=rX,o=	"${ROOT}"etc/callweaver
-	chown -R root:callweaver   "${ROOT}"etc/callweaver
+	chmod -R u=rwX,g=rX,o= "${ROOT}"etc/callweaver
+	chown -R root:callweaver "${ROOT}"etc/callweaver
 
 	for x in lib log run spool; do
-		chmod -R u=rwX,g=rX,o=	  "${ROOT}"var/${x}/callweaver
-		chown -R callweaver:callweaver	"${ROOT}"var/${x}/callweaver
+		chmod -R u=rwX,g=rX,o= "${ROOT}"var/${x}/callweaver
+		chown -R callweaver:callweaver "${ROOT}"var/${x}/callweaver
 	done
 	
-	chown -R root:callweaver   "${ROOT}"usr/lib/callweaver
+	chown -R root:callweaver "${ROOT}"usr/lib/callweaver
 }
 
 pkg_config() {
-	# TODO: ask user if he want to reset permissions back to sane defaults
-	einfo "Do you want to reset the permissions and ownerships of callweaver to"
-	einfo "the default values (y/N)?"
+	elog "Do you want to reset the permissions and ownerships of callweaver to"
+	elog "the default values (y/N)?"
 	read res
 
 	res="$(echo $res | tr [[:upper:]] [[:lower:]])"
 
-	if [[ "$res" = "y" ]] || \
-	   [[ "$res" = "yes" ]]
-	then
-		einfo "First time installation, fixing permissions..."
+	if [[ "$res" = "y" ]] || [[ "$res" = "yes" ]]; then
+		elog "First time installation, fixing permissions..."
 
-		chmod -R u=rwX,g=rX,o=	"${ROOT}"etc/callweaver
-		chown -R root:callweaver   "${ROOT}"etc/callweaver
+		chmod -R u=rwX,g=rX,o= "${ROOT}"etc/callweaver
+		chown -R root:callweaver "${ROOT}"etc/callweaver
 
 		for x in lib log run spool; do
-			chmod -R u=rwX,g=rX,o=	  "${ROOT}"var/${x}/callweaver
-			chown -R callweaver:callweaver	"${ROOT}"var/${x}/callweaver
+			chmod -R u=rwX,g=rX,o= "${ROOT}"var/${x}/callweaver
+			chown -R callweaver:callweaver "${ROOT}"var/${x}/callweaver
 		done
 	fi
 }
