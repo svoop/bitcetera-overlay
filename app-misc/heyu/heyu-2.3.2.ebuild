@@ -15,13 +15,8 @@ IUSE="cm17a dmx ext0 ore rfxm rfxs"
 
 RESTRICT="mirror"
 
-src_unpack() {
-	unpack ${A}
-	cd "${S}"
-	mv x10config.sample x10.conf.sample
-}
-
 src_compile() {
+	mv x10config.sample x10.conf.sample
 	./Configure						\
 		linux						\
 		`if ! use cm17a; then echo "-nocm17a"; fi`	\
