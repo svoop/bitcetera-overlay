@@ -1,4 +1,4 @@
-# Copyright 1999-2006 Gentoo Foundation
+# Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,8 +16,8 @@ LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
 
 # IUSE experimental, not tested appropriately!
-# IUSE="ael misdn postgres speex t38 zap exosip fax jabber mgr2 odbc"
-IUSE="ael misdn postgres speex t38 zap"
+# IUSE="ael misdn postgres speex t38 zaptel exosip fax jabber mgr2 odbc"
+IUSE="ael misdn postgres speex t38 zaptel"
 
 RDEPEND="!net-misc/callweaver-svn
 	>=media-libs/spandsp-0.0.4_pre15
@@ -25,7 +25,7 @@ RDEPEND="!net-misc/callweaver-svn
 	misdn? ( =net-dialup/misdn-1.1.2 =net-dialup/misdnuser-1.1.2 )
 	speex? ( media-libs/speex )
 	postgres? ( dev-db/postgresql )
-	zap? ( net-misc/zaptel )"
+	zaptel? ( net-misc/zaptel )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
@@ -57,7 +57,7 @@ src_compile() {
 		`use_with t38 app_rxfax`		\
 		`use_with t38 app_txfax`		\
 		`use_enable t38`			\
-		`use_with zap chan_zap`			\
+		`use_with zaptel chan_zap`		\
 		|| die "configure failed"
 
 #		`use_with exosip chan_exosip`		\

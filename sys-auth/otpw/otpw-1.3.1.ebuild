@@ -4,37 +4,24 @@
 
 inherit eutils
 
-DESCRIPTION="CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project."
-HOMEPAGE="http://www.callweaver.org/"
+DESCRIPTION="OTPW is a one-time password list generator and verifier including a wrapper suitable for PAM."
+HOMEPAGE="http://www.cl.cam.ac.uk/~mgk25/otpw.html"
 
-SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
+SRC_URI="http://www.cl.cam.ac.uk/~mgk25/download/otpw-snapshot.tar.gz"
 
 SLOT="0"
 LICENSE="GPL-2"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64"
 
-# IUSE experimental, not tested appropriately!
-# IUSE="ael misdn postgres speex t38 zaptel exosip fax jabber mgr2 odbc"
-IUSE="ael misdn postgres speex t38 zaptel"
+IUSE="pam pic"
 
-RDEPEND="!net-misc/callweaver-svn
-  >=media-libs/spandsp-0.0.5_pre3
-  >=sys-libs/libcap-1.10
-  misdn? ( =net-dialup/misdn-1.1.2 =net-dialup/misdnuser-1.1.2 )
-  speex? ( media-libs/speex )
-  postgres? ( dev-db/postgresql )
-  zaptel? ( net-misc/zaptel )"
+RDEPEND="pam? ( sys-libs/pam )"
 
-DEPEND="${RDEPEND}
-	sys-devel/flex
-	dev-util/subversion
-	>=sys-devel/automake-1.9.6
-	>=sys-devel/autoconf-2.59
-	>=sys-devel/libtool-1.5.20"
+DEPEND="${RDEPEND}"
 
 src_compile() {
-	ewarn "ALL IUSE ARE EXPERIMENTAL, NOT TESTED APPROPRIATELY!"
-	epause 5
+eerror "Under construction, not ready for use quite yet."
+die
 	econf \
 		--libdir=/usr/$(get_libdir)/callweaver	\
 		--datadir=/var/lib			\
@@ -49,19 +36,8 @@ src_compile() {
 		`use_with t38 app_rxfax`		\
 		`use_with t38 app_txfax`		\
 		`use_enable t38`			\
-		`use_with zaptel chan_zap`		\
+		`use_with zap chan_zap`			\
 		|| die "configure failed"
-
-#		`use_with exosip chan_exosip`		\
-#		`use_with fax chan_fax`			\
-#		`use_with fax app_rxfax`		\
-#		`use_with fax app_txfax`		\
-#		`use_with jabber res_jabber`		\
-#		`use_with mgr2 chan_unicall`		\
-#		`use_with odbc res_odbc`		\
-#		`use_with odbc res_config_odbc`		\
-##		`use_enable debug`			\
-##		`use_enable profile`			\
 
 	emake || die "make failed"
 }
