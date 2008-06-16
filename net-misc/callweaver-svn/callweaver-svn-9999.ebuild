@@ -6,13 +6,13 @@ inherit eutils subversion
 
 DESCRIPTION="CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project."
 HOMEPAGE="http://www.callweaver.org/"
+LICENSE="GPL-2"
 
 ESVN_REPO_URI="http://svn.callweaver.org/callweaver/branches/rel/1.2/"
 ESVN_BOOTSTRAP="./bootstrap.sh"
 S="${WORKDIR}/${PN}"
 
 SLOT="0"
-LICENSE="GPL-2"
 KEYWORDS="~x86 ~amd64"
 
 # IUSE experimental, not tested appropriately!

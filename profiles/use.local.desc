@@ -7,6 +7,13 @@
 
 # Keep it sorted.
 
+app-misc/heyu:cm17a - Support the X10 CM17A "Firecracker" device.
+app-misc/heyu:dmx - Support the Digimax 210 remote thermostat device.
+app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands.
+app-misc/heyu:ore - Support Oregon RF sensors.
+app-misc/heyu:rfxm - Support RFXMeters.
+app-misc/heyu:rfxs - Support RFXSensors.
+
 app-misc/irserver:ccf - Support loading codes used in .ccf files for the Philips Pronto(tm) into the IRTrans database.
 
 net-misc/callweaver:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
