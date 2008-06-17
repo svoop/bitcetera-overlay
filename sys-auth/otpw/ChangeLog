@@ -1,8 +1,0 @@
-# ChangeLog for otpw
-# Copyright 2002-2008 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
-
-*otpw-1.3.1.ebuild (16 Jun 2008)
-
-  16 Jun 2008; Sven Schwyn <gentoo@bitcetera.com> otpw-1.3.1.ebuild:
-  Initial ebuild 1.3.1 which is the post-1.3 snapshot.
