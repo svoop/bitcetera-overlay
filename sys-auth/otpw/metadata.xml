@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>app-misc</herd>
+  <herd>sys-auth</herd>
   <maintainer>
     <email>gentoo@bitcetera.com</email>
     <name>Sven Schwyn</name>
   </maintainer>
   <longdescription>
-    IR senders and receivers from IRTrans (www.irtrans.com) need this instead of the LIRC daemon.
+    OTPW is a one-time password list generator and verifier including a wrapper suitable for PAM.
   </longdescription>
 </pkgmetadata> 

@@ -7,6 +7,6 @@
     <name>Sven Schwyn</name>
   </maintainer>
   <longdescription>
-    IR senders and receivers from IRTrans (www.irtrans.com) need this instead of the LIRC daemon.
+    Utility to control and program CM11A, CM17A and CM12U X10 interfaces.
   </longdescription>
 </pkgmetadata> 

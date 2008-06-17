@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>app-misc</herd>
+  <herd>net-misc</herd>
   <maintainer>
     <email>gentoo@bitcetera.com</email>
     <name>Sven Schwyn</name>
   </maintainer>
   <longdescription>
-    IR senders and receivers from IRTrans (www.irtrans.com) need this instead of the LIRC daemon.
+    CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project.
   </longdescription>
 </pkgmetadata> 

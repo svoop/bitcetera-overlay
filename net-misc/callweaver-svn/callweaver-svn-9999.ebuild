@@ -18,7 +18,7 @@ IUSE="ael misdn postgres speex t38 zaptel"   # TODO: exosip fax jabber mgr2 odbc
 RDEPEND="!net-misc/callweaver-svn
 	>=media-libs/spandsp-0.0.4_pre15
 	>=sys-libs/libcap-1.10
-	misdn? ( =net-dialup/misdn-1.1.2 =net-dialup/misdnuser-1.1.2 )
+	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
 	postgres? ( dev-db/postgresql )
 	zaptel? ( net-misc/zaptel )"
@@ -75,7 +75,6 @@ src_install() {
 
 	dodoc README INSTALL AUTHORS COPYING NEWS BUGS
 	dodoc TODO_FOR_AUTOMAKE SECURITY CREDITS HARDWARE LICENSE
-
 	dodoc doc/README* doc/*.txt doc/*.pdf
 
 	docinto samples
@@ -108,7 +107,7 @@ pkg_postinst() {
 		chmod -R u=rwX,g=rX,o= "${ROOT}"var/${x}/callweaver
 		chown -R callweaver:callweaver "${ROOT}"var/${x}/callweaver
 	done
-	
+
 	chown -R root:callweaver "${ROOT}"usr/lib/callweaver
 }
 
