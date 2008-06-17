@@ -72,7 +72,7 @@ src_install() {
 	docinto samples
 	dodoc "${D}"etc/callweaver/*.sample
 
-	rm -rf ""${D}"var/lib/callweaver/doc
+	rm -rf "${D}"var/lib/callweaver/doc
 
 	newinitd "${FILESDIR}"/callweaver.rc6 callweaver
 	newconfd "${FILESDIR}"/callweaver.confd callweaver
