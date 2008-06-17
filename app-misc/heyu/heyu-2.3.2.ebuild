@@ -11,7 +11,7 @@ SRC_URI="http://heyu.tanj.com/download/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="kernel_FreeBSD kernel_linux cm17a dmx ext0 ore rfxm rfxs"
+IUSE="kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 
 RESTRICT="mirror"
 
@@ -21,7 +21,7 @@ src_compile() {
 		`if use kernel_FreeBSD; then echo "freebsd"; fi`	\
 		`if use kernel_linux; then echo "linux"; fi`		\
 		`if ! use cm17a; then echo "-nocm17a"; fi`		\
-		`if ! use dmx; then echo "-nodmx"; fi`			\
+		`if ! use dmx210; then echo "-nodmx"; fi`		\
 		`if ! use ext0; then echo "-noext0"; fi`		\
 		`if ! use ore; then echo "-noore"; fi`			\
 		`if ! use rfxm; then echo "-norfxm"; fi`		\
