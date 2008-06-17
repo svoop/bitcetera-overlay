@@ -33,7 +33,7 @@ src_compile() {
 }
 
 src_install() {
-	dobin heyu
+	dobin heyu || die "installing binary failed"
 	doman heyu.1 x10config.5 x10scripts.5 x10sched.5
 	newinitd "${FILESDIR}"/${PV}/heyu.init heyu
 	diropts -o nobody -g nogroup -m 0777
@@ -42,8 +42,8 @@ src_install() {
 	dodir /etc/heyu
 	insinto /etc/heyu
 	insopts -o root -g root -m 0644
-	doins x10.conf.sample
-	doins x10.sched.sample
+	doins x10.conf.sample || die "installing config sample failed"
+	doins x10.sched.sample || die "installing schedule sample failed"
 }
 
 pkg_postinst() {
