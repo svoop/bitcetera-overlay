@@ -16,13 +16,11 @@ IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 RESTRICT="mirror"
 
 src_compile() {
-echo "${CHOST}"
-die
 	mv x10config.sample x10.conf.sample
 	./Configure							\
 		$(if use kernel_FreeBSD; then echo "freebsd"; fi)	\
 		$(if use kernel_Darwin; then echo "darwin"; fi)		\
-		$(if use kernel_linux; then echo "linux"; fi)		\		
+		$(if use kernel_linux; then echo "linux"; fi)		\
 		$(if ! use cm17a; then echo "-nocm17a"; fi)		\
 		$(if ! use dmx210; then echo "-nodmx"; fi)		\
 		$(if ! use ext0; then echo "-noext0"; fi)		\
