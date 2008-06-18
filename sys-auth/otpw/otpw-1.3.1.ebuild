@@ -19,11 +19,13 @@ DEPEND="${RDEPEND}"
 
 S=${WORKDIR}/${PN}
 
-src_compile() {
+pkg_setup() {
 	if [ ! -c /dev/urandom ]; then
-		ewarn "/dev/urandom is missing, fix this before generating any password lists!"
-		epause 10
+		die "/dev/urandom is missing or faulty, fix this and try again!"
 	fi
+}
+
+src_compile() {
 	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" "${S}"/Makefile
 	sed -i "s/CFLAGS\s*=.*/CFLAGS = -fPIC ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile   # TODO: -fPIC should become obsolete in the next version
 	emake otpw-gen || die "emake otpw-gen failed"
