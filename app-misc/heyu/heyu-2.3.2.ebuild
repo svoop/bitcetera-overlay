@@ -35,7 +35,7 @@ src_compile() {
 src_install() {
 	dobin heyu || die "installing binary failed"
 	doman heyu.1 x10config.5 x10scripts.5 x10sched.5
-	newinitd "${FILESDIR}"/${PV}/heyu.init heyu
+	newinitd "${FILESDIR}"/${PVR}/heyu.init heyu
 	diropts -o nobody -g nogroup -m 0777
 	dodir /var/tmp/heyu
 	diropts -o root -g root -m 0744
@@ -67,8 +67,4 @@ pkg_postinst() {
 	elog "rc-update add heyu default"
 	elog
 	epause 5
-}
-
-pkg_prerm() {
-	killall heyu
 }

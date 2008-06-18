@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>app-misc</herd>
-  <maintainer>
-    <email>gentoo@bitcetera.com</email>
-    <name>Sven Schwyn</name>
-  </maintainer>
-  <longdescription>
-    IR senders and receivers from IRTrans (www.irtrans.com) need this instead of the LIRC daemon.
-  </longdescription>
+	<herd>maintainer-wanted</herd>
+	<maintainer>
+		<email>gentoo@bitcetera.com</email>
+		<name>Sven Schwyn</name>
+	</maintainer>
+	<longdescription lang="en">
+		IRServer is a fully compatible replacement for LIRC which supports IR modules from
+		IRTrans (www.irtrans.com). You need this if you wish to use IRTrans modules with
+		applications like VDR, MythTV and so on.
+	</longdescription>
 </pkgmetadata> 
