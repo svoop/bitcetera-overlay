@@ -11,15 +11,17 @@ SRC_URI="http://heyu.tanj.com/download/${P}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
+IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 
 RESTRICT="mirror"
 
 src_compile() {
 	mv x10config.sample x10.conf.sample
+	local PLATFORM
 	./Configure							\
 		$(if use kernel_FreeBSD; then echo "freebsd"; fi)	\
-		$(if use kernel_linux; then echo "linux"; fi)		\
+		$(if use kernel_Darwin; then echo "darwin"; fi)		\
+		$(if use kernel_linux; then echo "linux"; fi)		\		
 		$(if ! use cm17a; then echo "-nocm17a"; fi)		\
 		$(if ! use dmx210; then echo "-nodmx"; fi)		\
 		$(if ! use ext0; then echo "-noext0"; fi)		\
@@ -40,6 +42,7 @@ src_install() {
 	dodir /var/tmp/heyu
 	diropts -o root -g root -m 0744
 	dodir /etc/heyu
+	keepdir /etc/heyu
 	insinto /etc/heyu
 	insopts -o root -g root -m 0644
 	doins x10.conf.sample || die "installing config sample failed"
