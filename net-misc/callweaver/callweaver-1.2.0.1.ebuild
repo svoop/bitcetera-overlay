@@ -37,27 +37,27 @@ src_compile() {
 		--localstatedir=/var			\
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
-		`use_with ael pbx_ael`			\
-		`use_with misdn chan_misdn`		\
-		`use_with postgres cdr_pgsql`		\
-		`use_with postgres res_config_pgsql`	\
-		`use_with speex codec_speex`		\
-		`use_with t38 app_rxfax`		\
-		`use_with t38 app_txfax`		\
-		`use_enable t38`			\
-		`use_with zaptel chan_zap`		\
-		`use_enable debug`			\
-		`use_enable profile`			\
+		$(use_with ael pbx_ael)			\
+		$(use_with misdn chan_misdn)		\
+		$(use_with postgres cdr_pgsql)		\
+		$(use_with postgres res_config_pgsql)	\
+		$(use_with speex codec_speex)		\
+		$(use_with t38 app_rxfax)		\
+		$(use_with t38 app_txfax)		\
+		$(use_enable t38)			\
+		$(use_with zaptel chan_zap)		\
+		$(use_enable debug)			\
+		$(use_enable profile)			\
 		|| die "configure failed"
 
-# TODO:		`use_with exosip chan_exosip`		\
-#		`use_with fax chan_fax`			\
-#		`use_with fax app_rxfax`		\
-#		`use_with fax app_txfax`		\
-#		`use_with jabber res_jabber`		\
-#		`use_with mgr2 chan_unicall`		\
-#		`use_with odbc res_odbc`		\
-#		`use_with odbc res_config_odbc`		\
+# TODO:		$(use_with exosip chan_exosip)		\
+#		$(use_with fax chan_fax)		\
+#		$(use_with fax app_rxfax)		\
+#		$(use_with fax app_txfax)		\
+#		$(use_with jabber res_jabber)		\
+#		$(use_with mgr2 chan_unicall)		\
+#		$(use_with odbc res_odbc)		\
+#		$(use_with odbc res_config_odbc)	\
 
 	emake || die "make failed"
 }
