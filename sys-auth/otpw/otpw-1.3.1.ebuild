@@ -28,7 +28,7 @@ src_compile() {
 	sed -i "s/CFLAGS\s*=.*/CFLAGS = -fPIC ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile   # TODO: -fPIC should become obsolete in the next version
 	emake otpw-gen || die "emake otpw-gen failed"
 	emake demologin || die "emake demologin failed"
-        if use pam; then
+	if use pam; then
 		emake pam_otpw.so || die "emake pam_otpw.so failed"
 	fi
 }
