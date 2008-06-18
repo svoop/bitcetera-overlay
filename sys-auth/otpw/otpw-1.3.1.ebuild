@@ -4,7 +4,7 @@
 
 inherit eutils pam
 
-DESCRIPTION="OTPW is a one-time password list generator and verifier including a wrapper suitable for PAM."
+DESCRIPTION="Generator and PAM module for one-time password lists with a user-defined static password prefix."
 HOMEPAGE="http://www.cl.cam.ac.uk/~mgk25/otpw.html"
 SRC_URI="http://www.cl.cam.ac.uk/~mgk25/download/otpw-snapshot.tar.gz"   # TODO: sould be: download/{P}.tar.gz
 
@@ -20,6 +20,10 @@ DEPEND="${RDEPEND}"
 S=${WORKDIR}/${PN}
 
 src_compile() {
+	if [ ! -c /dev/urandom ]; then
+		ewarn "/dev/urandom is missing, fix this before generating any password lists!"
+		epause 10
+	fi
 	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" "${S}"/Makefile
 	sed -i "s/CFLAGS\s*=.*/CFLAGS = -fPIC ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile   # TODO: -fPIC should become obsolete in the next version
 	emake otpw-gen || die "emake otpw-gen failed"

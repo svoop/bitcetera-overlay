@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>sys-auth</herd>
-  <maintainer>
-    <email>gentoo@bitcetera.com</email>
-    <name>Sven Schwyn</name>
-  </maintainer>
-  <longdescription>
-    OTPW is a one-time password list generator and verifier including 
-    a wrapper for use with PAM.
-    
-    Passwords consist of a static prefix (set by the user) and a
-    one-time postfix which offers limited protection against
-    eavesdropping and fair protection in case the password list is lost.
-  </longdescription>
+	<herd>sys-auth</herd>
+	<maintainer>
+		<email>gentoo@bitcetera.com</email>
+		<name>Sven Schwyn</name>
+	</maintainer>
+	<longdescription>
+		OTPW is a one-time password list generator and verifier including 
+		a wrapper for use with PAM.
+		
+		Passwords consist of a static prefix (set by the user) and a
+		one-time postfix which offers limited protection against
+		eavesdropping and fair protection in case the password list is lost.
+	</longdescription>
 </pkgmetadata>
