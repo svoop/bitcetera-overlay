@@ -24,5 +24,5 @@ src_compile() {
 }
 
 src_install() {
-
+	die "bad idea"
 }
