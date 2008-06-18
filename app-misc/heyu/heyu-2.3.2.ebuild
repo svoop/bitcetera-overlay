@@ -16,6 +16,8 @@ IUSE="kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 RESTRICT="mirror"
 
 src_compile() {
+echo "${CHOST}"
+die
 	mv x10config.sample x10.conf.sample
 	./Configure							\
 		`if use kernel_FreeBSD; then echo "freebsd"; fi`	\
