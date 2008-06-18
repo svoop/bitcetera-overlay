@@ -17,7 +17,6 @@ RESTRICT="mirror"
 
 src_compile() {
 	mv x10config.sample x10.conf.sample
-	local PLATFORM
 	./Configure							\
 		$(if use kernel_FreeBSD; then echo "freebsd"; fi)	\
 		$(if use kernel_Darwin; then echo "darwin"; fi)		\
