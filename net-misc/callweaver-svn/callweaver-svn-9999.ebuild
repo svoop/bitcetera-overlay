@@ -4,7 +4,7 @@
 
 inherit eutils subversion
 
-DESCRIPTION="CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project."
+DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
 ESVN_REPO_URI="http://svn.callweaver.org/callweaver/branches/rel/1.2/"
 ESVN_BOOTSTRAP="./bootstrap.sh"
@@ -67,14 +67,14 @@ src_compile() {
 #		$(use_with odbc res_odbc)		\
 #		$(use_with odbc res_config_odbc)	\
 
-	emake || die "make failed"
+	emake || die "emake failed"
 }
 
 src_install() {
-	make DESTDIR="${D}" install || die "make install failed"
+	emake DESTDIR="${D}" install || die "emake install failed"
 
-	dodoc README INSTALL AUTHORS COPYING NEWS BUGS
-	dodoc TODO_FOR_AUTOMAKE SECURITY CREDITS HARDWARE LICENSE
+	dodoc README INSTALL AUTHORS NEWS BUGS
+	dodoc TODO_FOR_AUTOMAKE SECURITY CREDITS HARDWARE
 	dodoc doc/README* doc/*.txt doc/*.pdf
 
 	docinto samples
