@@ -15,8 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="ael misdn postgres speex t38 zaptel"   # TODO: exosip fax jabber mgr2 odbc
 
-RDEPEND="!net-misc/callweaver-svn
-	>=media-libs/spandsp-0.0.4_pre15
+RDEPEND="!net-misc/callweaver
+	>=media-libs/spandsp-0.0.5_pre3
 	>=sys-libs/libcap-1.10
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
