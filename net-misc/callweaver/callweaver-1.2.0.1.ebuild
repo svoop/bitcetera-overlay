@@ -11,19 +11,19 @@ SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael misdn postgres speex t38 zaptel"   # TODO: exosip fax jabber mgr2 odbc
+IUSE="ael dahdi misdn mysql postgres speex t38"   # TODO: exosip fax jabber mgr2 odbc
 
 RDEPEND="!net-misc/callweaver-svn
 	=media-libs/spandsp-0.0.5_pre3
 	>=sys-libs/libcap-1.10
+	dahdi? ( net-misc/zaptel )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
-	postgres? ( dev-db/postgresql )
-	zaptel? ( net-misc/zaptel )"
+	mysql? ( dev-db/mysql ) 
+	postgres? ( dev-db/postgresql )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
-	dev-util/subversion
 	>=sys-devel/automake-1.9.6
 	>=sys-devel/autoconf-2.59
 	>=sys-devel/libtool-1.5.20"
@@ -38,14 +38,15 @@ src_compile() {
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
+		$(use_with dahdi chan_zap)		\
 		$(use_with misdn chan_misdn)		\
+		$(use_with mysql cdr_mysql)		\
 		$(use_with postgres cdr_pgsql)		\
 		$(use_with postgres res_config_pgsql)	\
 		$(use_with speex codec_speex)		\
 		$(use_with t38 app_rxfax)		\
 		$(use_with t38 app_txfax)		\
 		$(use_enable t38)			\
-		$(use_with zaptel chan_zap)		\
 		$(use_enable debug)			\
 		$(use_enable profile)			\
 		|| die "configure failed"

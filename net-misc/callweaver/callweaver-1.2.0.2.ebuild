@@ -2,21 +2,19 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils subversion
+inherit eutils
 
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
-ESVN_REPO_URI="http://svn.callweaver.org/callweaver/branches/rel/1.2/"
-ESVN_BOOTSTRAP="./bootstrap.sh"
-S="${WORKDIR}/${PN}"
+SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael misdn mysql postgres speex t38 zaptel"   # TODO: exosip fax jabber mgr2 odbc
+IUSE="ael dahdi misdn mysql postgres speex t38"   # TODO: exosip fax jabber mgr2 odbc
 
-RDEPEND="!net-misc/callweaver
-	>=media-libs/spandsp-0.0.5_pre3
+RDEPEND="!net-misc/callweaver-svn
+	=media-libs/spandsp-0.0.5_pre4
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/zaptel )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
@@ -26,16 +24,9 @@ RDEPEND="!net-misc/callweaver
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
-	dev-util/subversion
 	>=sys-devel/automake-1.9.6
 	>=sys-devel/autoconf-2.59
 	>=sys-devel/libtool-1.5.20"
-
-src_unpack() {
-	subversion_fetch
-	cd "${S}"
-	subversion_bootstrap
-}
 
 src_compile() {
 	ewarn "All USE flags are experimental and have not been tested thoroughly!"
@@ -132,4 +123,3 @@ pkg_config() {
 		done
 	fi
 }
-

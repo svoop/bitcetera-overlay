@@ -15,11 +15,11 @@ app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
 
 net-misc/callweaver:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
+net-misc/callweaver:dahdi - Support for Digium hardware (formerly known as Zaptel).
 net-misc/callweaver:misdn - Support the new ISDN stack of Linux 2.6 kernels.
 net-misc/callweaver:t38 - Support T.38 fax over IP.
-net-misc/callweaver:zaptel - Support Zaptel hardware.
 
 net-misc/callweaver-svn:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
+net-misc/callweaver-svn:dahdi - Support for Digium hardware (formerly known as Zaptel).
 net-misc/callweaver-svn:misdn - Support the new ISDN stack of Linux 2.6 kernels.
 net-misc/callweaver-svn:t38 - Support T.38 fax over IP.
-net-misc/callweaver-svn:zaptel - Support Zaptel hardware.
