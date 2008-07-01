@@ -11,7 +11,7 @@ SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael dahdi misdn mysql postgres speex t38"   # TODO: exosip fax jabber mgr2 odbc
+IUSE="ael debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38 zaptel"
 
 RDEPEND="!net-misc/callweaver-svn
 	=media-libs/spandsp-0.0.5_pre3
@@ -29,8 +29,12 @@ DEPEND="${RDEPEND}
 	>=sys-devel/libtool-1.5.20"
 
 src_compile() {
-	ewarn "All USE flags are experimental and have not been tested thoroughly!"
-	epause 5
+	ewarn "The 'zap' USE flag has been renamed, use the 'dahdi' flag instead:"
+	ewarn "http://blogs.digium.com/2008/05/19"
+	ewarn ""
+	ewarn "All USE flags are experimental, please submit issues and patches to:"
+	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
+	epause 10
 	econf \
 		--libdir=/usr/$(get_libdir)/callweaver	\
 		--datadir=/var/lib			\
@@ -39,27 +43,25 @@ src_compile() {
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
 		$(use_with dahdi chan_zap)		\
+		$(use_with fax chan_fax)		\
+		$(use_with fax app_rxfax)		\
+		$(use_with fax app_txfax)		\
+		$(use_with jabber res_jabber)		\
 		$(use_with misdn chan_misdn)		\
+		$(use_with mgr2 chan_unicall)		\
 		$(use_with mysql cdr_mysql)		\
+		$(use_with mysql res_config_mysql)	\
+		$(use_with odbc res_odbc)		\
+		$(use_with odbc res_config_odbc)	\
 		$(use_with postgres cdr_pgsql)		\
 		$(use_with postgres res_config_pgsql)	\
 		$(use_with speex codec_speex)		\
 		$(use_with t38 app_rxfax)		\
 		$(use_with t38 app_txfax)		\
-		$(use_enable t38)			\
 		$(use_enable debug)			\
 		$(use_enable profile)			\
+		$(use_enable t38)			\
 		|| die "configure failed"
-
-# TODO:		$(use_with exosip chan_exosip)		\
-#		$(use_with fax chan_fax)		\
-#		$(use_with fax app_rxfax)		\
-#		$(use_with fax app_txfax)		\
-#		$(use_with jabber res_jabber)		\
-#		$(use_with mgr2 chan_unicall)		\
-#		$(use_with odbc res_odbc)		\
-#		$(use_with odbc res_config_odbc)	\
-
 	emake || die "emake failed"
 }
 

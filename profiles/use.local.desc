@@ -14,12 +14,16 @@ app-misc/heyu:ore - Support Oregon RF sensors.
 app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
 
-net-misc/callweaver:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
-net-misc/callweaver:dahdi - Support for Digium hardware (formerly known as Zaptel).
+net-misc/callweaver:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions configuration.
+net-misc/callweaver:dahdi - Support Digium compatible hardware (formerly known as Zaptel).
+net-misc/callweaver:fax - Support the fax channel driver.
+net-misc/callweaver:mgr2 - Support the Unicall call abstraction layer.
 net-misc/callweaver:misdn - Support the new ISDN stack of Linux 2.6 kernels.
 net-misc/callweaver:t38 - Support T.38 fax over IP.
 
-net-misc/callweaver-svn:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions.conf.
-net-misc/callweaver-svn:dahdi - Support for Digium hardware (formerly known as Zaptel).
+net-misc/callweaver-svn:ael - Support AEL (Asterisk Extension Language) for a more C-style extensions configuration.
+net-misc/callweaver-svn:dahdi - Support Digium compatible hardware (formerly known as Zaptel).
+net-misc/callweaver-svn:fax - Support the fax channel driver.
+net-misc/callweaver-svn:mgr2 - Support the Unicall call abstraction layer.
 net-misc/callweaver-svn:misdn - Support the new ISDN stack of Linux 2.6 kernels.
 net-misc/callweaver-svn:t38 - Support T.38 fax over IP.
