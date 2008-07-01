@@ -13,7 +13,7 @@ S="${WORKDIR}/${PN}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38 zaptel"
+IUSE="ael dahdi debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38"
 
 RDEPEND="!net-misc/callweaver
 	>=media-libs/spandsp-0.0.5_pre3
