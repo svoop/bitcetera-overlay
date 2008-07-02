@@ -276,15 +276,15 @@ src_unpack() {
 		zconfig_enable CONFIG_ZAPTEL_WATCHDOG
 
 	# prepare hpec
-	if use echpec; then
-		elog "Support for commercial HPEC echo canceller."
-		hpec_detect
-		cd "${S}"/kernel/hpec
-		wget -O hpec.tgz \
-			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
-			|| die "HPEC download failed"
-		tar xzf hpec.tgz
-	fi
+#	if use echpec; then
+#		elog "Support for commercial HPEC echo canceller."
+#		hpec_detect
+#		cd "${S}"/kernel/hpec
+#		wget -O hpec.tgz \
+#			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
+#			|| die "HPEC download failed"
+#		tar xzf hpec.tgz
+#	fi
 }
 
 src_compile() {
@@ -398,7 +398,7 @@ src_install() {
 		diropts -o root -g root -m 0744
 		dodir /opt/bin
 		insinto /opt/bin
-		insopts -o root -g root -m 0740	
+		insopts -o root -g root -m 0700	
 		doins zaphpec_register || die "installing zaphpec_register failed"
 		doins zaphpec_enable || die "installing zaphpec_enable failed"
 	fi
