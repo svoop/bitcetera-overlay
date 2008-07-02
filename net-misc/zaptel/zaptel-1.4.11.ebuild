@@ -276,15 +276,15 @@ src_unpack() {
 		zconfig_enable CONFIG_ZAPTEL_WATCHDOG
 
 	# prepare hpec
-#	if use echpec; then
-#		elog "Support for commercial HPEC echo canceller."
-#		hpec_detect
-#		cd "${S}"/kernel/hpec
-#		wget -O hpec.tgz \
-#			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
-#			|| die "HPEC download failed"
-#		tar xzf hpec.tgz
-#	fi
+	if use echpec; then
+		elog "Support for commercial HPEC echo canceller."
+		hpec_detect
+		cd "${S}"/kernel/hpec
+		wget -O hpec.tgz \
+			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
+			|| die "HPEC download failed"
+		tar xzf hpec.tgz
+	fi
 }
 
 src_compile() {
