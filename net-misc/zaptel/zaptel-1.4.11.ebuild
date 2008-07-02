@@ -30,7 +30,7 @@ S_BRI="${WORKDIR}/bristuff-${BRI_VERSION}"
 
 SLOT="0"
 LICENSE="GPL-2"
-KEYWORDS="~amd64"
+KEYWORDS="~x86 ~amd64"
 
 
 RDEPEND="virtual/libc
