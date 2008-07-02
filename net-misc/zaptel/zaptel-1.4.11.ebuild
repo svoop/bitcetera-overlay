@@ -11,9 +11,10 @@ inherit toolchain-funcs eutils linux-mod
 
 #BRI_VERSION="0.3.0-PRE-1v"
 #FLORZ_VERSION="0.3.0-PRE-1o_florz-12"
+HPEC_VERSION="9.00.007"
 
 #IUSE="bri ecmark ecmark2 ecmark3 ecaggressive eckb1 ecmg2 ecsteve ecsteve2 florz rtc ukcid watchdog zapras zapnet"
-IUSE="ecmark ecmark2 ecmark3 ecaggressive eckb1 ecmg2 ecsteve ecsteve2 rtc ukcid usb watchdog wanpipe zapras zapnet"
+IUSE="echpec ecmark ecmark2 ecmark3 ecaggressive eckb1 ecmg2 ecsteve ecsteve2 rtc ukcid usb watchdog wanpipe zapras zapnet"
 
 MY_P="${P/_/-}"
 
@@ -79,6 +80,21 @@ zconfig_enable() {
 	return $?
 }
 
+hpec_detect() {
+	if [ "$(tc-arch)" == "x86" ]; then
+		HPEC_ARCH="32"
+		HPEC_CPU="i386"
+		return
+	fi	
+	if [ "$(tc-arch)" == "amd64" ]; then
+		HPEC_ARCH="64"
+		HPEC_CPU="opteron"
+		if grep -q "GenuineIntel" /proc/cpuinfo; then HPEC_CPU="nocona"; fi
+		return
+	fi
+	die "HPEC is not available for your architecture, please remove the 'echpec' flag and retry."
+}
+
 ### End: Helper functions
 
 pkg_setup() {
@@ -90,7 +106,7 @@ pkg_setup() {
 
 	linux-mod_pkg_setup
 
-	einfo "Running pre-flight checks..."
+	elog "Running pre-flight checks..."
 
 	# basic zaptel checks
 	if kernel_is 2 4 ; then
@@ -166,7 +182,7 @@ pkg_setup() {
 	fi
 
 	echo
-	einfo "Zaptel is happy and continues... :)"
+	elog "Zaptel is happy and continues... :)"
 }
 
 src_unpack() {
@@ -187,13 +203,13 @@ src_unpack() {
 #		# fix for userpriv
 #		chmod -R a=rwX "${S_BRI}"
 #
-#		einfo "Patching zaptel w/ BRI stuff (${BRI_VERSION})"
+#		elog "Patching zaptel w/ BRI stuff (${BRI_VERSION})"
 #		epatch "${S_BRI}"/patches/zaptel.patch
 #
 #		cd "${S_BRI}"
 #
 #		if use florz; then
-#			einfo "Using florz patches (${FLORZ_VERSION}) for zaphfc"
+#			elog "Using florz patches (${FLORZ_VERSION}) for zaphfc"
 #
 #			# remove as soon as there's a new florz patch available
 #			sed -i -e "s:zaptel-1\.2\.5:zaptel-1.2.6:g" \
@@ -228,7 +244,7 @@ src_unpack() {
 	# prepare zconfig.h
 	myEC=$(select_echo_cancel)
 	if [[ -n "${myEC}" ]]; then
-		einfo "Selected echo canceller: ${myEC}"
+		elog "Selected echo canceller: ${myEC}"
 		# disable default first, set new selected ec afterwards
 		zconfig_disable ECHO_CAN
 		zconfig_enable ECHO_CAN_${myEC}
@@ -236,7 +252,7 @@ src_unpack() {
 
 	# enable rtc support on 2.6
 	if use rtc && linux_chkconfig_present RTC && kernel_is 2 6; then
-		einfo "Enabling ztdummy RTC support"
+		elog "Enabling ztdummy RTC support"
 		zconfig_enable USE_RTC
 	fi
 
@@ -255,6 +271,17 @@ src_unpack() {
 	# zaptel watchdog
 	use watchdog && \
 		zconfig_enable CONFIG_ZAPTEL_WATCHDOG
+
+	# prepare hpec
+	if use echpec; then
+		elog "Support for commercial HPEC echo canceller."
+		hpec_detect
+		cd "${S}"/kernel/hpec
+		wget -O hpec.tgz \
+			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
+			|| die "HPEC download failed"
+		tar xzf hpec.tgz
+	fi
 }
 
 src_compile() {
@@ -273,13 +300,20 @@ src_compile() {
 #	if use bri; then
 #		cd "${S_BRI}"
 #		for x in cwain qozap zaphfc; do
-#			einfo "Building ${x}..."
+#			elog "Building ${x}..."
 #			make KVERS=${KV_FULL} \
 #				KSRC=/usr/src/linux \
 #				ARCH=$(tc-arch-kernel) \
 #				-C ${x} || die "make ${x} failed"
 #		done
 #	fi
+
+	# download hpec utils
+	if use echpec; then
+		cd "${S}"
+		wget -O zaphpec_register "http://downloads.digium.com/pub/register/linux/register"
+		wget -O zaphpec_enable "http://downloads.digium.com/pub/telephony/hpec/$(hpec_arch)-bit/zaphpec_enable"
+	fi
 }
 
 src_install() {
@@ -299,7 +333,7 @@ src_install() {
 	doins *.h
 
 #	if use bri; then
-#		einfo "Installing bri"
+#		elog "Installing bri"
 #		cd "${S_BRI}"
 #
 #		insinto /lib/modules/${KV_FULL}/misc
@@ -354,27 +388,34 @@ src_install() {
 	# install xpp utils
 	cd "${S}"/kernel/xpp/utils
 	make DESTDIR="${D}" install || die "failed xpp utils install"
+
+	# install hpec utils
+	if use echpec; then
+		cd "${S}"
+		dobin zaphpec_register || die "installing zaphpec_register failed"
+		dobin zaphpec_enable || die "installing zaphpec_enable failed"
+	fi
 }
 
 pkg_postinst() {
 	linux-mod_pkg_postinst
 
 	echo
-	einfo "Use the /etc/init.d/zaptel script to load zaptel.conf settings on startup!"
+	elog "Use the /etc/init.d/zaptel script to load zaptel.conf settings on startup!"
 	echo
 
 #	if use bri; then
-#		einfo "Bristuff configs have been merged as:"
-#		einfo ""
-#		einfo "${ROOT}etc/"
-#		einfo "    zaptel.conf.zaphfc"
-#		einfo "    zaptel.conf.quadBRI"
-#		einfo "    zaptel.conf.octoBRI"
-#		einfo ""
-#		einfo "${ROOT}etc/asterisk/"
-#		einfo "    zapata.conf.zaphfc"
-#		einfo "    zapata.conf.quadBRI"
-#		einfo "    zapata.conf.octoBRI"
+#		elog "Bristuff configs have been merged as:"
+#		elog ""
+#		elog "${ROOT}etc/"
+#		elog "    zaptel.conf.zaphfc"
+#		elog "    zaptel.conf.quadBRI"
+#		elog "    zaptel.conf.octoBRI"
+#		elog ""
+#		elog "${ROOT}etc/asterisk/"
+#		elog "    zapata.conf.zaphfc"
+#		elog "    zapata.conf.quadBRI"
+#		elog "    zapata.conf.octoBRI"
 #		echo
 #	fi
 
@@ -382,5 +423,19 @@ pkg_postinst() {
 	if [[ -d "${ROOT}"dev/zap ]]; then
 		chown -R root:dialout	"${ROOT}"dev/zap
 		chmod -R u=rwX,g=rwX,o= "${ROOT}"dev/zap
+	fi
+
+	# instructions for HPEC
+	if use echpec; then
+		elog "HPEC is a commercial echo canceller. If you have purchased telephony"
+		elog "hardware from Digium, you might be eligible for a free HPEC license:"
+		elog "http://www.digium.com/en/products/software/hpec.php"
+		elog ""
+		elog "HPEC has to be registered once with 'zaphpec_register' and then enabled"
+		elog "with 'zaphpec_enable' every time the Zaptel drivers are loaded."
+		elog ""
+		elog "Add the following line to '/etc/conf.d/local.start' in order to enable"
+		elog "HPEC at boot time:"
+		elog "zaphpec_enable"
 	fi
 }
