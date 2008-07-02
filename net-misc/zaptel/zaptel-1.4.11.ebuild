@@ -40,6 +40,9 @@ RDEPEND="virtual/libc
 DEPEND="${RDEPEND}
 	virtual/linux-sources"
 
+RESTRICT="strip"
+QA_EXECSTACK="opt/bin/zaphpec_register opt/bin/zaphpec_enable"
+
 # list of echo canceller use flags,
 # first active in this list is selected (=order does matter)
 ZAP_EC_FLAGS="ecmark ecmark2 ecmark3 ecsteve ecsteve2 eckb1 ecmg2"
