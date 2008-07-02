@@ -1,0 +1,41 @@
+# ChangeLog for net-misc/zaptel
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  21 Mar 2008; Rambaldi <rambaldi@xs4all.nl>
+  +files/zaptel-1.4.9.2-gentoo.diff, +zaptel-1.4.9.2.ebuild:
+  version bump
+
+  18 Feb 2008: Stefan Knoblich <s.knoblich@axsentis.de>
+  +files/zaptel-1.4.8-gentoo.diff, +zaptel-1.4.8.ebuild:
+  Version bump
+
+  17 Jul 2007; Octavio Ruiz <tacvbo@tacvbo.net> +zaptel-1.4.4.ebuild,
+  +files/zaptel-1.4.4-gentoo.diff, +files/zaptel-wanpipe_hdlc.patch:
+  Version Bump
+
+  12 Jul 2007; Doug Goldstein <cardoe@gentoo.org>
+  -files/zaptel-1.4.0-gentoo.diff, -files/zaptel-1.4.1-gentoo.diff,
+  -files/zaptel-1.4.2.1-gentoo.diff, ++, ++, -zaptel-1.4.0.ebuild,
+  -zaptel-1.4.1.ebuild, -zaptel-1.4.2.1.ebuild:
+  update to latest version, remove previous versions (to match Asterisk)
+
+  23 May 2007; Stefan Schweizer <genstef@gentoo.org> zaptel-1.4.2.1.ebuild:
+  remove patch thanks Erik Wallin <erikw@sizeit.se>
+
+  16 May 2007; Octavio Ruiz <tacvbo@tacvbo.net>
+  -files/zaptel-1.2.12-gentoo.diff, zaptel-1.4.0.ebuild,
+  zaptel-1.4.1.ebuild, -zaptel-1.4.2.ebuild, zaptel-1.4.2.1.ebuild:
+  cleaning up
+
+  16 May 2007; Octavio Ruiz <tacvbo@tacvbo.net> +zaptel-1.4.2.1.ebuild,
+  +files/zaptel-1.4.2.1-gentoo.diff:
+  version bump
+
+  25 Apr 2007; Stefan Schweizer <genstef@gentoo.org> +zaptel-1.4.2.ebuild:
+  version bump
+
+  15 Apr 2007; Stefan Schweizer <genstef@gentoo.org> +zaptel-1.4.1.ebuild,
+  +files/zaptel-1.4.1-gentoo.diff:
+  version bump thanks to Sam Jacobson <sam@eversoft.co.nz> in bug 174681
+
