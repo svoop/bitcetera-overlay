@@ -63,21 +63,21 @@ select_echo_cancel() {
 }
 
 zconfig_disable() {
-	if grep -q "${1}" "${S}"/zconfig.h; then
+	if grep -q "${1}" "${S}"/kernel/zconfig.h; then
 		# match a little more than ${1} so we can use zconfig_disable
 		# to disable all echo cancellers in zconfig.h w/o calling it several times
 		sed -i -e "s:^[ \t]*#define[ \t]\+\(${1}[a-zA-Z0-9_-]*\).*:#undef \1:" \
-			"${S}"/zconfig.h
+			"${S}"/kernel/zconfig.h
 	fi
 
 	return $?
 }
 
 zconfig_enable() {
-	if grep -q "${1}" "${S}"/zconfig.h; then
+	if grep -q "${1}" "${S}"/kernel/zconfig.h; then
 		sed -i  -e "s:^/\*[ \t]*#define[ \t]\+\(${1}\).*:#define \1:" \
 			-e "s:^[ \t]*#undef[ \t]\+\(${1}\).*:#define \1:" \
-			"${S}"/zconfig.h
+			"${S}"/kernel/zconfig.h
 	fi
 
 	return $?
