@@ -311,8 +311,8 @@ src_compile() {
 	# download hpec utils
 	if use echpec; then
 		cd "${S}"
-		wget -O zaphpec_register "http://downloads.digium.com/pub/register/linux/register"
-		wget -O zaphpec_enable "http://downloads.digium.com/pub/telephony/hpec/$(hpec_arch)-bit/zaphpec_enable"
+		wget -O zaphpec_register "http://downloads.digium.com/pub/register/x86-${HPEC_ARCH}/register"
+		wget -O zaphpec_enable "http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/zaphpec_enable"
 	fi
 }
 
