@@ -265,9 +265,9 @@ src_compile() {
 
 	# build
 	make KVERS=${KV_FULL} \
-	     KSRC=${KV_DIR} ARCH=$(tc-arch-kernel) || die
+	     KSRC=${KV_DIR} ARCH=$(tc-arch-kernel) || die "make failed"
 
-	cd "${S}"/xpp/utils
+	cd "${S}"/kernel/xpp/utils
 	make || die "make xpp utils failed"
 
 #	if use bri; then
@@ -352,7 +352,7 @@ src_install() {
 	fi
 
 	# install xpp utils
-	cd "${S}"/xpp/utils
+	cd "${S}"/kernel/xpp/utils
 	make DESTDIR="${D}" install || die "failed xpp utils install"
 }
 
