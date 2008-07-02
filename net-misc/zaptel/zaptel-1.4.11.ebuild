@@ -392,8 +392,12 @@ src_install() {
 	# install hpec utils
 	if use echpec; then
 		cd "${S}"
-		dosbin zaphpec_register || die "installing zaphpec_register failed"
-		dosbin zaphpec_enable || die "installing zaphpec_enable failed"
+		diropts -o root -g root -m 0744
+		dodir /opt/bin
+		insinto /opt/bin
+		insopts -o root -g root -m 0740	
+		dosins zaphpec_register || die "installing zaphpec_register failed"
+		dosins zaphpec_enable || die "installing zaphpec_enable failed"
 	fi
 }
 
