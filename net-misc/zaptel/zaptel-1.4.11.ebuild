@@ -98,7 +98,7 @@ hpec_detect() {
 ### End: Helper functions
 
 pkg_setup() {
-	ewarn "Starting with version 2 you have to emerge dahdi instead of zaptel:"
+	ewarn "For version 2 and later you have to emerge dahdi instead of zaptel:"
 	ewarn "http://blogs.digium.com/2008/05/19"
 	epause 5
 	
@@ -396,8 +396,8 @@ src_install() {
 		dodir /opt/bin
 		insinto /opt/bin
 		insopts -o root -g root -m 0740	
-		dosins zaphpec_register || die "installing zaphpec_register failed"
-		dosins zaphpec_enable || die "installing zaphpec_enable failed"
+		doins zaphpec_register || die "installing zaphpec_register failed"
+		doins zaphpec_enable || die "installing zaphpec_enable failed"
 	fi
 }
 
