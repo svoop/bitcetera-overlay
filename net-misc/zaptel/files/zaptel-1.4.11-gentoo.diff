@@ -131,3 +131,45 @@
  if [ -z "${combined}" ]; then
      echo "***"
      echo "*** WARNING:"
+--- Kbuild.orig	2008-07-02 20:26:06 +0200
++++ Kbuild	2008-07-02 20:26:27 +0200
+@@ -16,19 +16,15 @@
+ 
+ zaptel-objs := zaptel-base.o
+ 
+-ifeq ($(ARCH),i386)
+ ifneq ($(wildcard $(src)/hpec/hpec_x86_32.o_shipped),)
+ HPEC_PRESENT=yes
+ zaptel-objs += hpec/hpec_x86_32.o
+ endif
+-endif
+ 
+-ifeq ($(ARCH),x86_64)
+ ifneq ($(wildcard $(src)/hpec/hpec_x86_64.o_shipped),)
+ HPEC_PRESENT=yes
+ zaptel-objs += hpec/hpec_x86_64.o
+ endif
+-endif
+ 
+ ifeq ($(HPEC_PRESENT),yes)
+ EXTRA_CFLAGS += -DECHO_CAN_HPEC -I$(src)/hpec
+--- GNUmakefile.orig	2008-07-02 20:26:11 +0200
++++ GNUmakefile	2008-07-02 20:26:41 +0200
+@@ -20,17 +20,13 @@
+   CFLAGS+=-DHOTPLUG_FIRMWARE
+ endif
+ 
+-ifeq ($(ARCH),i386)
+ ifneq ($(wildcard $(PWD)/hpec/hpec_x86_32.o_shipped),)
+ HPEC_PRESENT=yes
+ endif
+-endif
+ 
+-ifeq ($(ARCH),x86_64)
+ ifneq ($(wildcard $(PWD)/hpec/hpec_x86_64.o_shipped),)
+ HPEC_PRESENT=yes
+ endif
+-endif
+ 
+ BUILD_MODULES:=$(BUILD_TOPDIR_MODULES) $(BUILD_SUBDIR_MODULES)
+ ALL_MODULES	:= $(BUILD_TOPDIR_MODULES:%=%.o) \
