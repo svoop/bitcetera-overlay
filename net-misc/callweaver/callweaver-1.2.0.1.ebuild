@@ -11,7 +11,7 @@ SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael dahdi debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38 zap zaptel"
+IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38 zap zaptel"
 
 RDEPEND="!net-misc/callweaver-svn
 	=media-libs/spandsp-0.0.5_pre3
