@@ -11,7 +11,7 @@ SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael dahdi debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38"
+IUSE="ael dahdi debug fax jabber misdn mgr2 mysql odbc postgres profile speex t38 zap zaptel"
 
 RDEPEND="!net-misc/callweaver-svn
 	=media-libs/spandsp-0.0.5_pre3
@@ -19,8 +19,10 @@ RDEPEND="!net-misc/callweaver-svn
 	dahdi? ( net-misc/zaptel )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
-	mysql? ( dev-db/mysql ) 
-	postgres? ( dev-db/postgresql )"
+	mysql? ( dev-db/mysql )
+	postgres? ( dev-db/postgresql )
+	zap? ( net-misc/zaptel )
+	zaptel? ( net-misc/zaptel )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
@@ -29,12 +31,9 @@ DEPEND="${RDEPEND}
 	>=sys-devel/libtool-1.5.20"
 
 src_compile() {
-	ewarn "The 'zap' USE flag has been renamed, use the 'dahdi' flag instead:"
-	ewarn "http://blogs.digium.com/2008/05/19"
-	ewarn ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
-	epause 10
+	epause 5
 	econf \
 		--libdir=/usr/$(get_libdir)/callweaver	\
 		--datadir=/var/lib			\
@@ -58,6 +57,8 @@ src_compile() {
 		$(use_with speex codec_speex)		\
 		$(use_with t38 app_rxfax)		\
 		$(use_with t38 app_txfax)		\
+		$(use_with zap chan_zap)		\
+		$(use_with zaptel chan_zap)		\
 		$(use_enable debug)			\
 		$(use_enable profile)			\
 		$(use_enable t38)			\
@@ -104,6 +105,18 @@ pkg_postinst() {
 	done
 
 	chown -R root:callweaver "${ROOT}"usr/lib/callweaver
+
+	if use zap; then
+		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE"
+		ewarn "flag 'zap' with 'dahdi' now."
+		ewarn "http://blogs.digium.com/2008/05/19"
+	fi
+
+	if use zaptel; then
+		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE"
+		ewarn "flag 'zaptel' with 'dahdi' now."
+		ewarn "http://blogs.digium.com/2008/05/19"
+	fi
 }
 
 pkg_config() {
