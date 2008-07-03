@@ -107,14 +107,14 @@ pkg_postinst() {
 	chown -R root:callweaver "${ROOT}"usr/lib/callweaver
 
 	if use zap; then
-		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE"
-		ewarn "flag 'zap' with 'dahdi' now."
+		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE flag"
+		ewarn "'zap' with 'dahdi' in order to prevent troubles with future updates."
 		ewarn "http://blogs.digium.com/2008/05/19"
 	fi
 
 	if use zaptel; then
-		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE"
-		ewarn "flag 'zaptel' with 'dahdi' now."
+		ewarn "The Zaptel project has been renamed to DAHDI. Make sure you have set the"
+		ewarn "USE flag 'dahdi' in order to prevent troubles with future updates."
 		ewarn "http://blogs.digium.com/2008/05/19"
 	fi
 }
