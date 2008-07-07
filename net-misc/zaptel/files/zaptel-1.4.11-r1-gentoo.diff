@@ -1,0 +1,175 @@
+--- zaptel-1.4.11/Makefile.orig	2008-07-02 09:17:24 +0200
++++ zaptel-1.4.11/Makefile	2008-07-02 09:26:47 +0200
+@@ -66,15 +66,22 @@
+ # Set HOTPLUG_FIRMWARE=no to override automatic building with hotplug support
+ # if it is enabled in the kernel.
+ ifeq ($(BUILDVER),linux26)
+-  ifneq (,$(wildcard $(DESTDIR)/etc/udev/rules.d))
+-    DYNFS=yes
+-    UDEVRULES=yes
+-  endif
+   ifeq (yes,$(HAS_KSRC))
+     HOTPLUG_FIRMWARE:=$(shell if grep -q '^CONFIG_FW_LOADER=[ym]' $(KCONFIG); then echo "yes"; else echo "no"; fi)
+   endif
+ endif
+ 
++# This is not related to the version that we build. Rather, to the 
++# version that we runs. If we build for 2.4 using 2.4 headers on a 2.6
++# system with udev mounted on /dev , no point in installing files to /dev
++# because they'll be wiped at next reboot. XXX: should this be a use-flag? Perhaps: noudev?
++DYNFS:=$(shell ps ax | grep -v grep | grep -qw 'devfsd\|udevd' && echo "yes")
++
++# Check for udev rules directories
++ifneq (,$(wildcard $(ROOT_PREFIX)/etc/udev/rules.d))
++  UDEVRULES=yes
++endif
++
+ ifneq (,$(findstring $(CONFIG_DEVFS_FS),y m))
+   DYNFS=yes
+   HAS_DEVFS=yes
+@@ -153,7 +160,7 @@
+   ALL_MODULES+=$(patsubst %,xpp/%.ko,xpp_usb xpd_fxo xpd_fxs xpp)
+ endif
+ 
+-OPTFLAG=-O2
++OPTFLAGS?=-O2
+ CFLAGS+=-I. $(OPTFLAGS) -g -fPIC -Wall -DBUILDING_TONEZONE #-DTONEZONE_DRIVER
+ ifneq (,$(findstring ppc,$(UNAME_M)))
+ CFLAGS_PPC:=-fsigned-char
+@@ -162,7 +169,7 @@
+ CFLAGS_x86_64:=-m64
+ endif
+ CFLAGS+=$(CFLAGS_PPC) $(CFLAGS_x86_64)
+-KFLAGS=-I$(KINCLUDES) -O6
++KFLAGS=-I$(KINCLUDES) -O2
+ KFLAGS+=-DMODULE -D__KERNEL__ -DEXPORT_SYMTAB -I$(KSRC)/drivers/net \
+ 	-Wall -I. -Wstrict-prototypes -fomit-frame-pointer -I$(KSRC)/drivers/net/wan -I$(KINCLUDES)/net
+ ifneq (,$(wildcard $(KINCLUDES)/linux/modversions.h))
+@@ -425,7 +432,7 @@
+ $(UTILSO): %.o: %.c
+ 	$(CC) $(CFLAGS) -o $@ -c $<
+ 
+-install: all devices install-modules install-programs install-firmware
++install: devices install-modules install-programs install-firmware
+ 	@echo "###################################################"
+ 	@echo "###"
+ 	@echo "### Zaptel installed successfully."
+@@ -450,10 +457,8 @@
+ 
+ # Pushing those two to a separate target that is not used by default:
+ install-modconf:
+-	build_tools/genmodconf $(BUILDVER) "$(ROOT_PREFIX)" "$(filter-out zaptel ztdummy xpp zttranscode ztdynamic,$(BUILD_MODULES)) $(MODULE_ALIASES)"
+-	@if [ -d /etc/modutils ]; then \
+-		/sbin/update-modules ; \
+-	fi
++	install -d -m 755 $(DESTDIR)/etc/modules.d
++	build_tools/genmodconf $(BUILDVER) "$(DESTDIR)" "$(filter-out zaptel ztdummy xpp zttranscode ztdynamic,$(BUILD_MODULES)) $(MODULE_ALIASES)"
+ 
+ install-firmware:
+ ifeq ($(HOTPLUG_FIRMWARE),yes)
+@@ -463,11 +468,9 @@
+ install-libs: libs
+ 	$(INSTALL) -D -m 755 $(LTZ_A) $(DESTDIR)$(LIB_DIR)/$(LTZ_A)
+ 	$(INSTALL) -D -m 755 $(LTZ_SO) $(DESTDIR)$(LIB_DIR)/$(LTZ_SO).$(LTZ_SO_MAJOR_VER).$(LTZ_SO_MINOR_VER)
+-ifeq (,$(DESTDIR))
+ 	if [ `id -u` = 0 ]; then \
+-		/sbin/ldconfig || : ;\
++		/sbin/ldconfig -n $(DESTDIR)$(LIB_DIR) || : ;\
+ 	fi
+-endif
+ 	rm -f $(DESTDIR)$(LIB_DIR)$(LTZ_SO)
+ 	$(LN) -sf $(LTZ_SO).$(LTZ_SO_MAJOR_VER).$(LTZ_SO_MINOR_VER) \
+ 		$(DESTDIR)$(LIB_DIR)/$(LTZ_SO).$(LTZ_SO_MAJOR_VER)
+@@ -516,7 +519,8 @@
+ 	@echo "**** Dynamic filesystem detected -- not creating device nodes"
+   else # UDEVRULES
+ 	install -d $(DESTDIR)/etc/udev/rules.d
+-	build_tools/genudevrules > $(DESTDIR)/etc/udev/rules.d/zaptel.rules
++	build_tools/genudevrules > zaptel.rules
++	install -D -m 644 zaptel.rules $(DESTDIR)/etc/udev/rules.d/10-zaptel.rules
+   endif
+ endif
+ 
+@@ -538,7 +542,7 @@
+ install-modules: uninstall-modules
+ 	$(KMAKE_INST)
+ endif
+-	[ `id -u` = 0 ] && /sbin/depmod -a $(KVERS) || :
++	[ -z "$(DESTDIR)" -a `id -u` = 0 ] && /sbin/depmod -a $(KVERS) || :
+ 
+ config:
+ ifneq (,$(COPY_INITD))
+--- zaptel-1.4.11/build_tools/genudevrules.orig	2008-07-02 09:18:39 +0200
++++ zaptel-1.4.11/build_tools/genudevrules	2008-07-02 09:29:27 +0200
+@@ -31,5 +31,5 @@
+ KERNEL${match}"zap[0-9]*", NAME="zap/%n"
+ 
+ # zaptel devices with ownership/permissions for running as non-root
+-SUBSYSTEM${match}"zaptel",  OWNER="asterisk", GROUP="asterisk", MODE="0660"
++SUBSYSTEM${match}"zaptel",  OWNER="root", GROUP="dialout", MODE="0660"
+ EOF
+--- zaptel-1.4.11/build_tools/genmodconf.orig	2008-07-02 09:18:52 +0200
++++ zaptel-1.4.11/build_tools/genmodconf	2008-07-02 09:30:50 +0200
+@@ -79,20 +79,6 @@
+ 
+ echo Building ${target}...
+ 
+-if [ "${1}" = "linux24" ]; then
+-    for mod in ${3}; do
+-	if ! grep -q "post-install ${mod} " ${target}; then
+-	    echo "post-install ${mod} /sbin/ztcfg" >> ${target}
+-	fi
+-    done
+-elif [ "${1}" = "linux26" ]; then
+-    for mod in ${3}; do
+-	if ! grep -q "install ${mod} " ${target}; then
+-	    echo "install ${mod} /sbin/modprobe --ignore-install ${mod} ${cmdopts} && /sbin/ztcfg" >> ${target}
+-	fi
+-    done
+-fi
+-
+ if [ -z "${combined}" ]; then
+     echo "***"
+     echo "*** WARNING:"
+--- zaptel-1.4.11/kernel/Kbuild.orig	2008-07-02 20:26:06 +0200
++++ zaptel-1.4.11/kernel/Kbuild	2008-07-02 20:26:27 +0200
+@@ -16,19 +16,15 @@
+ 
+ zaptel-objs := zaptel-base.o
+ 
+-ifeq ($(ARCH),i386)
+ ifneq ($(wildcard $(src)/hpec/hpec_x86_32.o_shipped),)
+ HPEC_PRESENT=yes
+ zaptel-objs += hpec/hpec_x86_32.o
+ endif
+-endif
+ 
+-ifeq ($(ARCH),x86_64)
+ ifneq ($(wildcard $(src)/hpec/hpec_x86_64.o_shipped),)
+ HPEC_PRESENT=yes
+ zaptel-objs += hpec/hpec_x86_64.o
+ endif
+-endif
+ 
+ ifeq ($(HPEC_PRESENT),yes)
+ EXTRA_CFLAGS += -DECHO_CAN_HPEC -I$(src)/hpec
+--- zaptel-1.4.11/kernel/GNUmakefile.orig	2008-07-02 20:26:11 +0200
++++ zaptel-1.4.11/kernel/GNUmakefile	2008-07-02 20:26:41 +0200
+@@ -20,17 +20,13 @@
+   CFLAGS+=-DHOTPLUG_FIRMWARE
+ endif
+ 
+-ifeq ($(ARCH),i386)
+ ifneq ($(wildcard $(PWD)/hpec/hpec_x86_32.o_shipped),)
+ HPEC_PRESENT=yes
+ endif
+-endif
+ 
+-ifeq ($(ARCH),x86_64)
+ ifneq ($(wildcard $(PWD)/hpec/hpec_x86_64.o_shipped),)
+ HPEC_PRESENT=yes
+ endif
+-endif
+ 
+ BUILD_MODULES:=$(BUILD_TOPDIR_MODULES) $(BUILD_SUBDIR_MODULES)
+ ALL_MODULES	:= $(BUILD_TOPDIR_MODULES:%=%.o) \

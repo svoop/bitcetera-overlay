@@ -42,6 +42,12 @@ start() {
 	ebegin "Starting zaptel"
 	/sbin/ztcfg
 	eend $?
+
+	if [ -x /opt/bin/zaphpec_enable ]; then
+		ebegin "Enable HPEC"
+		/opt/bin/zaphpec_enable
+		eend $?
+	fi
 }
 
 stop() {
