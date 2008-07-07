@@ -44,7 +44,7 @@ start() {
 	eend $?
 
 	if [ -x /opt/bin/zaphpec_enable ]; then
-		ebegin "Enable HPEC"
+		ebegin "Enabling HPEC"
 		/opt/bin/zaphpec_enable >/dev/null
 		eend $?
 	fi
