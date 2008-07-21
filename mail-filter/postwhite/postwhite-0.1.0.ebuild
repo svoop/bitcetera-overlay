@@ -32,6 +32,8 @@ src_install() {
 	"${S}"/${PN} --prefix "${D}" configure
 	fowners ${PN}:${PN} /etc/postfix/${PN}
 	fperms 0770 /etc/postfix/${PN}
+	fowners ${PN}:${PN} /etc/postfix/${PN}/*
+	fperms 0660 /etc/postfix/${PN}/*
 	fowners ${PN}:${PN} /var/spool/postfix/${PN}
 	fperms 0770 /var/spool/postfix/${PN}
 	keepdir /etc/postfix/postwhite
