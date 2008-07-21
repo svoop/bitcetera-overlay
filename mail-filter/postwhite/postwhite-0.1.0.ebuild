@@ -19,11 +19,20 @@ RDEPEND="mail-mta/postfix
 DEPEND="${RDEPEND}"
 
 src_install() {
-	dosbin postwhite || die "installing binary failed"
-	newinitd "${FILESDIR}"/${PVR}/postwhite.init postwhite
-	newconfd "${FILESDIR}"/${PVR}/postwhite.conf postwhite
-	"${S}"/postwhite --prefix "${D}" configure
+	dosbin ${PN} || die "installing binary failed"
+	newinitd "${FILESDIR}"/${PVR}/${PN}.init ${PN}
+	newconfd "${FILESDIR}"/${PVR}/${PN}.conf ${PN}
+	"${S}"/${PN} --prefix "${D}" configure
+	fowners ${PN}:${PN} /etc/postfix/${PN}
+	fperms 0770 /etc/postfix/${PN}
+	fowners ${PN}:${PN} /var/spool/postfix/${PN}
+	fperms 0770 /var/spool/postfix/${PN}
 	keepdir /etc/postfix/postwhite
+}
+
+pkg_preinst() {
+	enewgroup ${PN}
+	enewuser ${PN} -1 -1 /dev/null ${PN}
 }
 
 pkg_postinst() {
