@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+inherit eutils
+
 DESCRIPTION="Easy to use whitelist service for Postfix."
 HOMEPAGE="http://www.bitcetera.com/en/products/postwhite"
 SRC_URI="http://www.bitcetera.com/download/${P}.tgz"
