@@ -20,8 +20,8 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	dosbin postwhite || die "installing binary failed"
-	"${S}"/postwhite --prefix "${D}" configure
 	newinitd "${FILESDIR}"/${PVR}/postwhite.init postwhite
 	newconfd "${FILESDIR}"/${PVR}/postwhite.conf postwhite
+	"${S}"/postwhite --prefix "${D}" configure
 	keepdir /etc/postfix/postwhite
 }
