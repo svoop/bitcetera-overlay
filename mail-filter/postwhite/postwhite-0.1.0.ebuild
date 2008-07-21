@@ -18,10 +18,8 @@ RDEPEND="mail-mta/postfix
 
 DEPEND="${RDEPEND}"
 
-src_compile() { }
-
 src_install() {
 	dosbin postwhite
-	postwhite configure
+	postwhite --prefix "${D}" configure
 	keepdir /etc/postfix/postwhite
 }
