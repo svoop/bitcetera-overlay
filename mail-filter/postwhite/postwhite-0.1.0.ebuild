@@ -20,6 +20,6 @@ DEPEND="${RDEPEND}"
 
 src_install() {
 	dosbin postwhite
-	postwhite --prefix "${D}" configure
+	"${S}"/postwhite --prefix "${D}" configure
 	keepdir /etc/postfix/postwhite
 }
