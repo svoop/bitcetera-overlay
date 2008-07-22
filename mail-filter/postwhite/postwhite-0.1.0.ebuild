@@ -13,13 +13,11 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="mail-mta/postfix
+DEPEND="mail-mta/postfix
 	>=dev-lang/ruby-1.8.6
 	dev-ruby/rubygems
 	dev-ruby/facets
 	dev-ruby/trollop"
-
-DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	enewgroup ${PN}
