@@ -51,7 +51,7 @@ pkg_postinst() {
 	elog "   (like DSPAM or SpamAssassin) in order to prevent unnecessary workload."
 	elog "4) Reload Postfix to bring your changes into effect:"
 	elog "   /etc/init.d/postfix reload"
-	elog "5) Make the Postwhite daemon start at boot time:
+	elog "5) Make the Postwhite daemon start at boot time:"
 	elog "   rc-update add postwhite default"
 	elog
 	epause 5
