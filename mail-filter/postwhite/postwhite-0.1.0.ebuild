@@ -4,8 +4,8 @@
 
 inherit eutils
 
-DESCRIPTION="Easy to use whitelist service for Postfix."
-HOMEPAGE="http://www.bitcetera.com/en/products/postwhite"
+DESCRIPTION="Per-recipient whitelist policy server for Postfix MTA managed entirely by emails."
+HOMEPAGE="http://www.bitcetera.com/products/postwhite"
 SRC_URI="http://www.bitcetera.com/download/${P}.tgz"
 
 LICENSE="GPL-3"
