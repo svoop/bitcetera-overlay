@@ -49,7 +49,7 @@ src_compile() {
 	ewarn "  6) modprobe dahdi"
 	ewarn "  7) Remove the USE flag 'zap' and/or 'zaptel'."
 	ewarn "  8) Add the USE flag 'dandi'."
-	epause 20
+	ebeep 20
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 5
