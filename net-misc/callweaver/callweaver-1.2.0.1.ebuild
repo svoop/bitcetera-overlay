@@ -78,8 +78,8 @@ src_install() {
 
 	rm -rf "${D}"var/lib/callweaver/doc
 
-	newinitd "${FILESDIR}"/callweaver.rc6 callweaver
-	newconfd "${FILESDIR}"/callweaver.confd callweaver
+	newinitd "${FILESDIR}"/${PVR}/callweaver.init callweaver
+	newconfd "${FILESDIR}"/${PVR}/callweaver.conf callweaver
 
 	keepdir /var/{log,run,spool}/callweaver
 	keepdir /var/lib/callweaver/{images,keys}

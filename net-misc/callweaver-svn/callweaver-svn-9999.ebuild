@@ -13,12 +13,12 @@ S="${WORKDIR}/${PN}"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38 zap zaptel"
+IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38"
 
 RDEPEND="!net-misc/callweaver
 	>=media-libs/spandsp-0.0.5_pre3
 	>=sys-libs/libcap-1.10
-	dahdi? ( net-misc/zaptel )
+	dahdi? ( net-misc/dahdi )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
 	mysql? ( dev-db/mysql ) 
@@ -48,7 +48,7 @@ src_compile() {
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
-		$(use_with dahdi chan_zap)		\
+		$(use_with dahdi chan_dahdi)		\
 		$(use_with fax chan_fax)		\
 		$(use_with fax app_rxfax)		\
 		$(use_with fax app_txfax)		\
@@ -83,14 +83,27 @@ src_install() {
 
 	rm -rf "${D}"var/lib/callweaver/doc
 
-	newinitd "${FILESDIR}"/callweaver.rc6 callweaver
-	newconfd "${FILESDIR}"/callweaver.confd callweaver
+	newinitd "${FILESDIR}"/callweaver.init callweaver
+	newconfd "${FILESDIR}"/callweaver.conf callweaver
 
 	keepdir /var/{log,run,spool}/callweaver
 	keepdir /var/lib/callweaver/{images,keys}
 }
 
 pkg_preinst() {
+	ewarn "The Zaptel project has been renamed to DAHDI. If you are using"
+	ewarn "hardware that relies on these drivers, make sure you have done"
+	ewarn "the following before you continue:"
+	ewarn "* rmmod zaptel"
+	ewarn "* emerge --unmerge zaptel"
+	ewarn "* emerge dahdi"
+	ewarn "* mkdir /etc/dahdi"
+	ewarn "* mv /etc/zaptel.conf /etc/dahdi/system.conf"
+	ewarn "* modprobe dahdi"
+	ewarn "* Remove the USE flag 'zap' and/or 'zaptel'."
+	ewarn "* Add the USE flag 'dandi'."
+	epause
+
 	if [[ -z "$(egetent passwd callweaver)" ]]; then
 		elog "Creating callweaver group and user..."
 		enewgroup callweaver
@@ -110,18 +123,6 @@ pkg_postinst() {
 	done
 
 	chown -R root:callweaver "${ROOT}"usr/lib/callweaver
-
-	if use zap; then
-		ewarn "The Zaptel project has been renamed to DAHDI. Please replace the USE flag"
-		ewarn "'zap' with 'dahdi' in order to prevent troubles with future updates."
-		ewarn "http://blogs.digium.com/2008/05/19"
-	fi
-
-	if use zaptel; then
-		ewarn "The Zaptel project has been renamed to DAHDI. Make sure you have set the"
-		ewarn "USE flag 'dahdi' in order to prevent troubles with future updates."
-		ewarn "http://blogs.digium.com/2008/05/19"
-	fi
 }
 
 pkg_config() {
