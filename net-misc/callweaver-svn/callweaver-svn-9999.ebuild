@@ -38,6 +38,18 @@ src_unpack() {
 }
 
 src_compile() {
+	ewarn "The Zaptel project has been renamed to DAHDI. If you are using"
+	ewarn "hardware that relies on these drivers, make sure you have done"
+	ewarn "the following before you continue:"
+	ewarn "  1) rmmod zaptel"
+	ewarn "  2) emerge --unmerge zaptel"
+	ewarn "  3) emerge dahdi"
+	ewarn "  4) mkdir /etc/dahdi"
+	ewarn "  5) mv /etc/zaptel.conf /etc/dahdi/system.conf"
+	ewarn "  6) modprobe dahdi"
+	ewarn "  7) Remove the USE flag 'zap' and/or 'zaptel'."
+	ewarn "  8) Add the USE flag 'dandi'."
+	epause 20
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 5
@@ -91,19 +103,6 @@ src_install() {
 }
 
 pkg_preinst() {
-	ewarn "The Zaptel project has been renamed to DAHDI. If you are using"
-	ewarn "hardware that relies on these drivers, make sure you have done"
-	ewarn "the following before you continue:"
-	ewarn "* rmmod zaptel"
-	ewarn "* emerge --unmerge zaptel"
-	ewarn "* emerge dahdi"
-	ewarn "* mkdir /etc/dahdi"
-	ewarn "* mv /etc/zaptel.conf /etc/dahdi/system.conf"
-	ewarn "* modprobe dahdi"
-	ewarn "* Remove the USE flag 'zap' and/or 'zaptel'."
-	ewarn "* Add the USE flag 'dandi'."
-	epause
-
 	if [[ -z "$(egetent passwd callweaver)" ]]; then
 		elog "Creating callweaver group and user..."
 		enewgroup callweaver
