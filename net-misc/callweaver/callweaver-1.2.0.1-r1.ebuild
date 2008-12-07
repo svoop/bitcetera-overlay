@@ -6,7 +6,7 @@ inherit eutils
 
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
-SRC_URI="http://devs.callweaver.org/release/callweaver-${PVR}.tgz"
+SRC_URI="http://devs.callweaver.org/release/callweaver-${PV}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
