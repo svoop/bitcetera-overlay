@@ -29,6 +29,8 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${PN}-$(get_version_component_range 1-3)
 
 src_compile() {
+	ewarn "MMX and SSE are broken and should be disabled on amd64 for this version."
+	epause 5
 	econf --disable-dependency-tracking \
 		$(use_enable doc) \
 		$(use_enable mmx) \

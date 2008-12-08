@@ -61,7 +61,7 @@ src_compile() {
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
-		$(use_with dahdi chan_dahdi)		\
+		$(use_with dahdi chan_zap)		\
 		$(use_with fax chan_fax)		\
 		$(use_with fax app_rxfax)		\
 		$(use_with fax app_txfax)		\
