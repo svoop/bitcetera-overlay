@@ -16,7 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38"
 
 RDEPEND="!net-misc/callweaver
-	>=media-libs/spandsp-0.0.5_pre3
+	>=media-libs/spandsp-0.0.6_pre2
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/dahdi )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
@@ -47,12 +47,13 @@ src_compile() {
 	ewarn "  4) mkdir /etc/dahdi"
 	ewarn "  5) mv /etc/zaptel.conf /etc/dahdi/system.conf"
 	ewarn "  6) modprobe dahdi"
-	ewarn "  7) Remove the USE flag 'zap' and/or 'zaptel'."
-	ewarn "  8) Add the USE flag 'dandi'."
-	ebeep 20
+	ewarn "  7) mv /etc/callweaver/zapata.conf /etc/callweaver/chan_dahdi.conf"
+	ewarn "  8) Remove the USE flag 'zap' and/or 'zaptel'."
+	ewarn "  9) Add the USE flag 'dandi'."
+	ebeep 10
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
-	epause 5
+	epause 10
 	econf \
 		--libdir=/usr/$(get_libdir)/callweaver	\
 		--datadir=/var/lib			\
