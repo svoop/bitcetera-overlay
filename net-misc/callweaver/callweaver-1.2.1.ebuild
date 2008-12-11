@@ -17,6 +17,7 @@ RDEPEND="!net-misc/callweaver-svn
 	=media-libs/spandsp-0.0.6_pre2
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/dahdi )
+	dahdi? ( net-misc/dahdi-tools )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
 	mysql? ( dev-db/mysql )
@@ -29,19 +30,24 @@ DEPEND="${RDEPEND}
 	>=sys-devel/libtool-1.5.20"
 
 src_compile() {
-	ewarn "The Zaptel project has been renamed to DAHDI. If you are using"
-	ewarn "hardware that relies on these drivers, make sure you have done"
-	ewarn "the following before you continue:"
-	ewarn "  1) rmmod zaptel"
-	ewarn "  2) emerge --unmerge zaptel"
-	ewarn "  3) emerge dahdi"
-	ewarn "  4) mkdir /etc/dahdi"
-	ewarn "  5) mv /etc/zaptel.conf /etc/dahdi/system.conf"
-	ewarn "  6) modprobe dahdi"
-	ewarn "  7) mv /etc/callweaver/zapata.conf /etc/callweaver/chan_dahdi.conf"
-	ewarn "  8) Remove the USE flag 'zap' and/or 'zaptel'."
-	ewarn "  9) Add the USE flag 'dandi'."
-	ebeep 10
+	if use zap; then
+		ewarn "Zaptel has been renamed to DAHDI and therefore the 'zap' USE"
+		ewarn "flag is no longer working. Set the 'dahdi' flag instead and"
+		ewarn "make sure you move your configurations from /etc/zaptel.conf"
+		ewarn "to /etc/dahdi/system.conf and from /etc/callweaver/zapata.conf"
+		ewarn "to /etc/callweaver/chan_dahdi.conf."
+		ebeep 10
+		echo
+	fi
+	if use zaptel; then
+		ewarn "Zaptel has been renamed to DAHDI and therefore the 'zaptel' USE"
+		ewarn "flag is no longer working. Set the 'dahdi' flag instead and"
+		ewarn "make sure you move your configurations from /etc/zaptel.conf"
+		ewarn "to /etc/dahdi/system.conf and from /etc/callweaver/zapata.conf"
+		ewarn "to /etc/callweaver/chan_dahdi.conf."
+		ebeep 10
+		echo
+	fi
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 10

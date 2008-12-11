@@ -1,0 +1,11 @@
+--- Makefile.org	2008-10-05 17:43:24.000000000 +0200
++++ Makefile	2008-10-05 17:43:37.000000000 +0200
+@@ -191,7 +191,7 @@
+ 	build_tools/uninstall-modules dahdi $(KVERS)
+ endif
+ 	$(KMAKE) INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=dahdi modules_install
+-	[ `id -u` = 0 ] && /sbin/depmod -a $(KVERS) || :
++#	[ `id -u` = 0 ] && /sbin/depmod -a $(KVERS) || :
+ 
+ uninstall-modules:
+ ifdef DESTDIR

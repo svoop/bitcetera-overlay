@@ -1,0 +1,18 @@
+# ChangeLog for net-misc/dahdi
+# Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  10 Dec 2008; Rambaldi <rambaldi@xs4all.nl>
+  -files/dahdi-2.0.0-install.patch, ++, ++, -dahdi-2.0.0.ebuild:
+  net-misc/dahdi: version bump
+
+  08 Nov 2008; Rambaldi <rambaldi@xs4all.nl> dahdi-2.0.0.ebuild:
+  install dahdi udev rules
+
+  08 Nov 2008; Rambaldi <rambaldi@xs4all.nl> dahdi-2.0.0.ebuild:
+  added ~x86 keywords, thanks Jaco Kroon
+
+  05 Oct 2008; Rambaldi <rambaldi@xs4all.nl>
+  +files/dahdi-2.0.0-install.patch, +metadata.xml, +dahdi-2.0.0.ebuild:
+  net-misc/dahdi-2.0.0: inital ebuild version, most likely very broken ...
+
