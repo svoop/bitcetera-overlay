@@ -5,6 +5,7 @@
 inherit linux-mod eutils flag-o-matic
 
 MY_P="${P/dahdi/dahdi-linux}"
+MY_S="${WORKDIR}/${MY_P}"
 
 DESCRIPTION="This package contains the kernel modules for DAHDI."
 HOMEPAGE="http://www.asterisk.org"
@@ -24,7 +25,10 @@ RDEPEND=""
 
 src_unpack() {
 	unpack ${A}
-	
+
+	# fix udev rules to work with both asterisk and callweaver
+	sed -i 's/GROUP="asterisk"/GROUP="dialout"/' "${MY_S}"/build_tools/genudevrules
+
 	# copy the firmware files to the correct location
 	for file in ${A} ; do
 		cp "${DISTDIR}"/${file} "${MY_P}"/drivers/dahdi/firmware/
@@ -46,9 +50,6 @@ src_install() {
 
 	# setup directory structure so udev rules get installed
 	mkdir -p "${D}"/etc/udev/rules.d
-
-	# fix udev rules to work with both asterisk and callweaver
-	sed -i 's/GROUP="asterisk"/GROUP="dialout"/' etc/udev/rules.d/dahdi.rules
 
 	einfo "Installing kernel module"
 	emake KSRC="${KERNEL_DIR}" DESTDIR="${D}" install || die "failed to install module"
