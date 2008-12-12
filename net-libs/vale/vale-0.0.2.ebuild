@@ -18,9 +18,10 @@ DEPEND="${RDEPEND}
 
 S=${WORKDIR}/${PN}-$(get_version_component_range 1-3)
 
-#src_unpack() {
-#
-#}
+src_unpack() {
+	unpack ${A}
+	
+}
 
 #src_compile() {
 #	econf --disable-dependency-tracking \
