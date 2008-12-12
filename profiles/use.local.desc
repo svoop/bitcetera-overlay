@@ -7,6 +7,8 @@
 
 # Keep it sorted.
 
+net-misc/dahdi:echpec - Support for HPEC echo cancellation.
+
 app-misc/heyu:cm17a - Support the X10 CM17A "Firecracker" device.
 app-misc/heyu:dmx210 - Support the Digimax 210 remote thermostat device.
 app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands.

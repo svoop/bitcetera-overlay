@@ -2,11 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<herd>sys-auth</herd>
-	<maintainer>
-		<email>gentoo@bitcetera.com</email>
-		<name>Sven Schwyn</name>
-	</maintainer>
-	<longdescription>
+	<longdescription lang="en">
 		OTPW is a one-time password list generator and verifier including 
 		a wrapper for use with PAM.
 		

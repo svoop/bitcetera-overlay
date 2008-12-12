@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38"
 
 RDEPEND="!net-misc/callweaver
-	>=media-libs/spandsp-0.0.6_pre2
+	>=media-libs/spandsp-0.0.6_pre3
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/dahdi )
 	dahdi? ( net-misc/dahdi-tools )
