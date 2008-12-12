@@ -9,32 +9,28 @@ SRC_URI="http://www.soft-switch.org/downloads/vale/${P}.tgz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc mmx sse"
+IUSE="mmx sse"
 
 RDEPEND=""
-DEPEND="${RDEPEND}
-	doc? ( app-doc/doxygen
-		dev-libs/libxslt )"
-
-S=${WORKDIR}/${PN}-$(get_version_component_range 1-3)
+DEPEND=""
 
 src_unpack() {
 	unpack ${A}
 	
+	# Workaround for vale-0.0.2.tgz expanding to vale-0.0.1 
+	if [[ ! -d ${P} ]]; then
+		mv vale-0.0.1 ${P}
+	fi
 }
 
-#src_compile() {
-#	econf --disable-dependency-tracking \
-#		$(use_enable doc) \
-#		$(use_enable mmx) \
-#		$(use_enable sse)
-##		$(use_enable test tests) \
-##		$(use_enable test test-data)
-#	emake || die "emake failed."
-#}
+src_compile() {
+	econf --disable-dependency-tracking \
+		$(use_enable mmx) \
+		$(use_enable sse)
+	emake || die "emake failed"
+}
 
-src_install () {
-	emake DESTDIR="${D}" install || die	"emake install failed."
+src_install() {
+	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS NEWS README
-	use doc && dohtml -r doc/{api/html/*,t38_manual}
 }

@@ -13,6 +13,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 
+DEPEND=""
+RDEPEND=""
+
 src_compile() {
 	mv x10config.sample x10.conf.sample
 	./Configure							\

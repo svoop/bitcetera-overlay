@@ -18,6 +18,7 @@ IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t3
 
 RDEPEND="!net-misc/callweaver
 	>=media-libs/spandsp-0.0.6_pre3
+	>=net-libs/vale-0.0.2
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/dahdi )
 	dahdi? ( net-misc/dahdi-tools )

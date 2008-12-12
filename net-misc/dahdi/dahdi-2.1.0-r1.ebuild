@@ -20,7 +20,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="echpec"
 
 DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND=""
 
 QA_EXECSTACK="opt/bin/zaphpec_register opt/bin/zaphpec_enable"
 
