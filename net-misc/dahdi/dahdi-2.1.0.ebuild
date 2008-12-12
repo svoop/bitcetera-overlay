@@ -45,10 +45,8 @@ src_install() {
 	cd "${MY_P}"
 
 	# setup directory structure so udev rules get installed
+	#
 	mkdir -p "${D}"/etc/udev/rules.d
-
-	# fix udev rules to work with both asterisk and callweaver
-	sed -i 's/GROUP="asterisk"/GROUP="dialout"/' etc/udev/rules.d/dahdi.rules
 
 	einfo "Installing kernel module"
 	emake KSRC="${KERNEL_DIR}" DESTDIR="${D}" install || die "failed to install module"
