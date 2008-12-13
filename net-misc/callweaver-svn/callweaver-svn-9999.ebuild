@@ -43,7 +43,7 @@ src_unpack() {
 src_compile() {
 	ewarn "Zaptel has been renamed to DAHDI and therefore the 'zap' and"
 	ewarn "'zaptel' USE flags are no longer recognized. Set the 'dahdi'"
-	ewarn "USE flag instead and make sure you move your configurations 
+	ewarn "USE flag instead and make sure you move your configurations"
 	ewarn "from /etc/zaptel.conf to /etc/dahdi/system.conf and from"
 	ewarn "/etc/callweaver/zapata.conf to /etc/callweaver/chan_dahdi.conf."
 	ebeep 10
