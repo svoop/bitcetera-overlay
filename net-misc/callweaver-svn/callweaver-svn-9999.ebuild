@@ -41,24 +41,12 @@ src_unpack() {
 }
 
 src_compile() {
-	if use zap; then
-		ewarn "Zaptel has been renamed to DAHDI and therefore the 'zap' USE"
-		ewarn "flag is no longer working. Set the 'dahdi' flag instead and"
-		ewarn "make sure you move your configurations from /etc/zaptel.conf"
-		ewarn "to /etc/dahdi/system.conf and from /etc/callweaver/zapata.conf"
-		ewarn "to /etc/callweaver/chan_dahdi.conf."
-		ebeep 10
-		echo
-	fi
-	if use zaptel; then
-		ewarn "Zaptel has been renamed to DAHDI and therefore the 'zaptel' USE"
-		ewarn "flag is no longer working. Set the 'dahdi' flag instead and"
-		ewarn "make sure you move your configurations from /etc/zaptel.conf"
-		ewarn "to /etc/dahdi/system.conf and from /etc/callweaver/zapata.conf"
-		ewarn "to /etc/callweaver/chan_dahdi.conf."
-		ebeep 10
-		echo
-	fi
+	ewarn "Zaptel has been renamed to DAHDI and therefore the 'zap' and"
+	ewarn "'zaptel' USE flags are no longer recognized. Set the 'dahdi'"
+	ewarn "USE flag instead and make sure you move your configurations 
+	ewarn "from /etc/zaptel.conf to /etc/dahdi/system.conf and from"
+	ewarn "/etc/callweaver/zapata.conf to /etc/callweaver/chan_dahdi.conf."
+	ebeep 10
 	ewarn "This ebuild from SVN is using the bleeding edge trunk version until"
 	ewarn "the DAHDI patches have been merged with the rel/1.2 branch. This"
 	ewarn "means that you should not expect everything to fully work. If you"
