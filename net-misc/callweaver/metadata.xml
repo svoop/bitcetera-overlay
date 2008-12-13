@@ -10,4 +10,12 @@
     software-fax, T.38 fax over IP and many telephony applications such as
     IVR, conferencing and callcenter queue management.
   </longdescription>
+  <use>
+    <flag name='ael'>Support AEL (Asterisk Extension Language) for a more C-style extensions configuration.</flag>
+    <flag name='dahdi'>Support Digium compatible hardware (formerly known as Zaptel).</flag>
+    <flag name='fax'>Support the fax channel driver.</flag>
+    <flag name='mgr2'>Support the Unicall call abstraction layer.</flag>
+    <flag name='misdn'>Support the new ISDN stack of Linux 2.6 kernels.</flag>
+    <flag name='t38'>Support T.38 fax over IP.</flag>
+  </use>
 </pkgmetadata> 

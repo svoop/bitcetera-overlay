@@ -7,7 +7,7 @@ inherit linux-mod eutils flag-o-matic
 MY_P="${P/dahdi/dahdi-linux}"
 MY_S="${WORKDIR}/${MY_P}"
 
-DESCRIPTION="This package contains the kernel modules for DAHDI."
+DESCRIPTION="Kernel modules for Digium compatible hardware (formerly known as Zaptel)."
 HOMEPAGE="http://www.asterisk.org"
 SRC_URI="http://downloads.digium.com/pub/telephony/dahdi-linux/releases/${MY_P}.tar.gz
 http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-064-1.05.01.tar.gz

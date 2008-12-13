@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-DESCRIPTION="The userspace tools to configure the kernel modules for the package net-misc/dahdi"
+DESCRIPTION="Userspace tools to configure the kernel modules from net-misc/dahdi"
 HOMEPAGE="http://www.asterisk.org"
 SRC_URI="http://downloads.digium.com/pub/telephony/dahdi-tools/releases/${P}.tar.gz"
 

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-</pkgmetadata>
+  <herd>maintainer-wanted</herd>
+  <longdescription lang="en">
+    Kernel modules for Digium compatible hardware (formerly known as Zaptel).
+  </longdescription>
+  <use>
+    <flag name='echpec'>Support for HPEC echo cancellation.</flag>
+  </use>
+</pkgmetadata> 

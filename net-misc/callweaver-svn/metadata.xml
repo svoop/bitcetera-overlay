@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>net-misc</herd>
-  <maintainer>
-    <email>gentoo@bitcetera.com</email>
-    <name>Sven Schwyn</name>
-  </maintainer>
-  <longdescription>
-    CallWeaver is a community-driven vendor-independent cross-platform Open Source PBX software project.
+  <herd>maintainer-wanted</herd>
+  <longdescription lang="en">
+    CallWeaver is a community-driven, vendor-independent, cross-platform, 
+    open source, PBX software project (formerly known as OpenPBX.org). It 
+    was originally derived from Asterisk. Now it supports analog and
+    digital PSTN telephony, multi-protocol voice over IP telephony, fax,
+    software-fax, T.38 fax over IP and many telephony applications such as
+    IVR, conferencing and callcenter queue management.
   </longdescription>
+  <use>
+    <flag name='ael'>Support AEL (Asterisk Extension Language) for a more C-style extensions configuration.</flag>
+    <flag name='dahdi'>Support Digium compatible hardware (formerly known as Zaptel).</flag>
+    <flag name='fax'>Support the fax channel driver.</flag>
+    <flag name='mgr2'>Support the Unicall call abstraction layer.</flag>
+    <flag name='misdn'>Support the new ISDN stack of Linux 2.6 kernels.</flag>
+    <flag name='t38'>Support T.38 fax over IP.</flag>
+  </use>
 </pkgmetadata> 

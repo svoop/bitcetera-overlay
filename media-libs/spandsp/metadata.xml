@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>media-libs</herd>
-  <longdescription>
-	  Library of DSP functions for telephony.
+  <herd>maintainer-wanted</herd>
+  <longdescription lang="en">
+    Library of DSP functions for telephony.
   </longdescription>
 </pkgmetadata> 
