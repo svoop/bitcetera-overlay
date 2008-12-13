@@ -4,6 +4,8 @@
 
 inherit linux-mod eutils flag-o-matic
 
+HPEC_VERSION="9.00.007"
+
 MY_P="${P/dahdi/dahdi-linux}"
 MY_S="${WORKDIR}/${MY_P}"
 
