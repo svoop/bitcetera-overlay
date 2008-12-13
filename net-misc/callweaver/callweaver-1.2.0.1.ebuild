@@ -90,6 +90,7 @@ pkg_preinst() {
 		elog "Creating callweaver group and user..."
 		enewgroup callweaver
 		enewuser callweaver -1 -1 /var/lib/callweaver callweaver
+		usermod -a -G dialout callweaver
 	fi
 }
 
