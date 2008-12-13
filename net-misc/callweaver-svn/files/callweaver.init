@@ -104,7 +104,9 @@ callweaver_run_loop() {
 			${NICE} /usr/sbin/callweaver ${OPTS} >${TTY} 2>&1 <${TTY}
 			result=$?
 		else
-			${NICE} /usr/sbin/callweaver ${OPTS} &>/dev/null
+			${NICE} /usr/sbin/callweaver ${OPTS}
+# TODO: temporary disable dumping output as callweaver would die with error 11		
+#			${NICE} /usr/sbin/callweaver ${OPTS} &>/dev/null   
 			result=$?
 		fi		
 
