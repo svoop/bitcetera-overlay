@@ -37,7 +37,7 @@ src_compile() {
 	ewarn "from /etc/zaptel.conf to /etc/dahdi/system.conf and from"
 	ewarn "/etc/callweaver/zapata.conf to /etc/callweaver/chan_dahdi.conf."
 	ebeep 10
-	echo
+	echo ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 10
