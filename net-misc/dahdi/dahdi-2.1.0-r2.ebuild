@@ -61,7 +61,8 @@ src_unpack() {
 	if use echpec; then
 		elog "Support for commercial HPEC echo canceller."
 		hpec_detect
-		cd "${MY_S}"/drivers/dahdi
+		mkdir -p "${MY_S}"/kernel/hpec
+		cd "${MY_S}"/kernel/hpec
 		wget -O hpec.tgz \
 			"http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/hpec-${HPEC_VERSION}-${HPEC_CPU}.tar.gz" \
 			|| die "HPEC download failed"
