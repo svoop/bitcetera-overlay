@@ -111,9 +111,12 @@ pkg_preinst() {
 	if [[ -z "$(egetent passwd callweaver)" ]]; then
 		elog "Creating callweaver group and user..."
 		enewgroup callweaver
-		enewuser callweaver -1 -1 /var/lib/callweaver callweaver
-		usermod -a -G dialout callweaver
+		enewuser callweaver -1 -1 /var/lib/callweaver "callweaver,dialout"
 	fi
+	
+	# make sure callweaver is in the dialout group (for upgrading users)
+	# TODO: remove this 3 months after the release of callweaver-1.2.1
+	usermod -a -G dialout callweaver
 }
 
 pkg_postinst() {
