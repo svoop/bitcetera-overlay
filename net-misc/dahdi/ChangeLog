@@ -2,6 +2,10 @@
 # Copyright 1999-2008 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  13 Dec 2008; Svoop <gentoo@bitcetera.com>
+  +dahdi-2.1.0-r1.ebuild: add support for HPEC echo cancellation and
+  change udev rules to set dahdi devices group to dialout
+
   10 Dec 2008; Rambaldi <rambaldi@xs4all.nl>
   -files/dahdi-2.0.0-install.patch, ++, ++, -dahdi-2.0.0.ebuild:
   net-misc/dahdi: version bump
