@@ -25,7 +25,7 @@ IUSE="echpec"
 DEPEND=""
 RDEPEND=""
 
-QA_EXECSTACK="opt/bin/zaphpec_register opt/bin/zaphpec_enable"
+QA_EXECSTACK="opt/bin/dahdihpec_register opt/bin/dahdihpec_enable"
 
 hpec_detect() {
 	if [ "$(tc-arch)" == "x86" ]; then
@@ -77,8 +77,8 @@ src_compile() {
 	# download hpec utils
 	if use echpec; then
 		cd "${S}"
-		wget -O zaphpec_register "http://downloads.digium.com/pub/register/x86-${HPEC_ARCH}/register"
-		wget -O zaphpec_enable "http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/zaphpec_enable"
+		wget -O dahdihpec_register "http://downloads.digium.com/pub/register/x86-${HPEC_ARCH}/register"
+		wget -O dahdihpec_enable "http://downloads.digium.com/pub/telephony/hpec/${HPEC_ARCH}-bit/dahdihpec_enable"
 	fi
 }
 
@@ -100,8 +100,8 @@ src_postinst() {
 		elog "hardware from Digium, you might be eligible for a free HPEC license:"
 		elog "http://www.digium.com/en/products/software/hpec.php"
 		elog ""
-		elog "HPEC has to be registered once with 'zaphpec_register' and then enabled"
-		elog "with 'zaphpec_enable' every time the Zaptel drivers are loaded. The Zaptel"
+		elog "HPEC has to be registered once with 'dahdihpec_register' and then enabled"
+		elog "with 'dahdihpec_enable' every time the DAHDI drivers are loaded. The DAHDI"
 		elog "init script does so implicitly."
 	fi
 }
