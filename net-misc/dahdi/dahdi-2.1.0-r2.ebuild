@@ -91,6 +91,17 @@ src_install() {
 	einfo "Installing kernel module"
 	emake KSRC="${KERNEL_DIR}" DESTDIR="${D}" install || die "failed to install module"
 	rm -rf "$D"/lib/modules/*/modules.*
+
+	# install hpec utils
+	if use echpec; then
+		cd "${S}"
+		diropts -o root -g root -m 0744
+		dodir /opt/bin
+		insinto /opt/bin
+		insopts -o root -g root -m 0700	
+		doins dahdihpec_register || die "installing dahdihpec_register failed"
+		doins dahdihpec_enable || die "installing dahdihpec_enable failed"
+	fi
 }
 
 src_postinst() {
