@@ -41,11 +41,13 @@ src_unpack() {
 }
 
 src_compile() {
-	ewarn "Zaptel has been renamed to DAHDI and therefore the 'zap' and"
-	ewarn "'zaptel' USE flags are no longer recognized. Set the 'dahdi'"
-	ewarn "USE flag instead and make sure you move your configurations"
-	ewarn "from /etc/zaptel.conf to /etc/dahdi/system.conf and from"
-	ewarn "/etc/callweaver/zapata.conf to /etc/callweaver/chan_dahdi.conf."
+	ewarn "Zaptel has been renamed to DAHDI and therefore the you should be"
+	ewarn "aware of the following necessary modifications:"
+	ewarn "-- The USE flags 'dahdi' replaces 'zap' and 'zaptel'"
+	ewarn "-- /etc/zaptel.conf is now /etc/dahdi/system.conf"
+	ewarn "-- Echo cancellers must be configured in /etc/dahdi/system.conf"
+	ewarn "-- /etc/callweaver/zapata.conf is now /etc/callweaver/chan_dahdi.conf"
+	ewarn "-- Channel 'Zap' is now 'DAHDI' (i.e. Dial() in extensions.conf)"
 	ebeep 10
 	echo ""
 	ewarn "This ebuild from SVN is using the bleeding edge trunk version until"
