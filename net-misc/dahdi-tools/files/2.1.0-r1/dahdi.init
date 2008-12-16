@@ -19,9 +19,9 @@ checkconfig() {
 start() {
 	checkconfig || return 1
 
-	if [ -x /opt/bin/zaphpec_enable ]; then
+	if [ -x /opt/bin/dahdihpec_enable ]; then
 		ebegin "Enabling HPEC"
-		/opt/bin/zaphpec_enable >/dev/null
+		/opt/bin/dahdihpec_enable >/dev/null
 		eend $?
 	fi
 
