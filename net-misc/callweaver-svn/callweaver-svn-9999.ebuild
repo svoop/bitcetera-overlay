@@ -6,8 +6,8 @@ inherit eutils subversion
 
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
-# ESVN_REPO_URI="http://svn.callweaver.org/callweaver/branches/rel/1.2/"
-ESVN_REPO_URI="http://svn.callweaver.org/callweaver/trunk/"
+# ESVN_REPO_URI="https://svn.callweaver.org/callweaver/branches/rel/1.2/"
+ESVN_REPO_URI="https://svn.callweaver.org/callweaver/trunk/"
 ESVN_BOOTSTRAP="./bootstrap.sh"
 S="${WORKDIR}/${PN}"
 
