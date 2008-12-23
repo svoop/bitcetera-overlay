@@ -49,14 +49,14 @@ src_compile() {
 	ewarn "-- /etc/callweaver/zapata.conf is now /etc/callweaver/chan_dahdi.conf"
 	ewarn "-- Channel 'Zap' is now 'DAHDI' (i.e. Dial() in extensions.conf)"
 	ebeep 10
-	echo ""
+	ewarn ""
 	ewarn "This ebuild from SVN is using the bleeding edge trunk version until"
 	ewarn "the DAHDI patches have been merged with the rel/1.2 branch. This"
 	ewarn "means that you should not expect everything to fully work. If you"
 	ewarn "can't live with this, you should stay with the regular callweaver"
 	ewarn "ebuild. You have been warned!"
 	ebeep 10
-	echo ""
+	ewarn ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 10

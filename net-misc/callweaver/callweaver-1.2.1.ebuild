@@ -39,7 +39,7 @@ src_compile() {
 	ewarn "-- /etc/callweaver/zapata.conf is now /etc/callweaver/chan_dahdi.conf"
 	ewarn "-- Channel 'Zap' is now 'DAHDI' (i.e. Dial() in extensions.conf)"
 	ebeep 10
-	echo ""
+	ewarn ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
 	epause 10
