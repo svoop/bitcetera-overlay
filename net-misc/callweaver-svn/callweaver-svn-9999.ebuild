@@ -53,8 +53,8 @@ src_compile() {
 	ewarn "This ebuild from SVN is using the bleeding edge trunk version until"
 	ewarn "the DAHDI patches have been merged with the rel/1.2 branch. This"
 	ewarn "means that you should not expect everything to fully work. If you"
-	ewarn "can't live with this, you should stay with the regular callweaver"
-	ewarn "ebuild. You have been warned!"
+	ewarn "can't live with this, please stay with the regular callweaver ebuild"
+	ewarn "You have been warned!"
 	ebeep 10
 	ewarn ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
