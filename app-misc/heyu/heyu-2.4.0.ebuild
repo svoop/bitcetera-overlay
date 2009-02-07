@@ -18,7 +18,7 @@ RDEPEND=""
 
 src_compile() {
 	mv x10config.sample x10.conf.sample
-	./Configure							\
+	econf							\
 		$(if use kernel_FreeBSD; then echo "freebsd"; fi)	\
 		$(if use kernel_Darwin; then echo "darwin"; fi)		\
 		$(if use kernel_linux; then echo "linux"; fi)		\
