@@ -1,0 +1,22 @@
+#!/sbin/runscript
+# Copyright 1999-2008 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+start() {
+	ebegin "Starting heyu"
+	start-stop-daemon --start --quiet --exec /usr/bin/heyu --chuid heyu:heyu -- start >/dev/null
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping heyu"
+	start-stop-daemon --stop --quiet --exec /usr/bin/heyu
+	eend $?
+}
+
+restart() {
+	svc_stop
+	sleep 5
+	svc_start
+}

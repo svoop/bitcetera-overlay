@@ -16,41 +16,48 @@ IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 DEPEND=""
 RDEPEND=""
 
+pkg_setup() {
+	enewgroup ${PN}
+	enewuser ${PN} -1 -1 /var/lib/${PN} "${PN},uucp"
+}
+
 src_compile() {
 	mv x10config.sample x10.conf.sample
-	./Configure							\
-		$(if use kernel_FreeBSD; then echo "freebsd"; fi)	\
-		$(if use kernel_Darwin; then echo "darwin"; fi)		\
-		$(if use kernel_linux; then echo "linux"; fi)		\
-		$(if ! use cm17a; then echo "-nocm17a"; fi)		\
-		$(if ! use dmx210; then echo "-nodmx"; fi)		\
-		$(if ! use ext0; then echo "-noext0"; fi)		\
-		$(if ! use ore; then echo "-noore"; fi)			\
-		$(if ! use rfxm; then echo "-norfxm"; fi)		\
-		$(if ! use rfxs; then echo "-norfxs"; fi)		\
+	"${S}"/Configure \
+		$(use kernel_FreeBSD && echo "freebsd")	\
+		$(use kernel_Darwin && echo "darwin")	\
+		$(use kernel_linux && echo "linux")	\
+		$(use cm17a || echo "-nocm17a")		\
+		$(use dmx210 || echo "-nodmx")		\
+		$(use ext0 || echo "-noext0")		\
+		$(use ore || echo "-noore")		\
+		$(use rfxm || echo "-norfxm")		\
+		$(use rfxs || echo "-norfxs")		\
 		|| die "configure failed"
-	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" "${S}"/Makefile
-	sed -i "s/CFLAGS\s*=.*/CFLAGS = ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile
+	sed -i "s/CC\s*=.*/CC = $(tc-getCC)/" "${S}"/Makefile || die "adjustment of CC failed"
+	sed -i "s/CFLAGS\s*=.*/CFLAGS = ${CFLAGS} \$(DFLAGS)/" "${S}"/Makefile || die "adjustment of CFLAGS failed"
+	sed -i -r 's%^(DFLAGS.+)-DSYSBASEDIR=\\"[^\]+\\"%\1%' "${S}"/Makefile || die "removing DSYSBASEDIR from DFLAGS failed"
+	sed -i -r 's%^(DFLAGS\s*=\s*)%\1-DSYSBASEDIR=\\"/var/lib/heyu\\" %' "${S}"/Makefile || die "adding DSYSBASEDIR to DFLAGS failed"
+	sed -i -r 's%^(DFLAGS.+)-DSPOOLDIR=\\"[^\]+\\"%\1%' "${S}"/Makefile || die "removing DSPOOLDIR from DFLAGS failed"
+	sed -i -r 's%^(DFLAGS\s*=\s*)%\1-DSPOOLDIR=\\"/var/lib/heyu\\" %' "${S}"/Makefile || die "adding DSPOOLDIR to DFLAGS failed"
+	sed -i -r 's%^(DFLAGS.+)-DLOCKDIR=\\"[^\]+\\"%\1%' "${S}"/Makefile || die "removing DLOCKDIR from DFLAGS failed"
+	sed -i -r 's%^(DFLAGS\s*=\s*)%\1-DLOCKDIR=\\"/var/lock\\" %' "${S}"/Makefile || die "adding DLOCKDIR to DFLAGS failed"
 	emake || die "make failed"
 }
 
 src_install() {
 	dobin heyu || die "installing binary failed"
 	doman heyu.1 x10config.5 x10scripts.5 x10sched.5
-	newinitd "${FILESDIR}"/${PVR}/heyu.init heyu
-	diropts -o nobody -g nogroup -m 0777
-	dodir /var/tmp/heyu
-	diropts -o root -g root -m 0744
-	dodir /etc/heyu
-	keepdir /etc/heyu
+	newinitd "${FILESDIR}"/${PV}/heyu.init heyu
 	insinto /etc/heyu
-	insopts -o root -g root -m 0644
-	doins x10.conf.sample || die "installing config sample failed"
-	doins x10.sched.sample || die "installing schedule sample failed"
+	doins x10.*.sample || die "installing config samples failed"
+	diropts -m 0750 -o heyu
+	dodir /var/log/heyu  || die "creating log directory failed"
+	dosym /etc/heyu/x10.conf /var/lib/heyu/x10.conf
+	dosym /etc/heyu/x10.sched /var/lib/heyu/x10.sched
 }
 
 pkg_postinst() {
-	elog
 	elog "Don't forget to tell heyu where to find your CM11 or CM17. Therefore"
 	elog "the file /etc/heyu/x10.conf must contain a line starting with 'TTY'"
 	elog "followed by the corresponding device such as:"
@@ -68,6 +75,4 @@ pkg_postinst() {
 	elog "at boot time:"
 	elog
 	elog "rc-update add heyu default"
-	elog
-	epause 5
 }
