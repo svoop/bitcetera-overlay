@@ -42,6 +42,7 @@ src_compile() {
 	sed -i -r 's%^(DFLAGS\s*=\s*)%\1-DSPOOLDIR=\\"/var/lib/heyu\\" %' "${S}"/Makefile || die "adding DSPOOLDIR to DFLAGS failed"
 	sed -i -r 's%^(DFLAGS.+)-DLOCKDIR=\\"[^\]+\\"%\1%' "${S}"/Makefile || die "removing DLOCKDIR from DFLAGS failed"
 	sed -i -r 's%^(DFLAGS\s*=\s*)%\1-DLOCKDIR=\\"/var/lock\\" %' "${S}"/Makefile || die "adding DLOCKDIR to DFLAGS failed"
+	sed -i -r 's%(LOG_DIR.*?)NONE%\1/var/log/heyu%' "${S}"/x10.conf.sample || die "changing LOG_DIR failed"
 	emake || die "make failed"
 }
 
