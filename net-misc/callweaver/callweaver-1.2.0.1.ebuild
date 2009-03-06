@@ -19,8 +19,8 @@ RDEPEND="!net-misc/callweaver-svn
 	dahdi? ( net-misc/zaptel )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
-	mysql? ( dev-db/mysql )
-	postgres? ( dev-db/postgresql )
+	mysql? ( virtual/mysql )
+	postgres? ( virtual/postgresql-base )
 	zap? ( net-misc/zaptel )
 	zaptel? ( net-misc/zaptel )"
 
