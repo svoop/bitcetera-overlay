@@ -7,7 +7,7 @@ inherit eutils subversion versionator
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
 MY_PV=$(replace_version_separator 3 '-')
-ESVN_REPO_URI="https://svn.callweaver.org/callweaver/tags/{$MY_PV}/"
+ESVN_REPO_URI="https://svn.callweaver.org/callweaver/tags/${MY_PV}/"
 ESVN_BOOTSTRAP="./bootstrap.sh"
 S="${WORKDIR}/${PN}"
 
@@ -59,7 +59,7 @@ src_compile() {
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
-		$(use_with dahdi chan_zap)		\
+		$(use_with dahdi chan_dahdi)		\
 		$(use_with fax chan_fax)		\
 		$(use_with fax app_rxfax)		\
 		$(use_with fax app_txfax)		\
