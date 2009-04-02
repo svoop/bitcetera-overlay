@@ -2,11 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils subversion
+inherit eutils subversion versionator
 
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
-ESVN_REPO_URI="https://svn.callweaver.org/callweaver/tags/{$PRV}/"
+MY_PV=$(replace_version_separator 3 '-')
+ESVN_REPO_URI="https://svn.callweaver.org/callweaver/tags/{$MY_PV}/"
 ESVN_BOOTSTRAP="./bootstrap.sh"
 S="${WORKDIR}/${PN}"
 
