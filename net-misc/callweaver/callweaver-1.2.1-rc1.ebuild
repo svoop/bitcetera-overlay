@@ -2,33 +2,42 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit eutils
+inherit eutils subversion
 
 DESCRIPTION="Community-driven vendor-independent cross-platform Open Source PBX software."
 HOMEPAGE="http://www.callweaver.org/"
-SRC_URI="http://devs.callweaver.org/release/callweaver-${PV}.tgz"
+ESVN_REPO_URI="https://svn.callweaver.org/callweaver/tags/{$PRV}/"
+ESVN_BOOTSTRAP="./bootstrap.sh"
+S="${WORKDIR}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="ael dahdi debug fax jabber mgr2 misdn mysql odbc postgres profile speex t38"
 
-RDEPEND="!net-misc/callweaver-svn
-	=media-libs/spandsp-0.0.6_pre3
+RDEPEND="!net-misc/callweaver
+	>=media-libs/spandsp-0.0.6_pre7
 	>=net-libs/vale-0.0.2
 	>=sys-libs/libcap-1.10
 	dahdi? ( net-misc/dahdi )
 	dahdi? ( net-misc/dahdi-tools )
 	misdn? ( >=net-dialup/misdn-1.1.7 >=net-dialup/misdnuser-1.1.7 )
 	speex? ( media-libs/speex )
-	mysql? ( virtual/mysql )
+	mysql? ( virtual/mysql ) 
 	postgres? ( virtual/postgresql-base )"
 
 DEPEND="${RDEPEND}
 	sys-devel/flex
+	dev-util/subversion
 	>=sys-devel/automake-1.9.6
 	>=sys-devel/autoconf-2.59
 	>=sys-devel/libtool-1.5.20"
+
+src_unpack() {
+	subversion_fetch
+	cd "${S}"
+	subversion_bootstrap
+}
 
 src_compile() {
 	ewarn "Zaptel has been renamed to DAHDI and therefore the you should be"
@@ -38,7 +47,6 @@ src_compile() {
 	ewarn "-- Echo cancellers must be configured in /etc/dahdi/system.conf"
 	ewarn "-- /etc/callweaver/zapata.conf is now /etc/callweaver/chan_dahdi.conf"
 	ewarn "-- Channel 'Zap' is now 'DAHDI' (i.e. Dial() in extensions.conf)"
-	ebeep 10
 	ewarn ""
 	ewarn "All USE flags are experimental, please submit issues and patches to:"
 	ewarn "http://bugs.gentoo.org/buglist.cgi?quicksearch=callweaver"
@@ -50,7 +58,7 @@ src_compile() {
 		--sharedstatedir=/var/lib/callweaver	\
 		--with-directory-layout=lsb		\
 		$(use_with ael pbx_ael)			\
-		$(use_with dahdi chan_dahdi)		\
+		$(use_with dahdi chan_zap)		\
 		$(use_with fax chan_fax)		\
 		$(use_with fax app_rxfax)		\
 		$(use_with fax app_txfax)		\
@@ -85,8 +93,8 @@ src_install() {
 
 	rm -rf "${D}"var/lib/callweaver/doc
 
-	newinitd "${FILESDIR}"/${PVR}/callweaver.init callweaver
-	newconfd "${FILESDIR}"/${PVR}/callweaver.conf callweaver
+	newinitd "${FILESDIR}"/${PV}/callweaver.init callweaver
+	newconfd "${FILESDIR}"/${PV}/callweaver.conf callweaver
 
 	keepdir /var/{log,run,spool}/callweaver
 	keepdir /var/lib/callweaver/{images,keys}
@@ -98,7 +106,7 @@ pkg_preinst() {
 		enewgroup callweaver
 		enewuser callweaver -1 -1 /var/lib/callweaver "callweaver,dialout"
 	fi
-
+	
 	# make sure callweaver is in the dialout group (for upgrading users)
 	# TODO: remove this 3 months after the release of callweaver-1.2.1
 	usermod -a -G dialout callweaver
