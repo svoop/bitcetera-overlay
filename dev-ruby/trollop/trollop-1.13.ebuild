@@ -13,5 +13,5 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 IUSE=""
-USE_RUBY="any"
+USE_RUBY="1.8 1.9"
 DEPEND="virtual/ruby"
