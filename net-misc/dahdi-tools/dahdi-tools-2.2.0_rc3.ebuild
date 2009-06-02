@@ -4,7 +4,7 @@
 
 inherit eutils
 
-SRC_P="${MY_P/_/-}"
+SRC_P="${P/_/-}"
 
 DESCRIPTION="Userspace tools to configure the kernel modules from net-misc/dahdi"
 HOMEPAGE="http://www.asterisk.org"
@@ -27,9 +27,6 @@ src_unpack() {
 	if [[ "${SRC_P}" != "${P}" ]]; then
 		mv "${SRC_P}" "${P}"
 	fi
-
-	cd "${S}"
-	epatch "${FILESDIR}/${P}-asneeded.patch"
 }
 
 src_install() {
