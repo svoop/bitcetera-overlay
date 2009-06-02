@@ -5,7 +5,7 @@
 inherit linux-mod eutils flag-o-matic
 
 MY_P="${P/dahdi/dahdi-linux}"
-MY_S="${WORKDIR}/${MY_P}"
+MY_S="${WORKDIR}/${MY_P/_/-}"
 
 DESCRIPTION="Kernel modules for Digium compatible hardware (formerly known as Zaptel)."
 HOMEPAGE="http://www.asterisk.org"
