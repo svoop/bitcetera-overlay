@@ -5,11 +5,13 @@
 inherit linux-mod eutils flag-o-matic
 
 MY_P="${P/dahdi/dahdi-linux}"
-MY_S="${WORKDIR}/${MY_P/_/-}"
+MY_S="${WORKDIR}/${MY_P}"
+
+SRC_P="${MY_P/_/-}"
 
 DESCRIPTION="Kernel modules for Digium compatible hardware (formerly known as Zaptel)."
 HOMEPAGE="http://www.asterisk.org"
-SRC_URI="http://downloads.digium.com/pub/telephony/dahdi-linux/releases/${MY_P}.tar.gz
+SRC_URI="http://downloads.digium.com/pub/telephony/dahdi-linux/releases/${SRC_P}.tar.gz
 http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-064-1.05.01.tar.gz
 http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-oct6114-128-1.05.01.tar.gz
 http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-tc400m-MR6.12.tar.gz
@@ -26,6 +28,11 @@ RDEPEND=""
 src_unpack() {
 	unpack ${A}
 
+	# Rename the work directory if necessary
+	if [[ "${SRC_P}" != "${MY_P}" ]]; then
+		mv "${SRC_P}" "${MY_P}"
+	fi
+
 	# Fix udev rules to work with both asterisk and callweaver
 	sed -i 's/GROUP="asterisk"/GROUP="dialout"/' "${MY_S}"/build_tools/genudevrules
 
@@ -36,10 +43,10 @@ src_unpack() {
 	# But without the .bin's it'll still fall over and die, so copy those too.
 	cp *.bin "${MY_P}"/drivers/dahdi/firmware/
 
-#	epatch "${FILESDIR}"/${P}-no-depmod.patch
+	epatch "${FILESDIR}"/${P}-no-depmod.patch
 
 	# http://bugs.digium.com/view.php?id=14285
-#	epatch "${FILESDIR}"/${P}-netdev-2-6-29.patch
+# epatch "${FILESDIR}"/${P}-netdev-2-6-29.patch
 }
 
 src_compile() {
