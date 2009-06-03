@@ -27,6 +27,8 @@ src_unpack() {
 	if [[ "${SRC_P}" != "${P}" ]]; then
 		mv "${SRC_P}" "${P}"
 	fi
+
+  epatch "${FILESDIR}/${P}-sethdl.patch"
 }
 
 src_install() {
