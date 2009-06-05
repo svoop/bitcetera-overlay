@@ -33,7 +33,7 @@ src_unpack() {
 
 src_install() {
 	emake DESTDIR="${D}" install || die "failed to install package"
-	emake DESTDIR="${D}" config || die "failed to install package"
+#	emake DESTDIR="${D}" config || die "failed to install package"
 
 	# install init script
 	newinitd "${FILESDIR}"/dahdi.init dahdi
