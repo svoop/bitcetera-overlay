@@ -19,7 +19,7 @@ pkg_setup() {
 	ewarn "Heyu must not be running when updating to a higher version as"
 	ewarn "stray lockfiles may prevent restarting it - in which case you"
 	ewarn "should refer to the cleanup section of the Heyu man page."
-	epause 5
+	epause
 }
 
 src_compile() {
