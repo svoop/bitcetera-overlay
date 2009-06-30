@@ -16,6 +16,10 @@ IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 pkg_setup() {
 	enewgroup ${PN}
 	enewuser ${PN} -1 -1 /var/lib/${PN} "${PN},uucp"
+	ewarn "Heyu must not be running when updating to a higher version as"
+	ewarn "stray lockfiles may prevent restarting it - in which case you"
+	ewarn "should refer to the cleanup section of the Heyu man page."
+	epause 5
 }
 
 src_compile() {
