@@ -17,8 +17,8 @@ pkg_setup() {
 	enewgroup ${PN}
 	enewuser ${PN} -1 -1 /var/lib/${PN} "${PN},uucp"
 	ewarn "Heyu must not be running when updating to a higher version as"
-	ewarn "stray lockfiles may prevent restarting it - in which case you"
-	ewarn "should refer to the cleanup section of the Heyu man page."
+	ewarn "stray lockfiles may prevent it fromrestarting - in which case"
+	ewarn "you should refer to the cleanup section of the Heyu man page."
 	epause
 }
 
