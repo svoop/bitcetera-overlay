@@ -104,7 +104,7 @@ src_compile() {
 
 	cd "${S}"
 	elog configure ${MYOPTS}
-	./configure ${MYOPTS} || die "configure failed"
+	./configure ${MYOPTS} --with-ffmpeg-path=/usr/share/ffmpeg || die "configure failed"
 
 	vdr-plugin_src_compile
 }
