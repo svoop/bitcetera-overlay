@@ -15,7 +15,8 @@ SLOT=$(get_version_component_range 1-2)
 # 1.9.1.0 -> 1.9.1 (used in libdirs)
 RUBYVERSION=$(get_version_component_range 1-3)
 
-MY_SUFFIX=${SLOT}
+# 1.9 -> 19
+MY_SUFFIX=$(delete_version_separator 1 ${SLOT})
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
