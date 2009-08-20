@@ -61,9 +61,9 @@ src_prepare() {
 	# Patch for rubygems to find installed gems outside of the sandbox
 	epatch "${FILESDIR}/ruby19-rubygems-gentoo.patch"
 
-	epatch "${FILESDIR}"/ruby-1.9.1_p129-no-undefined-ext.patch
-	epatch "${FILESDIR}"/ruby-1.9.1_p129-parallelmake.patch
-	epatch "${FILESDIR}"/ruby-1.9.1_p129-parallelmake2.patch
+	epatch "${FILESDIR}"/${P}-no-undefined-ext.patch
+	epatch "${FILESDIR}"/${P}-parallelmake.patch
+	epatch "${FILESDIR}"/${P}-parallelmake2.patch
 
 	# Strip rake
 	rm "bin/rake"
@@ -179,9 +179,6 @@ src_install() {
 
 	insinto /usr/$(get_libdir)/ruby${MY_SUFFIX}/site_ruby/
 	newins "${FILESDIR}/auto_gem.rb" auto_gem.rb
-
-	dosym ruby1.9 /usr/bin/ruby19
-	dosym gem1.9 /usr/bin/gem19
 }
 
 pkg_postinst() {
