@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/app-admin/eselect-ruby/eselect-ruby-20081227.ebuild,v 1.13 2009/05/15 14:27:27 aballier Exp $
 
+inherit eutils
+
 DESCRIPTION="Manages multiple Ruby versions"
 HOMEPAGE="http://www.gentoo.org"
 SRC_URI="http://www.funtoo.org/distfiles/ruby.eselect-${PVR}.bz2"
