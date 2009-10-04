@@ -5,20 +5,21 @@
 inherit eutils toolchain-funcs
 
 DESCRIPTION="Utility to control and program CM11A, CM17A and CM12U X10 interfaces."
-HOMEPAGE="http://heyu.tanj.com"
-SRC_URI="http://heyu.tanj.com/download/${P}.tgz"
+HOMEPAGE="http://www.heyu.org"
+SRC_URI="http://www.heyu.org/download/${P}.tgz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="kernel_Darwin kernel_FreeBSD kernel_linux cm17a dmx210 ext0 ore rfxm rfxs"
 
-DEPEND=""
-RDEPEND=""
-
 pkg_setup() {
 	enewgroup ${PN}
 	enewuser ${PN} -1 -1 /var/lib/${PN} "${PN},uucp"
+	ewarn "Heyu must not be running when updating to a higher version as"
+	ewarn "stray lockfiles may prevent it from restarting - in which case"
+	ewarn "you should refer to the cleanup section of the Heyu man page."
+	epause
 }
 
 src_compile() {
@@ -48,7 +49,7 @@ src_compile() {
 
 src_install() {
 	dobin heyu || die "installing binary failed"
-	doman heyu.1 x10config.5 x10scripts.5 x10sched.5
+	doman heyu.1 x10config.5 x10scripts.5 x10sched.5 || die "installing man pages failed"
 	newinitd "${FILESDIR}"/heyu.init heyu
 	insinto /etc/heyu
 	doins x10.*.sample || die "installing config samples failed"
