@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="logrotate"
 
-RDEPEND="net-firewall/iptables
+RDEPEND="=net-libs/libvuurmuur-${PV}
 	>=sys-libs/ncurses-5
 	logrotate? ( app-admin/logrotate )"
 
@@ -32,33 +32,37 @@ src_unpack() {
 src_prepare() {
 	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch
 	elibtoolize
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
-		if ! [ -d m4 ]; then mkdir m4; fi   # workaround
-		eautoreconf || die "eautoreconf $component failed"
+		if ! [ -d m4 ]; then mkdir m4; fi   # upstream issue
+		eautoreconf || die "eautoreconf ${component} failed"
 	done
 }
 
 src_configure() {
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
 		econf \
-			--with-libvuurmuur-includes="${S}/libvuurmuur-${PV}/src" \
-			--with-libvuurmuur-libraries="${S}/libvuurmuur-${PV}/src" \
-			--with-plugindir=/usr/lib/vuurmuur \
-			--with-shareddir=/usr/share/vuurmuur \
+			--with-libvuurmuur-includes=/usr/include \
+			--with-libvuurmuur-libraries=/usr/lib \
 			--with-localedir=/usr/share/locale \
 			--with-widec=yes \
-			|| die "econf $component failed"
+			|| die "econf ${component} failed"
 	done
 }
 
 src_compile() {
-	emake || die "emake failed"
+	for component in vuurmuur vuurmuur_conf; do
+		cd "${S}/${component}-${PV}"
+		emake || die "emake ${component} failed"
+	done
 }
 
 src_install() {
-	einstall
+	for component in vuurmuur vuurmuur_conf; do
+		cd "${S}/${component}-${PV}"
+		einstall || die "einstall ${component} failed"
+	done	
 
 	doinitd "${FILESDIR}"/vuurmuur.init vuurmuur
 
