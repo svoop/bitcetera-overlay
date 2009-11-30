@@ -19,23 +19,21 @@ IUSE=""
 
 RDEPEND="net-firewall/iptables"
 
-S="${WORKDIR}/${MY_PN}-${PV}"
+S="${WORKDIR}/${MY_PN}-${PV}/${P}"
 
 src_unpack() {
 	unpack ${A} || die "unpacking failed"
-	cd "${S}"
+	cd "${MY_PN}-${PV}"
 	tar xzf libvuurmuur-${PV}.tar.gz || die "unpacking component failed"
 }
 
 src_prepare() {
 	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch
-	cd "${S}/libvuurmuur-${PV}"
 	if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
 	eautoreconf || die "eautoreconf failed"
 }
 
 src_configure() {
-	cd "${S}/libvuurmuur-${PV}"
 	econf \
 		--with-plugindir=/usr/lib/vuurmuur \
 		--with-shareddir=/usr/share/vuurmuur \
@@ -43,11 +41,12 @@ src_configure() {
 }
 
 src_compile() {
-	cd "${S}/libvuurmuur-${PV}"
 	emake || die "emake failed"
 }
 
 src_install() {
-	cd "${S}/libvuurmuur-${PV}"
 	einstall
+
+	insinto /etc/vuurmuur/plugins
+	doins plugins/textdir/textdir.conf
 }

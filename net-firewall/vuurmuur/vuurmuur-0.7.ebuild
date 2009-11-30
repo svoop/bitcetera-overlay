@@ -38,15 +38,19 @@ src_prepare() {
 }
 
 src_configure() {
-	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${PV}"
-		econf \
-			--with-libvuurmuur-includes=/usr/include \
-			--with-libvuurmuur-libraries=/usr/lib \
-			--with-localedir=/usr/share/locale \
-			--with-widec=yes \
-			|| die "econf ${component} failed"
-	done
+	cd "${S}/vuurmuur-${PV}"
+	econf \
+		--with-libvuurmuur-includes=/usr/include \
+		--with-libvuurmuur-libraries=/usr/lib \
+		|| die "econf vuurmuur failed"
+	
+	cd "${S}/vuurmuur_conf-${PV}"
+	econf \
+		--with-libvuurmuur-includes=/usr/include \
+		--with-libvuurmuur-libraries=/usr/lib \
+		--with-localedir=/usr/share/locale \
+		--with-widec=yes \
+		|| die "econf ${component} failed"
 }
 
 src_compile() {
@@ -57,10 +61,8 @@ src_compile() {
 }
 
 src_install() {
-	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${PV}"
-		einstall || die "einstall ${component} failed"
-	done	
+	cd "${S}/vuurmuur-${PV}"
+	einstall || die "einstall vuurmuur failed"
 
 	doinitd "${FILESDIR}"/vuurmuur.init vuurmuur
 
@@ -74,11 +76,16 @@ src_install() {
 	insinto /etc/vuurmuur
 	newins skel/etc/vuurmuur/config.conf.sample config.conf
 
-	insinto /etc/vuurmuur/plugins
-	doins plugins/textdir/textdir.conf
+	if ( use logrotate ); then
+		insopts -m0600
+		insinto /etc/logrotate.d
+		newins scripts/vuurmuur-logrotate vuurmuur
+	fi
 
-	cd ..   # TODO: why?
+	cd "${S}/vuurmuur_conf-${PV}"
+	einstall || die "einstall vuurmuur_conf failed"
 
+	cd "${S}"
 	insinto /etc/vuurmuur/textdir
 	doins -r zones
 	dodir /etc/vuurmuur/textdir/zones/dmz/networks
@@ -86,17 +93,11 @@ src_install() {
 	dodir /etc/vuurmuur/textdir/zones/ext/networks/internet/groups
 	dodir /etc/vuurmuur/textdir/zones/lan/networks
 	dodir /etc/vuurmuur/textdir/zones/vpn/networks
-
-	if ( use logrotate ); then
-		insopts -m0600
-		insinto /etc/logrotate.d
-		newins scripts/vuurmuur-logrotate vuurmuur
-	fi
 }
 
 pkg_postinst() {
-	elog "The vuurmuur daemon must run in order to use the vuurmuur_conf"
-	elog "console tool. If this is a new install, start it with:"
+	elog "The vuurmuur daemon must be running in order to use the console"
+	elog "tool vuurmuur_conf. If this is a new install, start it with:"
 	elog "/etc/init.d/vuurmuur start"
 	elog
 	elog "Execute the following command to start the vuurmuur daemon at"
