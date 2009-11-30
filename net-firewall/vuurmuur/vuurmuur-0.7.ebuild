@@ -30,25 +30,19 @@ src_unpack() {
 }
 
 src_prepare() {
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
 		if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
-		sed -i \   # skip checking presence of libvuurmuur
-			'if test "x$ac_cv_lib_vuurmuur_libvuurmuur_get_version" = x""yes; then' \
-			'if test "1" = "1"; then' \
-			"${S}"/configure || die "modifying configure for ${component} failed"
 		eautoreconf || die "eautoreconf ${component} failed"
 	done
 }
 
 src_configure() {
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
 		econf \
-			--with-libvuurmuur-includes="${S}/libvuurmuur-${PV}/src" \
+			--with-libvuurmuur-includes=/usr/include \
 			--with-libvuurmuur-libraries=/usr/lib \
-			--with-plugindir=/usr/lib/vuurmuur \
-			--with-shareddir=/usr/share/vuurmuur \
 			--with-localedir=/usr/share/locale \
 			--with-widec=yes \
 			|| die "econf ${component} failed"
@@ -56,14 +50,14 @@ src_configure() {
 }
 
 src_compile() {
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
 		emake || die "emake ${component} failed"
 	done
 }
 
 src_install() {
-	for component in libvuurmuur vuurmuur vuurmuur_conf; do
+	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
 		einstall || die "einstall ${component} failed"
 	done	
