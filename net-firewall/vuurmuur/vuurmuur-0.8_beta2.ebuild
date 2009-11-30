@@ -6,6 +6,7 @@ inherit autotools
 
 EAPI="2"
 
+MY_P=${P/_beta/beta}
 MY_PN="Vuurmuur"
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons."
@@ -92,6 +93,6 @@ pkg_postinst() {
 	elog "Vuurmuur requires use of the INS and DEL keys. In case your"
 	elog "terminal doesn't feature these keys, assign the following"
 	elog "sequences to other keys:"
-	elog "INS: \033[2~"
-	elog "DEL: \033[3~"
+	elog "INS: \\033[2~"
+	elog "DEL: \\033[3~"
 }

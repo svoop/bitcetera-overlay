@@ -6,6 +6,7 @@ inherit autotools
 
 EAPI="2"
 
+MY_P=${P/_beta/beta}
 MY_PN="Vuurmuur"
 
 DESCRIPTION="Libraries and plugins needed by Vuurmuur."
