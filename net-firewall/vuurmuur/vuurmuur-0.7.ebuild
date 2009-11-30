@@ -30,11 +30,9 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch
-	elibtoolize
 	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${PV}"
-		if ! [ -d m4 ]; then mkdir m4; fi   # upstream issue
+		if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
 		eautoreconf || die "eautoreconf ${component} failed"
 	done
 }

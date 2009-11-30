@@ -15,7 +15,7 @@ SRC_URI="mirror://sourceforge/vuurmuur/${MY_PN}-${PV}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="logrotate"
+IUSE=""
 
 RDEPEND="net-firewall/iptables"
 
@@ -29,8 +29,8 @@ src_unpack() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch
-	elibtoolize
 	cd "${S}/libvuurmuur-${PV}"
+	if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
 	eautoreconf || die "eautoreconf failed"
 }
 
