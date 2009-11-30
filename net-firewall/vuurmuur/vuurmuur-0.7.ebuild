@@ -97,11 +97,11 @@ src_install() {
 }
 
 pkg_postinst() {
-	elog "The vuurmuur daemon must be running in order to use the console"
-	elog "tool vuurmuur_conf. If this is a new install, start it with:"
+	elog "If this is a new install, define some rules with vuurmuur_conf,"
+	elog "save them and then start the service with:"
+	elog "/etc/init.d/iptables save"
 	elog "/etc/init.d/vuurmuur start"
 	elog
-	elog "Execute the following command to start the vuurmuur daemon at"
-	elog "boot time:"
+	elog "Run the following command to start the vuurmuur daemon at boot:"
 	elog "rc-update add vuurmuur default"
 }
