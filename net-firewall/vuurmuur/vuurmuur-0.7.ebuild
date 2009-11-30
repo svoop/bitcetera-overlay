@@ -64,7 +64,8 @@ src_install() {
 	cd "${S}/vuurmuur-${PV}"
 	einstall || die "einstall vuurmuur failed"
 
-	doinitd "${FILESDIR}"/vuurmuur.init vuurmuur
+	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur
+	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur
 
 	diropts -m0700
 	dodir /etc/vuurmuurauto
