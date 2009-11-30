@@ -33,10 +33,10 @@ start() {
 			eend 2
 			return 2
 		fi
-		start-stop-daemon --start ${DEBUG+--debug} --exec /usr/bin/vuurmuur -- ${OPTIONS}
+		start-stop-daemon --start ${QUIET+--quiet} --exec /usr/bin/vuurmuur -- ${OPTIONS}
 		eend $?
 		ebegin "Starting Vuurmuur Log"
-		start-stop-daemon --start ${DEBUG+--debug} --exec /usr/bin/vuurmuur_log
+		start-stop-daemon --start ${QUIET+--quiet} --exec /usr/bin/vuurmuur_log
 		eend $?
 	else
 		eend 1
@@ -46,10 +46,10 @@ start() {
 
 stop() {
 	ebegin "Stopping Vuurmuur"
-	start-stop-daemon --stop ${DEBUG+--debug} --pidfile /var/run/vuurmuur.pid
+	start-stop-daemon --stop ${QUIET+--quiet} --pidfile /var/run/vuurmuur.pid
 	eend $?
 	ebegin "Stopping Vuurmuur Log"
-	start-stop-daemon --stop ${DEBUG+--debug} --exec /usr/bin/vuurmuur_log
+	start-stop-daemon --stop ${QUIET+--quiet} --exec /usr/bin/vuurmuur_log
 	eend $?
 }
 
