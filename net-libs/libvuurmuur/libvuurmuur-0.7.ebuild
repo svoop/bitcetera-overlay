@@ -36,7 +36,7 @@ src_prepare() {
 src_configure() {
 	econf \
 		--with-plugindir=/usr/lib \
-		--with-shareddir=/usr/share/vuurmuur \
+		--with-shareddir=/usr/share \
 		|| die "econf failed"
 }
 
