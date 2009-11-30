@@ -67,16 +67,6 @@ src_install() {
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur
 	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur
 
-	diropts -m0700
-	dodir /etc/vuurmuurauto
-	dodir /etc/vuurmuur/plugins
-	dodir /etc/vuurmuur/textdir/interface
-	dodir /etc/vuurmuur/textdir/rules
-	dodir /etc/vuurmuur/textdir/services
-
-	insinto /etc/vuurmuur
-	newins skel/etc/vuurmuur/config.conf.sample config.conf
-
 	if ( use logrotate ); then
 		insopts -m0600
 		insinto /etc/logrotate.d
@@ -85,23 +75,23 @@ src_install() {
 
 	cd "${S}/vuurmuur_conf-${PV}"
 	einstall || die "einstall vuurmuur_conf failed"
-
-	cd "${S}"
-	insinto /etc/vuurmuur/textdir
-	doins -r zones
-	dodir /etc/vuurmuur/textdir/zones/dmz/networks
-	dodir /etc/vuurmuur/textdir/zones/ext/networks/internet/hosts
-	dodir /etc/vuurmuur/textdir/zones/ext/networks/internet/groups
-	dodir /etc/vuurmuur/textdir/zones/lan/networks
-	dodir /etc/vuurmuur/textdir/zones/vpn/networks
 }
 
 pkg_postinst() {
-	elog "If this is a new install, define some rules with vuurmuur_conf,"
-	elog "save them and then start the service with:"
-	elog "/etc/init.d/iptables save"
-	elog "/etc/init.d/vuurmuur start"
+	elog "Please read the manual on www.vuurmuur.org now - you have"
+	elog "been warned!"
 	elog
-	elog "Run the following command to start the vuurmuur daemon at boot:"
-	elog "rc-update add vuurmuur default"
+	elog "If this is a new install, make sure you define some rules"
+	elog "BEFORE you start the daemon in order not to lock yourself"
+	elog "out. The necessary steps are:"
+	elog "1) vuurmuur_conf"
+	elog "2) /etc/init.d/iptables save"
+	elog "3) /etc/init.d/vuurmuur start"	
+	elog "4) rc-update add vuurmuur default"
+	elog
+	elog "Vuurmuur requires use of the INS and DEL keys. In case your"
+	elog "terminal doesn't feature these keys, assign the following"
+	elog "sequences to other keys:"
+	elog "INS: \033[2~"
+	elog "DEL: \033[3~"
 }
