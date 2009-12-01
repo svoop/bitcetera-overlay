@@ -8,10 +8,11 @@ EAPI="2"
 
 MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
+MY_P="${MY_PN}-${MY_PV}"
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons"
 HOMEPAGE="http://www.vuurmuur.org"
-SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
+SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,7 +23,7 @@ RDEPEND="=net-libs/libvuurmuur-${PV}
 	>=sys-libs/ncurses-5
 	logrotate? ( app-admin/logrotate )"
 
-S="${WORKDIR}/${MY_PN}-${MY_PV}"
+S="${WORKDIR}/${MY_P}"
 
 src_unpack() {
 	unpack ${A}
@@ -64,17 +65,17 @@ src_install() {
 	cd "${S}/vuurmuur-${MY_PV}"
 	emake DESTDIR="${D}" install || die "installing vuurmuur failed"
 
-	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur
-	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur
+	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur || die "installing init failed"
+	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur || die "installing conf failed"
 	
 	insopts -m0600
 	insinto /etc/vuurmuur
-	newins config/config.conf.sample config.conf
+	newins config/config.conf.sample config.conf || die "installing config.conf failed"
 
 	if use logrotate; then
 		insopts -m0600
 		insinto /etc/logrotate.d
-		newins scripts/vuurmuur-logrotate vuurmuur
+		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
 	fi
 
 	cd "${S}/vuurmuur_conf-${MY_PV}"
