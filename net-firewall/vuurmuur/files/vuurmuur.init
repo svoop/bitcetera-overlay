@@ -17,10 +17,12 @@ load_modules() {
 	if [ "${MODULES}" != "none" ]; then
 		ebegin "Loading modules for Vuurmuur"
 		local module
+		echo -n "   "
 		for module in `echo ${MODULES}`; do
 			modprobe ${module}
 			echo -n "${module} "
 		done
+		echo
 		eend $?
 	fi
 }
