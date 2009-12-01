@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-inherit autotools
-
 EAPI="2"
+
+inherit autotools
 
 MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
