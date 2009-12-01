@@ -6,12 +6,12 @@ inherit autotools
 
 EAPI="2"
 
-MY_P=${P/_beta/beta}
 MY_PN="Vuurmuur"
+MY_PV=${PV/_beta/beta}
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons."
 HOMEPAGE="http://www.vuurmuur.org"
-SRC_URI="mirror://sourceforge/vuurmuur/${MY_PN}-${PV}.tar.gz"
+SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -22,7 +22,7 @@ RDEPEND="=net-libs/libvuurmuur-${PV}
 	>=sys-libs/ncurses-5
 	logrotate? ( app-admin/logrotate )"
 
-S="${WORKDIR}/${MY_PN}-${PV}"
+S="${WORKDIR}/${MY_PN}-${MY_PV}"
 
 src_unpack() {
 	unpack ${A} || die "unpacking failed"
@@ -32,20 +32,19 @@ src_unpack() {
 
 src_prepare() {
 	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${PV}"
-		if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
+		cd "${S}/${component}-${MY_PV}"
 		eautoreconf || die "eautoreconf ${component} failed"
 	done
 }
 
 src_configure() {
-	cd "${S}/vuurmuur-${PV}"
+	cd "${S}/vuurmuur-${MY_PV}"
 	econf \
 		--with-libvuurmuur-includes=/usr/include \
 		--with-libvuurmuur-libraries=/usr/lib \
 		|| die "econf vuurmuur failed"
 	
-	cd "${S}/vuurmuur_conf-${PV}"
+	cd "${S}/vuurmuur_conf-${MY_PV}"
 	econf \
 		--with-libvuurmuur-includes=/usr/include \
 		--with-libvuurmuur-libraries=/usr/lib \
@@ -56,17 +55,21 @@ src_configure() {
 
 src_compile() {
 	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${PV}"
+		cd "${S}/${component}-${MY_PV}"
 		emake || die "emake ${component} failed"
 	done
 }
 
 src_install() {
-	cd "${S}/vuurmuur-${PV}"
+	cd "${S}/vuurmuur-${MY_PV}"
 	einstall || die "einstall vuurmuur failed"
 
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur
 	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur
+	
+	insopts -m0600
+	insinto /etc/vuurmuur
+	newins config/config.conf.sample config.conf
 
 	if ( use logrotate ); then
 		insopts -m0600
@@ -74,8 +77,13 @@ src_install() {
 		newins scripts/vuurmuur-logrotate vuurmuur
 	fi
 
-	cd "${S}/vuurmuur_conf-${PV}"
+	cd "${S}/vuurmuur_conf-${MY_PV}"
 	einstall || die "einstall vuurmuur_conf failed"
+	
+	# needed until the wizard scripts are copied by einstall
+	insopts -m0755
+	insinto /usr/share/scripts
+	doins scripts/*.sh
 }
 
 pkg_postinst() {
@@ -89,10 +97,4 @@ pkg_postinst() {
 	elog "2) /etc/init.d/iptables save"
 	elog "3) /etc/init.d/vuurmuur start"	
 	elog "4) rc-update add vuurmuur default"
-	elog
-	elog "Vuurmuur requires use of the INS and DEL keys. In case your"
-	elog "terminal doesn't feature these keys, assign the following"
-	elog "sequences to other keys:"
-	elog "INS: \\033[2~"
-	elog "DEL: \\033[3~"
 }

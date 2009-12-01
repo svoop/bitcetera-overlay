@@ -6,12 +6,12 @@ inherit autotools
 
 EAPI="2"
 
-MY_P=${P/_beta/beta}
 MY_PN="Vuurmuur"
+MY_PV=${PV/_beta/beta}
 
 DESCRIPTION="Libraries and plugins needed by Vuurmuur."
 HOMEPAGE="http://www.vuurmuur.org"
-SRC_URI="mirror://sourceforge/vuurmuur/${MY_PN}-${PV}.tar.gz"
+SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -20,17 +20,16 @@ IUSE=""
 
 RDEPEND="net-firewall/iptables"
 
-S="${WORKDIR}/${MY_PN}-${PV}/${P}"
+S="${WORKDIR}/${MY_PN}-${MY_PV}/${PN}-${MY_PV}"
 
 src_unpack() {
 	unpack ${A} || die "unpacking failed"
-	cd "${MY_PN}-${PV}"
-	tar xzf libvuurmuur-${PV}.tar.gz || die "unpacking component failed"
+	cd "${MY_PN}-${MY_PV}"
+	tar xzf libvuurmuur-${MY_PV}.tar.gz || die "unpacking component failed"
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch
-	if ! [ -d m4 ]; then mkdir m4; fi   # workaround for upstream issue
+	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch   # no longer needed as of >0.8_beta2
 	eautoreconf || die "eautoreconf failed"
 }
 
@@ -48,6 +47,7 @@ src_compile() {
 src_install() {
 	einstall
 
+	dodir /etc/vuurmuur/textdir
 	insinto /etc/vuurmuur/plugins
 	doins plugins/textdir/textdir.conf
 }
