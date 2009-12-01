@@ -9,7 +9,7 @@ EAPI="2"
 MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
 
-DESCRIPTION="Libraries and plugins needed by Vuurmuur."
+DESCRIPTION="Libraries and plugins needed by Vuurmuur"
 HOMEPAGE="http://www.vuurmuur.org"
 SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
 
@@ -23,31 +23,27 @@ RDEPEND="net-firewall/iptables"
 S="${WORKDIR}/${MY_PN}-${MY_PV}/${PN}-${MY_PV}"
 
 src_unpack() {
-	unpack ${A} || die "unpacking failed"
+	unpack ${A}
 	cd "${MY_PN}-${MY_PV}"
-	tar xzf libvuurmuur-${MY_PV}.tar.gz || die "unpacking component failed"
+	unpack "libvuurmuur-${MY_PV}.tar.gz"
 }
 
 src_prepare() {
 	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch   # no longer needed as of >0.8_beta2
-	eautoreconf || die "eautoreconf failed"
+	eautoreconf
 }
 
 src_configure() {
 	econf \
 		--with-plugindir=/usr/lib \
-		--with-shareddir=/usr/share \
-		|| die "econf failed"
-}
-
-src_compile() {
-	emake || die "emake failed"
+		--with-shareddir=/usr/share
 }
 
 src_install() {
-	einstall
+	emake DESTDIR="${D}" install || die "emake install failed"
 
+	# files needed but not yet installed by make
 	dodir /etc/vuurmuur/textdir
 	insinto /etc/vuurmuur/plugins
-	doins plugins/textdir/textdir.conf
+	doins plugins/textdir/textdir.conf || die "installing textdir.conf failed"
 }
