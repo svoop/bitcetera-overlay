@@ -75,7 +75,7 @@ src_install() {
 	if use logrotate; then
 		insopts -m0600
 		insinto /etc/logrotate.d
-		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
+		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
 	fi
 
 	cd "${S}/vuurmuur_conf-${MY_PV}"
