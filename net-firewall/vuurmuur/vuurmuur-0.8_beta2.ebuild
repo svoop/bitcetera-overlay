@@ -71,9 +71,9 @@ src_install() {
 	insopts -m0600
 	insinto /etc/vuurmuur
 	newins config/config.conf.sample config.conf || die "installing config.conf failed"
+	insopts -m0644
 
 	if use logrotate; then
-		insopts -m0600
 		insinto /etc/logrotate.d
 		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
 	fi
