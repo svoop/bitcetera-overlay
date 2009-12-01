@@ -28,7 +28,7 @@ src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	for component in vuurmuur vuurmuur_conf; do
-		unpack "${component}-${MY_PV}.tar.gz"
+		unpack "./${component}-${MY_PV}.tar.gz"
 	done
 }
 
@@ -56,13 +56,13 @@ src_configure() {
 src_compile() {
 	for component in vuurmuur vuurmuur_conf; do
 		cd "${S}/${component}-${MY_PV}"
-		emake || die "emake ${component} failed"
+		emake || die "compiling ${component} failed"
 	done
 }
 
 src_install() {
 	cd "${S}/vuurmuur-${MY_PV}"
-	emake DESTDIR="${D}" install || die "einstall vuurmuur failed"
+	emake DESTDIR="${D}" install || die "installing vuurmuur failed"
 
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur
 	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur
@@ -78,7 +78,7 @@ src_install() {
 	fi
 
 	cd "${S}/vuurmuur_conf-${MY_PV}"
-	emake DESTDIR="${D}" install || die "einstall vuurmuur_conf failed"
+	emake DESTDIR="${D}" install || die "installing vuurmuur_conf failed"
 	
 	# needed until the wizard scripts are copied by make
 	insopts -m0755

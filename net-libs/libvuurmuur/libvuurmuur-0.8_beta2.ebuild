@@ -25,7 +25,7 @@ S="${WORKDIR}/${MY_PN}-${MY_PV}/${PN}-${MY_PV}"
 src_unpack() {
 	unpack ${A}
 	cd "${MY_PN}-${MY_PV}"
-	unpack "libvuurmuur-${MY_PV}.tar.gz"
+	unpack "./libvuurmuur-${MY_PV}.tar.gz"
 }
 
 src_prepare() {
@@ -40,7 +40,7 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die "installing libvuurmuur failed"
 
 	# files needed but not yet installed by make
 	dodir /etc/vuurmuur/textdir
