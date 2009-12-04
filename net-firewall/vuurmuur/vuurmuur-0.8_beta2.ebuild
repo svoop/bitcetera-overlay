@@ -16,7 +16,7 @@ SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="logrotate"
 
 RDEPEND="=net-libs/libvuurmuur-${PV}
@@ -30,13 +30,6 @@ src_unpack() {
 	cd "${S}"
 	for component in vuurmuur vuurmuur_conf; do
 		unpack "./${component}-${MY_PV}.tar.gz"
-	done
-}
-
-src_prepare() {
-	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${MY_PV}"
-		eautoreconf
 	done
 }
 
