@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools
+inherit autotools multilib
 
 MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
@@ -30,13 +30,13 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch   # no longer needed as of >0.8_beta2
+	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch   # no longer needed for >0.8_beta2
 	eautoreconf
 }
 
 src_configure() {
 	econf \
-		--with-plugindir=/usr/lib \
+		--with-plugindir=/usr/$(get_libdir) \
 		--with-shareddir=/usr/share
 }
 

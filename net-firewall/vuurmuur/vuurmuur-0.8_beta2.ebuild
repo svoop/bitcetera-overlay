@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit autotools
+inherit autotools multilib
 
 MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
@@ -23,39 +23,34 @@ RDEPEND="=net-libs/libvuurmuur-${PV}
 	>=sys-libs/ncurses-5
 	logrotate? ( app-admin/logrotate )"
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
 
 src_unpack() {
 	unpack ${A}
-	cd "${S}"
+	cd ${MY_P}
 	for component in vuurmuur vuurmuur_conf; do
 		unpack "./${component}-${MY_PV}.tar.gz"
 	done
 }
 
 src_configure() {
-	cd "${S}/vuurmuur-${MY_PV}"
 	econf \
 		--with-libvuurmuur-includes=/usr/include \
-		--with-libvuurmuur-libraries=/usr/lib
-	
-	cd "${S}/vuurmuur_conf-${MY_PV}"
+		--with-libvuurmuur-libraries=/usr/$(get_libdir)
+	cd "../vuurmuur_conf-${MY_PV}"
 	econf \
 		--with-libvuurmuur-includes=/usr/include \
-		--with-libvuurmuur-libraries=/usr/lib \
+		--with-libvuurmuur-libraries=/usr/$(get_libdir) \
 		--with-localedir=/usr/share/locale \
 		--with-widec=yes
 }
 
 src_compile() {
-	for component in vuurmuur vuurmuur_conf; do
-		cd "${S}/${component}-${MY_PV}"
-		emake || die "compiling ${component} failed"
-	done
+	default
+	emake -C "../vuurmuur_conf-${MY_PV}" || die "compiling vuurmuur_conf failed"
 }
 
 src_install() {
-	cd "${S}/vuurmuur-${MY_PV}"
 	emake DESTDIR="${D}" install || die "installing vuurmuur failed"
 
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur || die "installing init failed"
@@ -71,23 +66,23 @@ src_install() {
 		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
 	fi
 
-	cd "${S}/vuurmuur_conf-${MY_PV}"
+	cd "../vuurmuur_conf-${MY_PV}"
+
 	emake DESTDIR="${D}" install || die "installing vuurmuur_conf failed"
 	
 	# needed until the wizard scripts are copied by make
-	insopts -m0755
-	insinto /usr/share/scripts
-	doins scripts/*.sh || die "installing vuurmuur scripts failed"
+	exeinto /usr/share/scripts
+	doexe scripts/*.sh || die "installing vuurmuur scripts failed"
 }
 
 pkg_postinst() {
-	elog "Please read the manual on www.vuurmuur.org now - you have"
-	elog "been warned!"
-	elog
-	elog "If this is a new install, make sure you define some rules"
-	elog "BEFORE you start the daemon in order not to lock yourself"
-	elog "out. The necessary steps are:"
-	elog "1) vuurmuur_conf"
-	elog "2) /etc/init.d/vuurmuur start"	
-	elog "3) rc-update add vuurmuur default"
+	einfo "Please read the manual on www.vuurmuur.org now - you have"
+	einfo "been warned!"
+	einfo
+	einfo "If this is a new install, make sure you define some rules"
+	einfo "BEFORE you start the daemon in order not to lock yourself"
+	einfo "out. The necessary steps are:"
+	einfo "1) vuurmuur_conf"
+	einfo "2) /etc/init.d/vuurmuur start"	
+	einfo "3) rc-update add vuurmuur default"
 }
