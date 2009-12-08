@@ -1,4 +1,4 @@
-# Copyright 1999-2005 Gentoo Foundation
+# Copyright 1999-2009 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,9 +6,8 @@ EAPI="2"
 
 inherit autotools multilib
 
-MY_PN="Vuurmuur"
 MY_PV=${PV/_beta/beta}
-MY_P="${MY_PN}-${MY_PV}"
+MY_P="Vuurmuur-${MY_PV}"
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons"
 HOMEPAGE="http://www.vuurmuur.org"
@@ -26,10 +25,10 @@ RDEPEND="=net-libs/libvuurmuur-${PV}
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
 
 src_unpack() {
-	unpack ${A}
+	default
 	cd ${MY_P}
 	for component in vuurmuur vuurmuur_conf; do
-		unpack "./${component}-${MY_PV}.tar.gz"
+		unpack "./${component}-${MY_PV}.tar.gz"   # upstream supplies tarball inside tarball
 	done
 }
 
