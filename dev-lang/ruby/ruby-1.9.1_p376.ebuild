@@ -23,7 +23,7 @@ PATCHES_PVR="1.9.1_p243"   # use old patches
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
 SRC_URI="mirror://ruby/${MY_P}.tar.bz2
-		http://dev.a3li.info/gentoo/distfiles/${PN}-patches-${PATCHES_PRV}.tar.bz2"
+		http://dev.a3li.info/gentoo/distfiles/${PN}-patches-${PATCHES_PVR}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
 KEYWORDS="~amd64 ~hppa ~x86 ~x86-fbsd"
@@ -60,7 +60,7 @@ src_prepare() {
 	cd "${S}"
 
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
-	epatch "${WORKDIR}/patches-${PATCHES_PRV}"
+	epatch "${WORKDIR}/patches-${PATCHES_PVR}"
 
 	# Strip rake
 	rm "bin/rake"
