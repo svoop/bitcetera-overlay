@@ -36,7 +36,8 @@ src_prepare() {
 src_configure() {
 	econf \
 		--with-plugindir=/usr/$(get_libdir) \
-		--with-shareddir=/usr/share
+		--with-shareddir=/usr/share \
+		--datadir=/usr/share/vuurmuur
 }
 
 src_install() {
