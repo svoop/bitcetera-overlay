@@ -18,12 +18,12 @@ RUBYVERSION=$(get_version_component_range 1-3)
 # 1.9 -> 19
 MY_SUFFIX=$(delete_version_separator 1 ${SLOT})
 
-PATCH_PVR="1.9.1_p243"   # use old patches
+PATCHES_PVR="1.9.1_p243"   # use old patches
 
 DESCRIPTION="An object-oriented scripting language"
 HOMEPAGE="http://www.ruby-lang.org/"
 SRC_URI="mirror://ruby/${MY_P}.tar.bz2
-		http://dev.a3li.info/gentoo/distfiles/${PN}-patches-${PATCH_PVR}.tar.bz2"
+		http://dev.a3li.info/gentoo/distfiles/${PN}-patches-${PATCHES_PRV}.tar.bz2"
 
 LICENSE="|| ( Ruby GPL-2 )"
 KEYWORDS="~amd64 ~hppa ~x86 ~x86-fbsd"
@@ -37,7 +37,20 @@ RDEPEND="
 	tk? ( dev-lang/tk[threads] )
 	>=app-admin/eselect-ruby-20090909
 	!=dev-lang/ruby-cvs-${SLOT}*
-	!=dev-ruby/rubygems-1.3.1-r30"
+	!<dev-ruby/rdoc-2
+	!dev-ruby/rexml"
+DEPEND="${RDEPEND}"
+PDEPEND="
+	emacs? ( app-emacs/ruby-mode )
+	xemacs? ( app-xemacs/ruby-modes )"
+
+PROVIDE="virtual/ruby"
+
+S="${WORKDIR}/${MY_P}"
+
+pkg_setup() {
+	ewarn
+	ewarn "It is highly recommended to install >=dev-ruby/rubygems-1.3.1-r30"
 	ewarn "if you have Ruby 1.8 on this system installed, too."
 	ewarn
 	epause 5
@@ -47,7 +60,7 @@ src_prepare() {
 	cd "${S}"
 
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
-	epatch "${WORKDIR}/patches-${PATCH_PVR}"
+	epatch "${WORKDIR}/patches-${PATCHES_PRV}"
 
 	# Strip rake
 	rm "bin/rake"
