@@ -35,8 +35,7 @@ src_prepare() {
 
 src_configure() {
 	econf \
-		--with-plugindir=/usr/$(get_libdir) \
-		--with-shareddir=/usr/share
+		--with-plugindir=/usr/$(get_libdir)
 }
 
 src_install() {
