@@ -55,24 +55,19 @@ src_install() {
 
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur || die "installing init failed"
 	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur || die "installing conf failed"
-	
-	insopts -m0600
-	insinto /etc/vuurmuur
-	newins config/config.conf.sample config.conf || die "installing config.conf failed"
-	insopts -m0644
 
 	if use logrotate; then
 		insinto /etc/logrotate.d
 		newins scripts/vuurmuur-logrotate vuurmuur || die "installing logrotate config failed"
 	fi
 
+	insopts -m0600
+	insinto /etc/vuurmuur
+	newins config/config.conf.sample config.conf || die "installing config.conf failed"
+
 	cd "../vuurmuur_conf-${MY_PV}"
 
 	emake DESTDIR="${D}" install || die "installing vuurmuur_conf failed"
-	
-	# needed until the wizard scripts are copied by make
-	exeinto /usr/share/scripts
-	doexe scripts/*.sh || die "installing vuurmuur scripts failed"
 }
 
 pkg_postinst() {
