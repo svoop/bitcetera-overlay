@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-RDEPEND="net-firewall/iptables"
+DEPEND="net-firewall/iptables"
+RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
 
@@ -34,8 +35,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		--with-plugindir=/usr/$(get_libdir)
+	econf --with-plugindir=/usr/$(get_libdir)
 }
 
 src_install() {

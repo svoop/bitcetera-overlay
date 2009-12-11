@@ -18,8 +18,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="logrotate"
 
-RDEPEND="=net-libs/libvuurmuur-${PV}
-	>=sys-libs/ncurses-5
+DEPEND="=net-libs/libvuurmuur-${PV}
+	>=sys-libs/ncurses-5"
+RDEPEND="${DEPEND}
 	logrotate? ( app-admin/logrotate )"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
@@ -54,11 +55,6 @@ src_install() {
 
 	newinitd "${FILESDIR}"/vuurmuur.init vuurmuur || die "installing init failed"
 	newconfd "${FILESDIR}"/vuurmuur.conf vuurmuur || die "installing conf failed"
-	
-	insopts -m0600
-	insinto /etc/vuurmuur
-	newins config/config.conf.sample config.conf || die "installing config.conf failed"
-	insopts -m0644
 
 	if use logrotate; then
 		insinto /etc/logrotate.d
@@ -72,16 +68,20 @@ src_install() {
 	# needed until the wizard scripts are copied by make
 	exeinto /usr/share/scripts
 	doexe scripts/*.sh || die "installing vuurmuur scripts failed"
+
+	insopts -m0600
+	insinto /etc/vuurmuur
+	newins config/config.conf.sample config.conf || die "installing config.conf failed"
 }
 
 pkg_postinst() {
-	einfo "Please read the manual on www.vuurmuur.org now - you have"
-	einfo "been warned!"
-	einfo
-	einfo "If this is a new install, make sure you define some rules"
-	einfo "BEFORE you start the daemon in order not to lock yourself"
-	einfo "out. The necessary steps are:"
-	einfo "1) vuurmuur_conf"
-	einfo "2) /etc/init.d/vuurmuur start"	
-	einfo "3) rc-update add vuurmuur default"
+	elog "Please read the manual on www.vuurmuur.org now - you have"
+	elog "been warned!"
+	elog
+	elog "If this is a new install, make sure you define some rules"
+	elog "BEFORE you start the daemon in order not to lock yourself"
+	elog "out. The necessary steps are:"
+	elog "1) vuurmuur_conf"
+	elog "2) /etc/init.d/vuurmuur start"	
+	elog "3) rc-update add vuurmuur default"
 }
