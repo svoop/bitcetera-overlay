@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-USE_RUBY="1.8 1.9"
+USE_RUBY="ruby18 ruby19"
 EAPI="2"
-inherit ruby gems
+inherit gems
 
 DESCRIPTION="Advanced commandline option parser with implicit --help generator."
 HOMEPAGE="http://trollop.rubyforge.org"
