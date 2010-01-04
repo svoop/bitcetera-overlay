@@ -2,6 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
+EAPI="2"
+
 inherit eutils
 
 DESCRIPTION="Per-recipient whitelist policy server for Postfix MTA managed entirely by emails."
@@ -16,8 +18,9 @@ IUSE=""
 DEPEND="mail-mta/postfix
 	>=dev-lang/ruby-1.8.6
 	dev-ruby/rubygems
-	dev-ruby/facets
+	>=dev-ruby/facets-2.8.0
 	dev-ruby/trollop"
+RDEPEND="${DEPEND}"
 
 pkg_setup() {
 	enewgroup ${PN}
