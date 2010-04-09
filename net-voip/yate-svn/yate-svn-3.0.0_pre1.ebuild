@@ -4,11 +4,14 @@
 
 EAPI="2"
 
-inherit autotools eutils multilib
+inherit autotools eutils multilib subversion
+
+ESVN_REPO_URI="http://yate.null.ro/svn/yate/trunk"
+ESVN_PROJECT="yate-svn"
+ESVN_REVISION="3176"
 
 DESCRIPTION="Yet Another Telephony Engine"
 HOMEPAGE="http://yate.null.ro/"
-SRC_URI="http://yate.null.ro/tarballs/yate2/${P}-1.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
