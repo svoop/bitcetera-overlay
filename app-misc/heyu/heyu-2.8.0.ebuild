@@ -37,15 +37,16 @@ src_configure() {
 		$(use rfxm || echo "-norfxm")		\
 		$(use rfxs || echo "-norfxs")		\
 		|| die "configure failed"
-	sed -i -r -e "s/CC\s*=.*/CC = $(tc-getCC)/" \
-	-e "s/CFLAGS\s*=.*/CFLAGS = ${CFLAGS} \$(DFLAGS)/" \
-	-e 's%^(DFLAGS.+)-DSYSBASEDIR=\\"[^\]+\\"%\1%' \
-	-e 's%^(DFLAGS\s*=\s*)%\1-DSYSBASEDIR=\\"/var/lib/heyu\\" %' \
-	-e 's%^(DFLAGS.+)-DSPOOLDIR=\\"[^\]+\\"%\1%' \
-	-e 's%^(DFLAGS\s*=\s*)%\1-DSPOOLDIR=\\"/var/lib/heyu\\" %' \
-	-e 's%^(DFLAGS.+)-DLOCKDIR=\\"[^\]+\\"%\1%' \
-	-e 's%^(DFLAGS\s*=\s*)%\1-DLOCKDIR=\\"/var/lock\\" %' "${S}"/Makefile || die "adjusting Makefile failed"
-	sed -i -r 's%(LOG_DIR.*?)NONE%\1/var/log/heyu%' "${S}"/x10.conf.sample || die "changing LOG_DIR failed"
+	sed -i -r "s%(LOG_DIR.*?)NONE%\1/var/log/heyu%" "${S}"/x10.conf.sample || die "changing LOG_DIR failed"
+	sed -i -r -e "s%CC\s*=.*%CC = $(tc-getCC)%" \
+		-e "s%CFLAGS\s*=.*%CFLAGS = ${CFLAGS} \$(DFLAGS)%" \
+		-e "s%^(DFLAGS.+)-DSYSBASEDIR=\\\"[^\]+\\\"%\1%" \
+		-e "s%^(DFLAGS\s*=\s*)%\1-DSYSBASEDIR=\\\\\"/var/lib/heyu\\\\\" %" \
+		-e "s%^(DFLAGS.+)-DSPOOLDIR=\\\"[^\]+\\\"%\1%" \
+		-e "s%^(DFLAGS\s*=\s*)%\1-DSPOOLDIR=\\\\\"/var/lib/heyu\\\\\" %" \
+		-e "s%^(DFLAGS.+)-DLOCKDIR=\\\"[^\]+\\\"%\1%" \
+		-e "s%^(DFLAGS\s*=\s*)%\1-DLOCKDIR=\\\\\"/var/lock\\\\\" %" \
+		"${S}"/Makefile || die "adjusting Makefile failed"
 }
 
 src_install() {
