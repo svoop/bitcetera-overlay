@@ -3,4 +3,7 @@ app-misc
 dev-lang
 dev-ruby
 mail-filter
+net-firewall
+net-libs
+net-voip
 sys-auth
