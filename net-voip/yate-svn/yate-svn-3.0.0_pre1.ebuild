@@ -7,8 +7,7 @@ EAPI="2"
 inherit autotools eutils multilib subversion
 
 ESVN_REPO_URI="http://yate.null.ro/svn/yate/trunk"
-ESVN_PROJECT="yate-svn"
-ESVN_REVISION="3188"
+# ESVN_REVISION="3189"
 
 DESCRIPTION="Yet Another Telephony Engine"
 HOMEPAGE="http://yate.null.ro/"
@@ -20,6 +19,7 @@ IUSE="alsa amrnb debug doc gsm h323 ilbc mysql oss postgres qt4 sctp spandsp
 speex ssl zaptel"
 
 RDEPEND="
+	!net-voip/yate
 	sys-libs/glibc
 	alsa? ( media-libs/alsa-lib )
 	amrnb? ( media-libs/amrnb )
@@ -37,6 +37,7 @@ RDEPEND="
 	ssl? ( dev-libs/openssl )
 	zaptel? ( net-misc/zaptel )"
 DEPEND="${RDEPEND}
+	media-sound/sox
 	dev-util/pkgconfig"
 
 S=${WORKDIR}/${PN}
@@ -50,6 +51,10 @@ S=${WORKDIR}/${PN}
 # spandsp >= 0.0.6 fails in configure and >=0.0.5 fails in build
 # fix bug 199222 for this version
 
+src_unpack() {
+	subversion_fetch
+}
+
 src_prepare() {
 	# add Icon in yate-qt4 desktop file
 	sed -i -e '/^Exec=yate-qt4$/a Icon=null_team-32.png' \
@@ -57,9 +62,10 @@ src_prepare() {
 
 	epatch "${FILESDIR}"/${P}-ilbc-alsa-oss.patch
 	epatch "${FILESDIR}"/${P}-cxxflags.patch
-	epatch "${FILESDIR}"/${P}-as-needed.patch
+#	epatch "${FILESDIR}"/${P}-as-needed.patch
 
-	eautoreconf
+	./autogen.sh || die "autogen.sh failed"
+#	eautoreconf
 }
 
 src_configure() {

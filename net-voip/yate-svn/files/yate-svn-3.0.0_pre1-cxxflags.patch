@@ -1,6 +1,6 @@
 diff -Naur yate.orig/Makefile.in yate/Makefile.in
---- Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ Makefile.in	2010-03-14 16:47:07.000000000 +0000
+--- yate.orig/Makefile.in	2010-04-13 14:03:59.000000000 +0200
++++ yate/Makefile.in	2010-04-13 17:12:57.000000000 +0200
 @@ -7,12 +7,12 @@
  # override DEBUG at compile time to enable full debug or remove it all
  DEBUG :=
@@ -26,9 +26,9 @@ diff -Naur yate.orig/Makefile.in yate/Makefile.in
  
  DOCGEN_F := $(INCS)
 diff -Naur yate.orig/clients/Makefile.in yate/clients/Makefile.in
---- clients/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ clients/Makefile.in	2010-03-14 20:11:23.000000000 +0000
-@@ -7,12 +7,12 @@
+--- yate.orig/clients/Makefile.in	2010-04-13 14:03:26.000000000 +0200
++++ yate/clients/Makefile.in	2010-04-13 14:06:39.000000000 +0200
+@@ -7,7 +7,7 @@
  # override DEBUG at compile time to enable full debug or remove it all
  DEBUG :=
  
@@ -36,14 +36,17 @@ diff -Naur yate.orig/clients/Makefile.in yate/clients/Makefile.in
 +CXX := @CXX@
  SED := sed
  DEFS :=
+ MOC := @QT4_MOC@
+@@ -17,7 +17,7 @@
+ QT4_LIB_NET := @QT4_LIB_NET@
  LIBTHR:= @THREAD_LIB@
  INCLUDES := -I.. -I@top_srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yatengine.h @top_srcdir@/yatephone.h ../yateversn.h
- 
-@@ -38,7 +38,7 @@
+@@ -44,7 +44,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -51,11 +54,11 @@ diff -Naur yate.orig/clients/Makefile.in yate/clients/Makefile.in
 +COMPILE = $(CXX) $(DEFS) $(DEBUG) $(INCLUDES) $(CXXFLAGS)
  LINK = $(CXX) $(LDFLAGS)
  
- prefix = @prefix@
+ ifneq (x@QT4_VER@,x)
 diff -Naur yate.orig/clients/qt4/Makefile.in yate/clients/qt4/Makefile.in
---- clients/qt4/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ clients/qt4/Makefile.in	2010-03-14 20:10:18.000000000 +0000
-@@ -4,13 +4,13 @@
+--- yate.orig/clients/qt4/Makefile.in	2010-04-13 14:03:25.000000000 +0200
++++ yate/clients/qt4/Makefile.in	2010-04-13 16:59:07.000000000 +0200
+@@ -4,7 +4,7 @@
  # override DEBUG at compile time to enable full debug or remove it all
  DEBUG :=
  
@@ -63,24 +66,26 @@ diff -Naur yate.orig/clients/qt4/Makefile.in yate/clients/qt4/Makefile.in
 +CXX := @CXX@
  AR  := ar
  MOC := @QT4_MOC@
+ QT4_INC := @QT4_INC@
+@@ -14,7 +14,7 @@
  DEFS:=
  
- INCLUDES:=-I. -I@srcdir@ -I@top_srcdir@ @QT4_INC@
+ INCLUDES:=-I. -I@srcdir@ -I@top_srcdir@ $(QT4_INC)
 -CXXFLAGS:=$(CXXFLAGS) @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS+= -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @top_srcdir@/yatecbase.h @srcdir@/qt4client.h
- 
 diff -Naur yate.orig/engine/Makefile.in yate/engine/Makefile.in
---- engine/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ engine/Makefile.in	2010-03-14 16:48:30.000000000 +0000
+--- yate.orig/engine/Makefile.in	2010-04-13 14:03:42.000000000 +0200
++++ yate/engine/Makefile.in	2010-04-13 17:01:00.000000000 +0200
 @@ -4,15 +4,15 @@
  # override DEBUG at compile time to enable full debug or remove it all
  DEBUG :=
  
 -CC  := @CC@ -Wall
 -CXX := @CXX@ -Wall
-+CC  := @CC@ 
++CC  := @CC@
 +CXX := @CXX@
  SED := sed
  DEFS :=
@@ -92,9 +97,9 @@ diff -Naur yate.orig/engine/Makefile.in yate/engine/Makefile.in
 +CFLAGS += -Wall @MODULE_CFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
  LDFLAGS:= @LDFLAGS@
+ SONAME_OPT := @SONAME_OPT@
  LDCONFIG:=true
- 
-@@ -34,7 +34,7 @@
+@@ -35,7 +35,7 @@
  LIBOBJS := $(CLSOBJS) $(ENGOBJS) $(TELOBJS) $(CLIOBJS)
  CLEANS = $(LIBOBJS) core
  CCOMPILE = $(CC) $(DEFS) $(DEBUG) $(INCLUDES) $(CFLAGS)
@@ -104,8 +109,8 @@ diff -Naur yate.orig/engine/Makefile.in yate/engine/Makefile.in
  
  ifeq (@INTERNAL_REGEX@,yes)
 diff -Naur yate.orig/libs/ilbc/Makefile.in yate/libs/ilbc/Makefile.in
---- libs/ilbc/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ilbc/Makefile.in	2010-03-14 20:22:55.000000000 +0000
+--- yate.orig/libs/ilbc/Makefile.in	2010-04-13 14:03:11.000000000 +0200
++++ yate/libs/ilbc/Makefile.in	2010-04-13 17:02:17.000000000 +0200
 @@ -1,12 +1,12 @@
  # Makefile
  # This file holds the make rules for the libilbc 
@@ -122,8 +127,8 @@ diff -Naur yate.orig/libs/ilbc/Makefile.in yate/libs/ilbc/Makefile.in
  
  PROGS=
 diff -Naur yate.orig/libs/yiax/Makefile.in yate/libs/yiax/Makefile.in
---- libs/yiax/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/yiax/Makefile.in	2010-03-14 20:26:55.000000000 +0000
+--- yate.orig/libs/yiax/Makefile.in	2010-04-13 14:03:11.000000000 +0200
++++ yate/libs/yiax/Makefile.in	2010-04-13 17:03:22.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -135,10 +140,10 @@ diff -Naur yate.orig/libs/yiax/Makefile.in yate/libs/yiax/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS := -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @srcdir@/yateiax.h
- 
-@@ -17,7 +17,7 @@
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -147,9 +152,9 @@ diff -Naur yate.orig/libs/yiax/Makefile.in yate/libs/yiax/Makefile.in
  LINK = $(CXX) $(LDFLAGS)
  
  prefix = @prefix@
-diff -Naur yate.orig/libs/yjingle/Makefile.in yate/libs/yjingle/Makefile.in
---- libs/yjingle/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/yjingle/Makefile.in	2010-03-14 20:23:38.000000000 +0000
+diff -Naur yate.orig/libs/yjabber/Makefile.in yate/libs/yjabber/Makefile.in
+--- yate.orig/libs/yjabber/Makefile.in	2010-04-13 14:03:16.000000000 +0200
++++ yate/libs/yjabber/Makefile.in	2010-04-13 17:18:21.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -161,10 +166,10 @@ diff -Naur yate.orig/libs/yjingle/Makefile.in yate/libs/yjingle/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@/../yxml -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
- INCFILES := @top_srcdir@/yateclass.h @srcdir@/../yxml/tinystr.h @srcdir@/../yxml/tinyxml.h @srcdir@/xmlparser.h @srcdir@/xmpputils.h @srcdir@/yatejabber.h @srcdir@/yatejingle.h
- 
-@@ -21,7 +21,7 @@
+ LDFLAGS:= @LDFLAGS@
+ SONAME_OPT := @SONAME_OPT@
+ YATELIBS := -L../.. -lyate @LIBS@
+@@ -23,7 +23,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -174,8 +179,8 @@ diff -Naur yate.orig/libs/yjingle/Makefile.in yate/libs/yjingle/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/ymgcp/Makefile.in yate/libs/ymgcp/Makefile.in
---- libs/ymgcp/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ymgcp/Makefile.in	2010-03-14 20:21:18.000000000 +0000
+--- yate.orig/libs/ymgcp/Makefile.in	2010-04-13 14:03:09.000000000 +0200
++++ yate/libs/ymgcp/Makefile.in	2010-04-13 17:05:03.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -187,10 +192,10 @@ diff -Naur yate.orig/libs/ymgcp/Makefile.in yate/libs/ymgcp/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
- INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatemgcp.h
- 
-@@ -20,7 +20,7 @@
+ LDFLAGS:= @LDFLAGS@
+ SONAME_OPT := @SONAME_OPT@
+ YATELIBS := -L../.. -lyate @LIBS@
+@@ -22,7 +22,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -200,8 +205,8 @@ diff -Naur yate.orig/libs/ymgcp/Makefile.in yate/libs/ymgcp/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/ymodem/Makefile.in yate/libs/ymodem/Makefile.in
---- libs/ymodem/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ymodem/Makefile.in	2010-03-14 20:26:17.000000000 +0000
+--- yate.orig/libs/ymodem/Makefile.in	2010-04-13 14:03:12.000000000 +0200
++++ yate/libs/ymodem/Makefile.in	2010-04-13 17:07:15.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -213,10 +218,10 @@ diff -Naur yate.orig/libs/ymodem/Makefile.in yate/libs/ymodem/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatemodem.h
- 
-@@ -17,7 +17,7 @@
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -226,8 +231,8 @@ diff -Naur yate.orig/libs/ymodem/Makefile.in yate/libs/ymodem/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/ypbx/Makefile.in yate/libs/ypbx/Makefile.in
---- libs/ypbx/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ypbx/Makefile.in	2010-03-14 20:24:53.000000000 +0000
+--- yate.orig/libs/ypbx/Makefile.in	2010-04-13 14:03:09.000000000 +0200
++++ yate/libs/ypbx/Makefile.in	2010-04-13 17:08:46.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -239,10 +244,10 @@ diff -Naur yate.orig/libs/ypbx/Makefile.in yate/libs/ypbx/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS := -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatepbx.h
- 
-@@ -17,7 +17,7 @@
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -252,8 +257,8 @@ diff -Naur yate.orig/libs/ypbx/Makefile.in yate/libs/ypbx/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/yrtp/Makefile.in yate/libs/yrtp/Makefile.in
---- libs/yrtp/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/yrtp/Makefile.in	2010-03-14 20:22:04.000000000 +0000
+--- yate.orig/libs/yrtp/Makefile.in	2010-04-13 14:03:17.000000000 +0200
++++ yate/libs/yrtp/Makefile.in	2010-04-13 17:09:30.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -265,10 +270,36 @@ diff -Naur yate.orig/libs/yrtp/Makefile.in yate/libs/yrtp/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS := -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatertp.h
+@@ -18,7 +18,7 @@
  
-@@ -17,7 +17,7 @@
+ LOCALFLAGS =
+ LOCALLIBS =
+-COMPILE = $(CXX) $(DEFS) $(DEBUG) $(INCLUDES) $(CFLAGS)
++COMPILE = $(CXX) $(DEFS) $(DEBUG) $(INCLUDES) $(CXXFLAGS)
+ LINK = $(CXX) $(LDFLAGS)
+ 
+ prefix = @prefix@
+diff -Naur yate.orig/libs/ysdp/Makefile.in yate/libs/ysdp/Makefile.in
+--- yate.orig/libs/ysdp/Makefile.in	2010-04-13 14:03:09.000000000 +0200
++++ yate/libs/ysdp/Makefile.in	2010-04-13 17:20:17.000000000 +0200
+@@ -3,11 +3,11 @@
+ 
+ DEBUG :=
+ 
+-CXX  := @CXX@ -Wall
++CXX  := @CXX@
+ AR  := ar
+ DEFS :=
+ INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
+-CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
++CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
+ INCFILES := @top_srcdir@/yatemime.h @top_srcdir@/yatephone.h @srcdir@/yatesdp.h
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -278,8 +309,8 @@ diff -Naur yate.orig/libs/yrtp/Makefile.in yate/libs/yrtp/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/ysig/Makefile.in yate/libs/ysig/Makefile.in
---- libs/ysig/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ysig/Makefile.in	2010-03-14 20:20:29.000000000 +0000
+--- yate.orig/libs/ysig/Makefile.in	2010-04-13 14:03:15.000000000 +0200
++++ yate/libs/ysig/Makefile.in	2010-04-13 17:10:43.000000000 +0200
 @@ -3,12 +3,12 @@
  
  DEBUG :=
@@ -292,10 +323,10 @@ diff -Naur yate.orig/libs/ysig/Makefile.in yate/libs/ysig/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
- INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatesig.h
- 
-@@ -26,7 +26,7 @@
+ LDFLAGS:= @LDFLAGS@
+ SONAME_OPT := @SONAME_OPT@
+ YATELIBS := -L../.. -lyate @LIBS@
+@@ -28,7 +28,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -305,8 +336,8 @@ diff -Naur yate.orig/libs/ysig/Makefile.in yate/libs/ysig/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/ysip/Makefile.in yate/libs/ysip/Makefile.in
---- libs/ysip/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/ysip/Makefile.in	2010-03-14 20:24:06.000000000 +0000
+--- yate.orig/libs/ysip/Makefile.in	2010-04-13 14:03:10.000000000 +0200
++++ yate/libs/ysip/Makefile.in	2010-04-13 17:11:21.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -318,10 +349,10 @@ diff -Naur yate.orig/libs/ysip/Makefile.in yate/libs/ysip/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
  INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatesip.h @srcdir@/util.h
- 
-@@ -17,7 +17,7 @@
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -331,8 +362,8 @@ diff -Naur yate.orig/libs/ysip/Makefile.in yate/libs/ysip/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/libs/yxml/Makefile.in yate/libs/yxml/Makefile.in
---- libs/yxml/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ libs/yxml/Makefile.in	2010-03-14 20:25:36.000000000 +0000
+--- yate.orig/libs/yxml/Makefile.in	2010-04-13 14:03:11.000000000 +0200
++++ yate/libs/yxml/Makefile.in	2010-04-13 17:12:06.000000000 +0200
 @@ -3,11 +3,11 @@
  
  DEBUG :=
@@ -344,10 +375,10 @@ diff -Naur yate.orig/libs/yxml/Makefile.in yate/libs/yxml/Makefile.in
  INCLUDES := -I@top_srcdir@ -I../.. -I@srcdir@
 -CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
- INCFILES := @top_srcdir@/yateclass.h @srcdir@/tinystr.h @srcdir@/tinyxml.h
- 
-@@ -17,7 +17,7 @@
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS := -L../.. -lyate @LIBS@
+ INCFILES := @top_srcdir@/yateclass.h @srcdir@/yatexml.h
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
@@ -357,9 +388,9 @@ diff -Naur yate.orig/libs/yxml/Makefile.in yate/libs/yxml/Makefile.in
  
  prefix = @prefix@
 diff -Naur yate.orig/modules/Makefile.in yate/modules/Makefile.in
---- modules/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ modules/Makefile.in	2010-03-14 20:18:44.000000000 +0000
-@@ -7,14 +7,14 @@
+--- yate.orig/modules/Makefile.in	2010-04-13 14:03:58.000000000 +0200
++++ yate/modules/Makefile.in	2010-04-13 17:14:27.000000000 +0200
+@@ -7,8 +7,8 @@
  # override DEBUG at compile time to enable full debug or remove it all
  DEBUG :=
  
@@ -368,6 +399,9 @@ diff -Naur yate.orig/modules/Makefile.in yate/modules/Makefile.in
 +CC  := @CC@
 +CXX := @CXX@
  MOC := @QT4_MOC@
+ QT4_INC := @QT4_INC@
+ QT4_LIB := @QT4_LIB@
+@@ -17,8 +17,8 @@
  SED := sed
  DEFS :=
  INCLUDES := -I.. -I@top_srcdir@
@@ -375,10 +409,10 @@ diff -Naur yate.orig/modules/Makefile.in yate/modules/Makefile.in
 -CPPFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CFLAGS += -Wall @CFLAGS@ @MODULE_CFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -Wall @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS:= -L.. -lyate @LIBS@
  MODFLAGS:= @MODULE_LDFLAGS@
- MODRELAX:= @MODULE_LDRELAX@
-@@ -124,7 +124,7 @@
+@@ -140,7 +140,7 @@
  LOCALFLAGS =
  LOCALLIBS =
  CCOMPILE = $(CC) $(DEFS) $(DEBUG) $(INCLUDES) $(CFLAGS)
@@ -388,8 +422,8 @@ diff -Naur yate.orig/modules/Makefile.in yate/modules/Makefile.in
  MODLINK = $(CXX) $(MODFLAGS) $(MODSTRIP) $(LDFLAGS)
  MODCOMP = $(COMPILE) $(MODFLAGS) $(MODSTRIP) $(LDFLAGS)
 diff -Naur yate.orig/modules/test/Makefile.in yate/modules/test/Makefile.in
---- modules/test/Makefile.in	2010-03-14 16:44:06.000000000 +0000
-+++ modules/test/Makefile.in	2010-03-14 20:12:06.000000000 +0000
+--- yate.orig/modules/test/Makefile.in	2010-04-13 14:03:57.000000000 +0200
++++ yate/modules/test/Makefile.in	2010-04-13 17:15:34.000000000 +0200
 @@ -1,11 +1,11 @@
  # Makefile
  # This file holds the make rules for the Telephony Engine test cases
@@ -401,10 +435,10 @@ diff -Naur yate.orig/modules/test/Makefile.in yate/modules/test/Makefile.in
  INCLUDES := -I@top_srcdir@
 -CFLAGS := -O0 @MODULE_CPPFLAGS@ @INLINE_FLAGS@
 +CXXFLAGS += -O0 -Wall @MODULE_CPPFLAGS@ @INLINE_FLAGS@
- LDFLAGS:= @LDFLAGS@ -L../.. -lyate
+ LDFLAGS:= @LDFLAGS@
+ YATELIBS:= -L../.. -lyate @LIBS@
  MODFLAGS:= @MODULE_LDFLAGS@
- MODSTRIP:= @MODULE_SYMBOLS@
-@@ -17,7 +17,7 @@
+@@ -18,7 +18,7 @@
  
  LOCALFLAGS =
  LOCALLIBS =
