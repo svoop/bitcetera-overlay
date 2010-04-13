@@ -8,7 +8,7 @@ inherit autotools eutils multilib subversion
 
 ESVN_REPO_URI="http://yate.null.ro/svn/yate/trunk"
 ESVN_PROJECT="yate-svn"
-ESVN_REVISION="3176"
+ESVN_REVISION="3188"
 
 DESCRIPTION="Yet Another Telephony Engine"
 HOMEPAGE="http://yate.null.ro/"
