@@ -1,7 +1,7 @@
 # /etc/conf.d/yate: config file for /etc/init.d/yate
 
 # Any random options you want to pass to yate
-YATE_OPTS="-l /var/log/yate/yate.log -vvvv"
+YATE_OPTS="-l /var/log/yate/yate.log -vvv"
 
 # Pid file to use (needs to be absolute path)
 #YATE_PIDFILE="/var/run/yate.pid"
