@@ -1,0 +1,9 @@
+/var/log/yate/*.log {
+    size=10M
+    rotate 5
+    missingok
+    notifempty
+    postrotate
+	/etc/init.d/yate reload > /dev/null 2>&1 || true
+    endscript
+}

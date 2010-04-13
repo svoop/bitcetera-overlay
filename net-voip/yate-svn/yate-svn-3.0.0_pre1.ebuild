@@ -119,11 +119,12 @@ src_install() {
 
 	dodoc ChangeLog README || die "dodoc failed"
 
+	dodir /var/log/yate || die "dodir failed"
 	insinto /etc/logrotate.d
-	newins packing/${PN}.logrotate ${PN} || die "newins failed"
+	newins "${FILESDIR}"/yate.logrotated yate || die "newins failed"
 
-	newinitd "${FILESDIR}"/${PN}.initd ${PN} || die "newinitd failed"
-	newconfd "${FILESDIR}"/${PN}.confd ${PN} || die "newconfd failed"
+	newinitd "${FILESDIR}"/yate.initd yate || die "newinitd failed"
+	newconfd "${FILESDIR}"/yate.confd yate || die "newconfd failed"
 
 	if use doc; then
 		emake DESTDIR="${D}" install-api || die "emake install-api failed"
