@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -78,6 +78,6 @@ pkg_postinst() {
 	elog "BEFORE you start the daemon in order not to lock yourself"
 	elog "out. The necessary steps are:"
 	elog "1) vuurmuur_conf"
-	elog "2) /etc/init.d/vuurmuur start"	
+	elog "2) /etc/init.d/vuurmuur start"
 	elog "3) rc-update add vuurmuur default"
 }

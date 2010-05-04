@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/dev-lang/ruby/ruby-1.9.1_p243.ebuild,v 1.2 2009/10/12 23:07:03 jer Exp $
 
@@ -57,8 +57,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cd "${S}"
-
 	EPATCH_FORCE="yes" EPATCH_SUFFIX="patch" \
 	epatch "${WORKDIR}/patches-${PATCHES_PVR}"
 
