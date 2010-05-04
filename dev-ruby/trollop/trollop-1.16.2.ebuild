@@ -5,9 +5,6 @@
 EAPI=2
 USE_RUBY="ruby18 ree18 ruby19 jruby"
 
-RUBY_FAKEGEM_TASK_DOC=""
-RUBY_FAKEGEM_TASK_TEST=""
-
 inherit ruby-fakegem
 
 DESCRIPTION="Advanced commandline option parser with implicit --help generator."
