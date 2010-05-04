@@ -2,13 +2,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-USE_RUBY="ruby18 ruby19"
-EAPI="2"
-inherit gems
+EAPI=2
+USE_RUBY="ruby18 ree18 ruby19 jruby"
+
+RUBY_FAKEGEM_TASK_DOC=""
+RUBY_FAKEGEM_TASK_TEST=""
+
+inherit ruby-fakegem
 
 DESCRIPTION="Advanced commandline option parser with implicit --help generator."
 HOMEPAGE="http://trollop.rubyforge.org"
-SRC_URI="http://gems.rubyforge.org/gems/${P}.gem"
 
 LICENSE="Ruby"
 SLOT="0"
