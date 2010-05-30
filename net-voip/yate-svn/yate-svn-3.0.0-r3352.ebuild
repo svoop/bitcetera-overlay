@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=1
+EAPI=2
 
 inherit eutils subversion
 
@@ -41,7 +41,11 @@ src_unpack() {
 	subversion_fetch
 }
 
-src_compile() {
+src_prepare() {
+	./autogen.sh || die "autogen.sh failed"
+}
+
+src_configure() {
 	local configopts
 	if use doc; then
 		if has_version app-doc/doxygen; then
@@ -68,7 +72,9 @@ src_compile() {
 		$(use_with qt4 libqt4) \
 		$(use_with spandsp) \
 		${configopts} || die "Configuring failed"
+}
 
+src_compile() {
 	emake -j1 all || die "Building failed"
 }
 
