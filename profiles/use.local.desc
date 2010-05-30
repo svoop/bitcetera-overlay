@@ -15,3 +15,5 @@ app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands.
 app-misc/heyu:ore - Support Oregon RF sensors.
 app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
+app-voip/yate:amrnb - Support for the adaptive multi-rate audio codec.
+app-voip/yate:wanpipe - Support for Sangoma WAN cards.
