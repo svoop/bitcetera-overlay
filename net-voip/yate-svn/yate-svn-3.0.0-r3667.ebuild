@@ -7,7 +7,7 @@ EAPI=2
 inherit eutils subversion
 
 ESVN_REPO_URI="http://yate.null.ro/svn/yate/trunk"
-ESVN_REVISION="3657"
+ESVN_REVISION="3667"
 
 DESCRIPTION="YATE - Yet Another Telephony Engine"
 HOMEPAGE="http://yate.null.ro/"
@@ -15,7 +15,7 @@ LICENSE="GPL-2"
 
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="doc gsm speex amrnb h323 ilbc mysql postgres ssl qt4 spandsp sctp wanpipe zaptel"
+IUSE="doc gsm speex amrnb h323 ilbc mysql postgres ssl qt4 spandsp sctp wanpipe zaptel anonsdp"
 
 DEPEND="
 	media-sound/sox
@@ -42,6 +42,9 @@ src_unpack() {
 }
 
 src_prepare() {
+	if use anonsdp; then
+		epatch "${FILESDIR}"/anonymous_sdp.patch
+	fi
 	./autogen.sh || die "autogen.sh failed"
 }
 

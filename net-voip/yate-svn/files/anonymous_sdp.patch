@@ -1,0 +1,12 @@
+diff -Nu -burN yate-svn/libs/ysdp/session.cpp yate-svn.modified/libs/ysdp/session.cpp
+--- yate-svn/libs/ysdp/session.cpp	2010-09-24 13:22:16.000000000 +0200
++++ yate-svn.modified/libs/ysdp/session.cpp	2010-09-24 13:41:24.000000000 +0200
+@@ -293,7 +293,7 @@
+ 
+     // no address means on hold or muted
+     String origin;
+-    origin << "yate " << m_sdpSession << " " << m_sdpVersion;
++    origin << "- " << m_sdpSession << " " << m_sdpVersion;
+     origin << " IN IP4 " << (addr ? addr : m_host.safe());
+     String conn;
+     conn << "IN IP4 " << (addr ? addr : "0.0.0.0");

@@ -16,4 +16,5 @@ app-misc/heyu:ore - Support Oregon RF sensors.
 app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
 app-voip/yate:amrnb - Support for the adaptive multi-rate audio codec.
+app-voip/yate:anonsdp - Suppress useragent "yate" in SDP
 app-voip/yate:wanpipe - Support for Sangoma WAN cards.
