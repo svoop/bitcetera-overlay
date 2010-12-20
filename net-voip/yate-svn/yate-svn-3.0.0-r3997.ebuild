@@ -7,7 +7,7 @@ EAPI=2
 inherit eutils subversion
 
 ESVN_REPO_URI="http://yate.null.ro/svn/yate/trunk"
-ESVN_REVISION="3667"
+ESVN_REVISION="3997"
 
 DESCRIPTION="YATE - Yet Another Telephony Engine"
 HOMEPAGE="http://yate.null.ro/"
