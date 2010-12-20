@@ -18,3 +18,6 @@ app-misc/heyu:rfxs - Support RFXSensors.
 app-voip/yate:amrnb - Support for the adaptive multi-rate audio codec.
 app-voip/yate:anonsdp - Suppress useragent "yate" in SDP
 app-voip/yate:wanpipe - Support for Sangoma WAN cards.
+app-voip/yate-svn:amrnb - Support for the adaptive multi-rate audio codec.
+app-voip/yate-svn:anonsdp - Suppress useragent "yate" in SDP
+app-voip/yate-svn:wanpipe - Support for Sangoma WAN cards.
