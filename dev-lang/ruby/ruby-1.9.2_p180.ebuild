@@ -5,12 +5,13 @@
 EAPI=2
 
 #PATCHSET=
+OVERRIDE_PATCHSET="1.9.2"
 
 inherit autotools eutils flag-o-matic multilib versionator
 
 RUBYPL=$(get_version_component_range 4)
 
-MY_P="${PN}-$(get_version_component_range 1-3)-p${RUBYPL:-0}"
+MY_P="${PN}-$(get_version_component_range 1-3)-${RUBYPL:-0}"
 S=${WORKDIR}/${MY_P}
 
 SLOT=$(get_version_component_range 1-2)
@@ -26,6 +27,11 @@ if [[ -n ${PATCHSET} ]]; then
 	fi
 else
 	PATCHSET="${PVR}"
+fi
+
+# List of patches: http://dev.gentoo.org/~flameeyes/ruby-team/
+if [[ -n ${OVERRIDE_PATCHSET} ]]; then
+  PATCHSET=${OVERRIDE_PATCHSET}
 fi
 
 DESCRIPTION="An object-oriented scripting language"
