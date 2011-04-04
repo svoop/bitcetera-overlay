@@ -1,0 +1,31 @@
+Index: ruby-1.9.2-rc2/ext/dbm/extconf.rb
+===================================================================
+--- ruby-1.9.2-rc2.orig/ext/dbm/extconf.rb
++++ ruby-1.9.2-rc2/ext/dbm/extconf.rb
+@@ -21,12 +21,12 @@ headers = {
+ def headers.db_check(db)
+   db_prefix = nil
+   have_gdbm = false
+-  hsearch = nil
++  db_defs = nil
+ 
+   case db
+   when /^db2?$/
+     db_prefix = "__db_n"
+-    hsearch = "-DDB_DBM_HSEARCH "
++    db_defs = %w[-DDB_DBM_HSEARCH -DHAVE_DBM]
+   when "gdbm"
+     have_gdbm = true
+   when "gdbm_compat"
+@@ -36,9 +36,9 @@ def headers.db_check(db)
+   db_prefix ||= ""
+ 
+   if (have_library(db, db_prefix+"dbm_open") || have_func(db_prefix+"dbm_open")) and
+-      hdr = self.fetch(db, ["ndbm.h"]).find {|h| have_type("DBM", h, hsearch)}
++      hdr = self.fetch(db, ["ndbm.h"]).find {|h| have_type("DBM", h, db_defs.join(" "))}
+     have_func(db_prefix+"dbm_clearerr") unless have_gdbm
+-    $defs << hsearch if hsearch
++    $defs += db_defs if db_defs
+     $defs << '-DDBM_HDR="<'+hdr+'>"'
+     true
+   else

@@ -1,0 +1,39 @@
+Index: ruby-1.9.2-rc2/configure.in
+===================================================================
+--- ruby-1.9.2-rc2.orig/configure.in
++++ ruby-1.9.2-rc2/configure.in
+@@ -1683,7 +1683,7 @@ if test "$rb_cv_binary_elf" = yes; then
+ fi
+ 
+ AS_CASE(["$target_os"],
+-[linux* | gnu* | k*bsd*-gnu | bsdi* | kopensolaris*-gnu], [
++[linux* | gnu* | k*bsd*-gnu | bsdi* | kopensolaris*-gnu | freebsd* | dragonfly*], [
+     if test "$rb_cv_binary_elf" = no; then
+ 	with_dln_a_out=yes
+     else
+@@ -1772,7 +1772,7 @@ if test "$with_dln_a_out" != yes; then
+ 	[bsdi3*], [	AS_CASE(["$CC"],
+ 			[*shlicc*], [	: ${LDSHARED='$(CC) -r'}
+ 					rb_cv_dlopen=yes])],
+-	[linux* | gnu* | k*bsd*-gnu | netbsd* | bsdi* | kopensolaris*-gnu], [
++	[linux* | gnu* | k*bsd*-gnu | netbsd* | bsdi* | kopensolaris*-gnu | freebsd7*], [
+ 			: ${LDSHARED='$(CC) -shared'}
+ 			if test "$rb_cv_binary_elf" = yes; then
+ 			    LDFLAGS="$LDFLAGS -Wl,-export-dynamic"
+@@ -1785,7 +1785,6 @@ if test "$with_dln_a_out" != yes; then
+ 	[freebsd*|dragonfly*], [
+ 			: ${LDSHARED='$(CC) -shared'}
+ 			if test "$rb_cv_binary_elf" = yes; then
+-			    LDFLAGS="$LDFLAGS -rdynamic"
+ 			    DLDFLAGS="$DLDFLAGS "'-Wl,-soname,$(.TARGET)'
+ 			else
+ 			  test "$GCC" = yes && test "$rb_cv_prog_gnu_ld" = yes || LDSHARED="ld -Bshareable"
+@@ -2066,7 +2065,7 @@ if test "$enable_shared" = 'yes'; then
+     [sunos4*], [
+ 	LIBRUBY_ALIASES='lib$(RUBY_SO_NAME).so.$(MAJOR).$(MINOR) lib$(RUBY_SO_NAME).so'
+ 	],
+-    [linux* | gnu* | k*bsd*-gnu | atheos* | kopensolaris*-gnu], [
++    [linux* | gnu* | k*bsd*-gnu | atheos* | kopensolaris*-gnu | freebsd7*], [
+ 	LIBRUBY_DLDFLAGS='-Wl,-soname,lib$(RUBY_SO_NAME).so.$(MAJOR).$(MINOR)'
+ 	LIBRUBY_ALIASES='lib$(RUBY_SO_NAME).so.$(MAJOR).$(MINOR) lib$(RUBY_SO_NAME).so'
+ 	],
