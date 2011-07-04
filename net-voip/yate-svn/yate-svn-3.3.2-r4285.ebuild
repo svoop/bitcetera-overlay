@@ -95,4 +95,7 @@ src_install() {
 	dodir /var/log/yate || die "dodir failed"
 	insinto /etc/logrotate.d
 	newins ${S}/packing/yate.logrotate yate || die "newins failed"
+	
+	insinto /usr/share/yate/scripts
+	newins "${FILESDIR}"/libyate.rb || die "newins failed"
 }
