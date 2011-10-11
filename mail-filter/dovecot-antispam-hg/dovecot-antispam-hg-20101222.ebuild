@@ -10,6 +10,7 @@ DESCRIPTION="A dovecot antispam plugin supporting multiple backends"
 HOMEPAGE="http://wiki2.dovecot.org/Plugins/Antispam"
 
 EHG_REPO_URI="http://hg.dovecot.org/dovecot-antispam-plugin"
+EHG_REVISION="43880985e3dd"
 
 LICENSE="GPL-2"
 SLOT="0"
