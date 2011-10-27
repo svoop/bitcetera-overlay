@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "http://www.gentoo.org/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name>bitcetera</name>
+    <description lang="en">
+      A bouquet of unreviewed ebuilds for Gentoo Linux maintained by 
+      Bitcetera. This is the development overlay and thus should be
+      considered experimental and edge, use at your own risk! Some of 
+      the ebuilds are made available after review by Gentoo developers 
+      as part of the Gentoo Sunrise Overlay. Please take a look at
+      http://www.gentoo.org/proj/en/sunrise/ for details.
+    </description>
+    <homepage>http://www.bitcetera.com/products</homepage>
+    <owner type="person">
+      <name>Sven Schwyn</name>
+      <email>gentoo@bitcetera.com</email>
+    </owner>
+    <source type="git">git://github.com/svoop/bitcetera-overlay.git</source>
+    <feed>http://www.bitcetera.com/en/rss</feed>
+  </repo>
+</repositories>
