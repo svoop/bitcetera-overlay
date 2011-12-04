@@ -2,12 +2,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-opts="${opts}"
-
-# this next comment is important, don't remove it - it has to be somewhere in 
-# the init script to kill off a warning that doesn't apply to us
-# svc_start svc_stop   
-
 depend() {
 	need net iptables
 	use modules
