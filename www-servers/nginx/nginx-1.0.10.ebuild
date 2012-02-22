@@ -180,7 +180,7 @@ src_configure() {
     passenger_root=`passenger-config --root`
     einfo
     einfo "Passenger is not supported by use of the Passenger ebuild."
-    einfo "Therefore, make sure you have installed and built the 
+    einfo "Therefore, make sure you have installed and built the" 
     einfo "Passenger gem through RubyGems beforehand:"
     einfo "* gem install passenger"
     einfo "* cd ${passenger_root}"
