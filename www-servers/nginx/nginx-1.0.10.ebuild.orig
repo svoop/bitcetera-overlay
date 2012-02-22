@@ -118,6 +118,24 @@ DEPEND="${CDEPEND}
 PDEPEND="vim-syntax? ( app-vim/nginx-syntax )"
 
 pkg_setup() {
+	if use nginx_modules_http_passenger; then
+		einfo
+		einfo "Passenger support has been removed from the nginx ebuild to"
+		einfo "get rid of file collisions, its broken build system and"
+		einfo "incompatibilities between passenger 2 and 3."
+		einfo
+		einfo "Please switch to passenger-3 standalone or use the"
+		einfo "unicorn gem which provides a sane nginx-like architecture"
+		einfo "out of the box."
+		einfo
+		einfo "For more information on sane ruby deployments with"
+		einfo "passenger-3/unicorn go to:"
+		einfo
+		einfo "https://rvm.beginrescueend.com"
+		einfo
+		die "nginx_modules_http_passenger still in IUSE"
+	fi
+
 	ebegin "Creating nginx user and group"
 	enewgroup ${PN}
 	enewuser ${PN} -1 -1 -1 ${PN}
@@ -174,22 +192,6 @@ src_configure() {
 	if use nginx_modules_http_fastcgi; then
 		myconf+=" --with-http_realip_module"
 	fi
-
-  # passenger
-  if use nginx_modules_http_passenger; then
-    passenger_root=`passenger-config --root`
-    einfo
-    einfo "Passenger is not supported by use of the Passenger ebuild."
-    einfo "Therefore, make sure you have installed and built the 
-    einfo "Passenger gem through RubyGems beforehand:"
-    einfo "* gem install passenger"
-    einfo "* cd ${passenger_root}"
-    einfo "* rake nginx RELEASE=yes"
-    einfo
-    epause 15
-    cp -pr "${passenger_root}" "${WORKDIR}/passenger-nginx-module"
-    myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/ext/nginx"
-  fi
 
 	# third-party modules
 	if use nginx_modules_http_upload_progress; then
