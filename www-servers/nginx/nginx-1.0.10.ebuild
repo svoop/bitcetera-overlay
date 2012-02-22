@@ -182,11 +182,10 @@ src_configure() {
     einfo "Passenger is not supported by use of the Passenger ebuild."
     einfo "Therefore, make sure you have installed and built the" 
     einfo "Passenger gem through RubyGems beforehand:"
-    einfo "* gem install passenger"
-    einfo "* cd ${passenger_root}"
-    einfo "* rake nginx RELEASE=yes"
+    einfo "- gem install passenger"
+    einfo "- cd ${passenger_root}"
+    einfo "- rake nginx RELEASE=yes"
     einfo
-    epause 15
     cp -pr "${passenger_root}" "${WORKDIR}/passenger-nginx-module"
     myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/ext/nginx"
   fi
