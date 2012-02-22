@@ -178,14 +178,14 @@ src_configure() {
   # passenger
   if use nginx_modules_http_passenger; then
     passenger_root=`passenger-config --root`
-    einfo
-    einfo "Passenger is not supported by use of the Passenger ebuild."
-    einfo "Therefore, make sure you have installed and built the" 
-    einfo "Passenger gem through RubyGems beforehand:"
-    einfo "- gem install passenger"
-    einfo "- cd ${passenger_root}"
-    einfo "- rake nginx RELEASE=yes"
-    einfo
+    ewarn
+    ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
+    ewarn "Therefore, make sure you have installed and built the Passenger" 
+    ewarn "gem through RubyGems beforehand:"
+    ewarn "- gem install passenger"
+    ewarn "- cd ${passenger_root}"
+    ewarn "- rake nginx RELEASE=yes"
+    ewarn
     cp -pr "${passenger_root}" "${WORKDIR}/passenger-nginx-module"
     myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/ext/nginx"
   fi
