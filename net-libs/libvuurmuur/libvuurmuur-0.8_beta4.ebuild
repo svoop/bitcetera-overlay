@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="net-firewall/iptables"
+DEPEND="net-firewall/iptables[ipv6]"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
