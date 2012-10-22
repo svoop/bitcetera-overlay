@@ -41,7 +41,6 @@ src_configure() {
 	econf \
 		--with-libvuurmuur-includes=/usr/include \
 		--with-libvuurmuur-libraries=/usr/$(get_libdir) \
-		--with-localedir=/usr/share/locale \
 		--with-widec=yes
 }
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -29,11 +29,6 @@ src_unpack() {
 	unpack "./libvuurmuur-${MY_PV}.tar.gz"
 }
 
-src_prepare() {
-	epatch "${FILESDIR}"/libvuurmuur-plugin-0.7.patch   # no longer needed for >0.8_beta2
-	eautoreconf
-}
-
 src_configure() {
 	econf --with-plugindir=/usr/$(get_libdir)
 }
@@ -43,6 +38,7 @@ src_install() {
 
 	# files needed but not yet installed by make
 	dodir /etc/vuurmuur/textdir || die "installing textdir failed"
+	dodir /etc/vuurmuur/plugins || die "installing plugins failed"
 	insinto /etc/vuurmuur/plugins
-	doins plugins/textdir/textdir.conf || die "installing textdir.conf failed"
+	doins "${FILESDIR}"/textdir.conf || die "installing textdir.conf failed"
 }
