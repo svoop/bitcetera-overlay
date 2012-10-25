@@ -21,6 +21,7 @@ IUSE="logrotate"
 DEPEND="=net-libs/libvuurmuur-${PV}
 	>=sys-libs/ncurses-5"
 RDEPEND="${DEPEND}
+	net-firewall/conntrack-tools
 	logrotate? ( app-admin/logrotate )"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
