@@ -19,6 +19,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="logrotate"
 
 DEPEND="=net-libs/libvuurmuur-${PV}
+        sys-apps/iproute2
 	>=sys-libs/ncurses-5"
 RDEPEND="${DEPEND}
 	net-firewall/conntrack-tools
