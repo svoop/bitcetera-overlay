@@ -16,10 +16,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="mail-mta/postfix
-	>=dev-lang/ruby-1.8.6
-	dev-ruby/rubygems
-	>=dev-ruby/facets-2.8.0
-	dev-ruby/trollop"
+	>=dev-lang/ruby-1.8.7"
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
@@ -37,6 +34,13 @@ src_install() {
 
 pkg_postinst() {
 	elog
+	elog "The Ruby gems necessary for Postwhite to work are no longer a dependency"
+	elog "since maintenance on Gentoo is rather poor. Make sure you have installed"
+	elog "the following gems manually:"
+	elog
+	elog "* trollop"
+	elog "* facets"
+	elog
 	elog "The following steps are necessary to hook Postwhite into the Postfix"
 	elog "workflow:"
 	elog
@@ -47,9 +51,8 @@ pkg_postinst() {
 	elog "3) Add the line 'check_policy_service inet:127.0.0.1:10035,' to the"
 	elog "   'smtpd_recipient_restrictions' block which you find somewhere in"
 	elog "   /etc/postfix/main.cf. You should place it near the end of the block"
-	elog "   after all basic services (like 'reject_unauth_destination,') and"
-	elog "   the greylist service (like Postgrey) but before the anti-SPAM services"
-	elog "   (like DSPAM or SpamAssassin) in order to prevent unnecessary workload."
+	elog "   after all basic services and the greylist service, but before the"
+	elog "   anti-SPAM services such as DSPAM."
 	elog "4) Reload Postfix to bring your changes into effect:"
 	elog "   /etc/init.d/postfix reload"
 	elog "5) Make the Postwhite daemon start at boot time:"
