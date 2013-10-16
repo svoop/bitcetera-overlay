@@ -16,9 +16,10 @@ SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="nflog"
 
-DEPEND="net-firewall/iptables[ipv6]"
+DEPEND="net-firewall/iptables[ipv6]
+        nflog? ( net-libs/libnetfilter_log )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
