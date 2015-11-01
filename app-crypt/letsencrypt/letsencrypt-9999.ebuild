@@ -22,6 +22,7 @@ DEPEND="
 	dev-python/virtualenv
 	dev-lang/python
 	dev-python/setuptools
+	dev-python/mock
 	sys-devel/gcc
 	dev-lang/swig
 	dev-util/dialog
