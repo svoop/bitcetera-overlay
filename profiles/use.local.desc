@@ -7,17 +7,10 @@
 
 # Keep it sorted.
 
-app-admin/eselect-ruby:format-executable - Add and switch Ruby version for binaries from gems.
 app-misc/heyu:cm17a - Support the X10 CM17A "Firecracker" device.
 app-misc/heyu:dmx210 - Support the Digimax 210 remote thermostat device.
 app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands.
 app-misc/heyu:ore - Support Oregon RF sensors.
 app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
-app-voip/yate:amrnb - Support for the adaptive multi-rate audio codec.
-app-voip/yate:wanpipe - Support for Sangoma WAN cards.
-app-voip/yate:zaptel - Support for Zaptel cards.
-app-voip/yate-svn:amrnb - Support for the adaptive multi-rate audio codec.
-app-voip/yate-svn:anonsdp - Suppress useragent "yate" in SDP
-app-voip/yate-svn:wanpipe - Support for Sangoma WAN cards.
 www-servers/nginx:passenger - Enable support for passenger installed with "gem install passenger".
