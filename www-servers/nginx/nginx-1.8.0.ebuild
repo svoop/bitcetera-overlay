@@ -363,7 +363,7 @@ src_configure() {
 			die "Either set PASSENGER_ROOT or remove the passenger USE flag."
 		fi
 		cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
-		myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/ext/nginx"
+		myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module"
 	fi
 
 	# third-party modules
