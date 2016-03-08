@@ -14,10 +14,7 @@ KEYWORDS="~amd64 ~x86 ~arm"
 
 DEPEND="net-libs/libtelnet"
 
-src_unpack() {
-  unpack ${A}
-  mv "${WORKDIR}"/procServ-${PV} "${WORKDIR}"/${P}
-}
+S="${WORKDIR}/procServ-${PV}"
 
 src_install() {
   emake DESTDIR="${D}" install
