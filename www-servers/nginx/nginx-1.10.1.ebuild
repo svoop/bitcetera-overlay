@@ -202,7 +202,7 @@ NGINX_MODULES_3RD="
 	http_mogilefs
 	http_memc
 	http_auth_ldap
-        http_passenger"
+	http_passenger"
 
 IUSE="aio debug +http +http2 +http-cache ipv6 libatomic libressl luajit +pcre
 	pcre-jit rtmp selinux ssl threads userland_GNU vim-syntax"
@@ -394,23 +394,23 @@ src_configure() {
 		myconf+=( --with-http_realip_module )
 	fi
 
- 	# passenger
- 	if use nginx_modules_http_passenger; then
- 		ewarn
- 		ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
- 		ewarn "Therefore, make sure you have installed and built the Passenger"
- 		ewarn "gem through RubyGems beforehand and set the PASSENGER_ROOT"
- 		ewarn "environment variable accordingly:"
- 		ewarn "- gem install passenger"
- 		ewarn "- export PASSENGER_ROOT=\$(passenger-config --root)"
- 		ewarn "- cd \$PASSENGER_ROOT"
- 		ewarn "- rake nginx RELEASE=yes"
- 		ewarn
- 		if [ ! -n "$PASSENGER_ROOT" ]; then
- 			die "Either set PASSENGER_ROOT or remove the passenger USE flag."
- 		fi
- 		cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
- 		myconf="${myconf} --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module"
+	# passenger
+	if use nginx_modules_http_passenger; then
+		ewarn
+		ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
+		ewarn "Therefore, make sure you have installed and built the Passenger"
+		ewarn "gem through RubyGems beforehand and set the PASSENGER_ROOT"
+		ewarn "environment variable accordingly:"
+		ewarn "- gem install passenger"
+		ewarn "- export PASSENGER_ROOT=\$(passenger-config --root)"
+		ewarn "- cd \$PASSENGER_ROOT"
+		ewarn "- rake nginx RELEASE=yes"
+		ewarn
+		if [ ! -n "$PASSENGER_ROOT" ]; then
+			die "Either set PASSENGER_ROOT or remove the passenger USE flag."
+		fi
+		cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
+		myconf+=( --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module )
 	fi
 
 	# third-party modules
