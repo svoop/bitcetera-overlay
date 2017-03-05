@@ -1,0 +1,41 @@
+#!/sbin/openrc-run
+# $Id$
+
+extra_commands="checkconfig"
+
+: ${RTLSDR_AIRBAND_CONFDIR:=/etc/rtlsdr-airband}
+: ${RTLSDR_AIRBAND_CONFIG:=${RTLSDR_AIRBAND_CONFDIR}/rtlsdr-airband.conf}
+
+depend() {
+	use logger dns
+}
+
+checkconfig() {
+	if [ ! -e "${RTLSDR_AIRBAND_CONFIG}" ] ; then
+		eerror "You need an ${RTLSDR_AIRBAND_CONFIG} file to run rtlsdr-airband"
+		return 1
+	fi
+}
+
+start() {
+	checkconfig || return 1
+	ebegin "Starting rtlsdr-airband"
+	start-stop-daemon --start \
+		--exec "/usr/bin/rtlsdr-airband" \
+		--pidfile "/var/run/rtl_airband.pid" \
+		-- -c ${RTLSDR_AIRBAND_CONFIG}
+	eend $?
+}
+
+stop() {
+	if [ "${RC_CMD}" = "restart" ] ; then
+		checkconfig || return 1
+	fi
+
+	ebegin "Stopping rtlsdr-airband"
+	start-stop-daemon --stop \
+		--exec "/usr/bin/rtlsdr-airband" \
+		--pidfile "/var/run/rtl_airband.pid" \
+		--quiet
+	eend $?
+}

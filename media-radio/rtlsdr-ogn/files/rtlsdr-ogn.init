@@ -1,0 +1,71 @@
+#!/sbin/openrc-run
+# $Id$
+
+: ${RTLSDR_OGN_CONFIG:=/etc/rtlsdr-ogn.conf}
+: ${RTLSDR_OGN_USER:=ogn}
+: ${RTLSDR_OGN_RF_PORT:=50000}
+: ${RTLSDR_OGN_DECODE_PORT:=50001}
+
+procserv_options="-k ^X --killsig 15 -x ^C -i ^D"
+
+depend() {
+	use logger dns
+}
+
+start() {
+  checkconfig || return 1
+	ebegin "Starting rtlsdr-ogn"
+	start-stop-daemon --start \
+		--chdir "/var/run/rtlsdr-ogn" \
+		--user "${RTLSDR_OGN_USER}" \
+		--exec /usr/bin/procserv -- \
+		  ${procserv_options} \
+			--pidfile /var/run/rtlsdr-ogn/ogn-rf.pid \
+			--chdir "/var/run/rtlsdr-ogn" \
+			${RTLSDR_OGN_RF_PORT} \
+			"/usr/bin/ogn-rf" "${RTLSDR_OGN_CONFIG}" \
+      >/dev/null 2>&1 </dev/null
+	start-stop-daemon --start \
+		--chdir "/var/run/rtlsdr-ogn" \
+		--user "${RTLSDR_OGN_USER}" \
+		--exec /usr/bin/procserv -- \
+		  ${procserv_options} \
+			--pidfile /var/run/rtlsdr-ogn/ogn-decode.pid \
+			--chdir "/var/run/rtlsdr-ogn" \
+			${RTLSDR_OGN_DECODE_PORT} \
+			"/usr/bin/ogn-decode" "${RTLSDR_OGN_CONFIG}" \
+      >/dev/null 2>&1 </dev/null
+	eend $?
+}
+
+stop() {
+	if [ "${RC_CMD}" = "restart" ] ; then
+		checkconfig || return 1
+	fi
+	ebegin "Stopping rtlsdr-ogn"
+	start-stop-daemon --stop \
+		--chdir "/var/run/rtlsdr-ogn" \
+		--user "${RTLSDR_OGN_USER}" \
+		--pidfile "/var/run/rtlsdr-ogn/ogn-rf.pid"
+	start-stop-daemon --stop \
+		--chdir "/var/run/rtlsdr-ogn" \
+		--user "${RTLSDR_OGN_USER}" \
+		--pidfile "/var/run/rtlsdr-ogn/ogn-decode.pid"
+	eend $?
+}
+
+checkconfig() {
+	if [ ! -e "${RTLSDR_OGN_CONFIG}" ] ; then
+		eerror "You need an ${RTLSDR_OGN_CONFIG} file to run rtlsdr-ogn"
+		return 1
+	fi
+	if [ ! -d "/var/run/rtlsdr-ogn" ]; then
+	  mkdir "/var/run/rtlsdr-ogn"
+		chown ogn:ogn "/var/run/rtlsdr-ogn"
+	fi
+	if [ ! -p "/var/run/rtlsdr-ogn/ogn-rf.fifo" ]; then
+	  mkfifo -m 0660 "/var/run/rtlsdr-ogn/ogn-rf.fifo"
+		chown ogn:ogn "/var/run/rtlsdr-ogn/ogn-rf.fifo"
+	fi
+
+}
