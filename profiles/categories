@@ -1,7 +1,9 @@
 app-misc
+dev-libs
 mail-filter
+media-radio
 net-firewall
 net-libs
-net-voip
+net-misc
 sys-auth
 www-servers
