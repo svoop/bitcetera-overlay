@@ -26,8 +26,9 @@ RDEPEND="${DEPEND}
   net-misc/procserv
 	net-wireless/rtl-sdr
 	sci-libs/fftw
-	media-libs/libjpeg-turbo
+	media-libs/jpeg
 "
+# might depend on media-libs/libjpeg-turbo from version 0.2.7 onwards
 
 S="${WORKDIR}/${P}"
 

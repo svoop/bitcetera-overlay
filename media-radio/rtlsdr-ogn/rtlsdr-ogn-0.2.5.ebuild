@@ -28,7 +28,7 @@ RDEPEND="${DEPEND}
 	sci-libs/fftw
 	media-libs/jpeg
 "
-# will depend on media-libs/libjpeg-turbo from version 0.2.6 onwards
+# might depend on media-libs/libjpeg-turbo from version 0.2.6 onwards
 
 S="${WORKDIR}/${P}"
 
