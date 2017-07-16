@@ -1,8 +1,7 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=6
+EAPI="6"
 
 # Maintainer notes:
 # - http_rewrite-independent pcre-support makes sense for matching locations without an actual rewrite
@@ -54,7 +53,7 @@ HTTP_FANCYINDEX_MODULE_URI="https://github.com/aperezdc/ngx-fancyindex/archive/v
 HTTP_FANCYINDEX_MODULE_WD="${WORKDIR}/ngx-fancyindex-${HTTP_FANCYINDEX_MODULE_PV}"
 
 # http_lua (https://github.com/openresty/lua-nginx-module, BSD license)
-HTTP_LUA_MODULE_PV="0.10.7"
+HTTP_LUA_MODULE_PV="0.10.8"
 HTTP_LUA_MODULE_P="ngx_http_lua-${HTTP_LUA_MODULE_PV}"
 HTTP_LUA_MODULE_URI="https://github.com/openresty/lua-nginx-module/archive/v${HTTP_LUA_MODULE_PV}.tar.gz"
 HTTP_LUA_MODULE_WD="${WORKDIR}/lua-nginx-module-${HTTP_LUA_MODULE_PV}"
@@ -78,13 +77,13 @@ HTTP_METRICS_MODULE_URI="https://github.com/madvertise/ngx_metrics/archive/v${HT
 HTTP_METRICS_MODULE_WD="${WORKDIR}/ngx_metrics-${HTTP_METRICS_MODULE_PV}"
 
 # naxsi-core (https://github.com/nbs-system/naxsi, GPLv2+)
-HTTP_NAXSI_MODULE_PV="0.55.1"
+HTTP_NAXSI_MODULE_PV="0.55.3"
 HTTP_NAXSI_MODULE_P="ngx_http_naxsi-${HTTP_NAXSI_MODULE_PV}"
 HTTP_NAXSI_MODULE_URI="https://github.com/nbs-system/naxsi/archive/${HTTP_NAXSI_MODULE_PV}.tar.gz"
 HTTP_NAXSI_MODULE_WD="${WORKDIR}/naxsi-${HTTP_NAXSI_MODULE_PV}/naxsi_src"
 
 # nginx-rtmp-module (https://github.com/arut/nginx-rtmp-module, BSD license)
-RTMP_MODULE_PV="1.1.10"
+RTMP_MODULE_PV="1.2.0"
 RTMP_MODULE_P="ngx_rtmp-${RTMP_MODULE_PV}"
 RTMP_MODULE_URI="https://github.com/arut/nginx-rtmp-module/archive/v${RTMP_MODULE_PV}.tar.gz"
 RTMP_MODULE_WD="${WORKDIR}/nginx-rtmp-module-${RTMP_MODULE_PV}"
@@ -127,7 +126,7 @@ HTTP_MOGILEFS_MODULE_URI="https://github.com/vkholodkov/nginx-mogilefs-module/ar
 HTTP_MOGILEFS_MODULE_WD="${WORKDIR}/nginx_mogilefs_module-${HTTP_MOGILEFS_MODULE_PV}"
 
 # memc-module (https://github.com/openresty/memc-nginx-module, BSD-2)
-HTTP_MEMC_MODULE_PV="0.17"
+HTTP_MEMC_MODULE_PV="0.18"
 HTTP_MEMC_MODULE_P="ngx_memc_module-${HTTP_MEMC_MODULE_PV}"
 HTTP_MEMC_MODULE_URI="https://github.com/openresty/memc-nginx-module/archive/v${HTTP_MEMC_MODULE_PV}.tar.gz"
 HTTP_MEMC_MODULE_WD="${WORKDIR}/memc-nginx-module-${HTTP_MEMC_MODULE_PV}"
@@ -145,8 +144,8 @@ AUTOTOOLS_AUTO_DEPEND="no"
 inherit autotools ssl-cert toolchain-funcs perl-module flag-o-matic user systemd versionator multilib
 
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
-HOMEPAGE="http://nginx.org"
-SRC_URI="http://nginx.org/download/${P}.tar.gz
+HOMEPAGE="https://nginx.org"
+SRC_URI="https://nginx.org/download/${P}.tar.gz
 	${DEVEL_KIT_MODULE_URI} -> ${DEVEL_KIT_MODULE_P}.tar.gz
 	nginx_modules_http_upload_progress? ( ${HTTP_UPLOAD_PROGRESS_MODULE_URI} -> ${HTTP_UPLOAD_PROGRESS_MODULE_P}.tar.gz )
 	nginx_modules_http_headers_more? ( ${HTTP_HEADERS_MORE_MODULE_URI} -> ${HTTP_HEADERS_MORE_MODULE_P}.tar.gz )
@@ -175,13 +174,19 @@ LICENSE="BSD-2 BSD SSLeay MIT GPL-2 GPL-2+
 SLOT="0"
 KEYWORDS="amd64 ~arm ~arm64 ~ppc x86 ~x86-fbsd ~amd64-linux ~x86-linux"
 
+# Package doesn't provide a real test suite
+RESTRICT="test"
+
 NGINX_MODULES_STD="access auth_basic autoindex browser charset empty_gif
 	fastcgi geo gzip limit_req limit_conn map memcached proxy referer
-	rewrite scgi ssi split_clients upstream_ip_hash userid uwsgi"
+	rewrite scgi ssi split_clients upstream_hash upstream_ip_hash
+	upstream_keepalive upstream_least_conn upstream_zone userid uwsgi"
 NGINX_MODULES_OPT="addition auth_request dav degradation flv geoip gunzip
 	gzip_static image_filter mp4 perl random_index realip secure_link
 	slice stub_status sub xslt"
-NGINX_MODULES_STREAM="access limit_conn upstream"
+NGINX_MODULES_STREAM_STD="access geo limit_conn map return split_clients
+	upstream_hash upstream_least_conn upstream_zone"
+NGINX_MODULES_STREAM_OPT="geoip realip ssl_preread"
 NGINX_MODULES_MAIL="imap pop3 smtp"
 NGINX_MODULES_3RD="
 	http_upload_progress
@@ -201,9 +206,10 @@ NGINX_MODULES_3RD="
 	http_sticky
 	http_mogilefs
 	http_memc
-	http_auth_ldap"
+	http_auth_ldap
+	http_passenger"
 
-IUSE="aio debug +http +http2 +http-cache ipv6 libatomic libressl luajit +pcre
+IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic libressl luajit +pcre
 	pcre-jit rtmp selinux ssl threads userland_GNU vim-syntax"
 
 for mod in $NGINX_MODULES_STD; do
@@ -214,7 +220,11 @@ for mod in $NGINX_MODULES_OPT; do
 	IUSE="${IUSE} nginx_modules_http_${mod}"
 done
 
-for mod in $NGINX_MODULES_STREAM; do
+for mod in $NGINX_MODULES_STREAM_STD; do
+	IUSE="${IUSE} nginx_modules_stream_${mod}"
+done
+
+for mod in $NGINX_MODULES_STREAM_OPT; do
 	IUSE="${IUSE} nginx_modules_stream_${mod}"
 done
 
@@ -328,11 +338,21 @@ src_prepare() {
 	eapply "${FILESDIR}/${PN}-1.4.1-fix-perl-install-path.patch"
 	eapply "${FILESDIR}/${PN}-httpoxy-mitigation-r1.patch"
 
+	if use nginx_modules_http_echo; then
+		cd "${HTTP_ECHO_MODULE_WD}" || die
+		eapply "${FILESDIR}"/http_echo-nginx-1.11.11+.patch
+		cd "${S}" || die
+	fi
+
 	if use nginx_modules_http_upstream_check; then
-		eapply -p0 "${HTTP_UPSTREAM_CHECK_MODULE_WD}/check_1.9.2+".patch
+		#eapply -p0 "${HTTP_UPSTREAM_CHECK_MODULE_WD}"/check_1.11.1+.patch
+		eapply -p0 "${FILESDIR}"/http_upstream_check-nginx-1.11.5+.patch
 	fi
 
 	if use nginx_modules_http_lua; then
+		cd "${HTTP_LUA_MODULE_WD}" || die
+		eapply -p1 "${FILESDIR}"/http_lua_nginx-1.11.11+-r1.patch
+		cd "${S}" || die
 		sed -i -e 's/-llua5.1/-llua/' "${HTTP_LUA_MODULE_WD}/config" || die
 	fi
 
@@ -340,6 +360,7 @@ src_prepare() {
 		cd "${HTTP_SECURITY_MODULE_WD}" || die
 
 		eapply "${FILESDIR}"/http_security-pr_1158.patch
+		eapply "${FILESDIR}"/http_security-pr_1373.patch
 
 		eautoreconf
 
@@ -355,12 +376,6 @@ src_prepare() {
 	if use nginx_modules_http_upload_progress; then
 		cd "${HTTP_UPLOAD_PROGRESS_MODULE_WD}" || die
 		eapply "${FILESDIR}"/http_uploadprogress-issue_50-r1.patch
-		cd "${S}" || die
-	fi
-
-	if use nginx_modules_http_memc; then
-		cd "${HTTP_MEMC_MODULE_WD}" || die
-		eapply "${FILESDIR}"/http_memc-0.17-issue_26.patch
 		cd "${S}" || die
 	fi
 
@@ -401,7 +416,6 @@ src_configure() {
 	use aio       && myconf+=( --with-file-aio )
 	use debug     && myconf+=( --with-debug )
 	use http2     && myconf+=( --with-http_v2_module )
-	use ipv6      && myconf+=( --with-ipv6 )
 	use libatomic && myconf+=( --with-libatomic )
 	use pcre      && myconf+=( --with-pcre )
 	use pcre-jit  && myconf+=( --with-pcre-jit )
@@ -425,6 +439,25 @@ src_configure() {
 
 	if use nginx_modules_http_fastcgi; then
 		myconf+=( --with-http_realip_module )
+	fi
+
+	# passenger
+	if use nginx_modules_http_passenger; then
+		ewarn
+		ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
+		ewarn "Therefore, make sure you have installed and built the Passenger"
+		ewarn "gem through RubyGems beforehand and set the PASSENGER_ROOT"
+		ewarn "environment variable accordingly:"
+		ewarn "- gem install passenger"
+		ewarn "- export PASSENGER_ROOT=\$(passenger-config --root)"
+		ewarn "- cd \$PASSENGER_ROOT"
+		ewarn "- rake nginx RELEASE=yes"
+		ewarn
+		if [ ! -n "$PASSENGER_ROOT" ]; then
+			die "Either set PASSENGER_ROOT or remove the passenger USE flag."
+		fi
+		cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
+		myconf+=( --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module )
 	fi
 
 	# third-party modules
@@ -543,18 +576,18 @@ src_configure() {
 	fi
 
 	# Stream modules
-	for mod in $NGINX_MODULES_STREAM; do
+	for mod in $NGINX_MODULES_STREAM_STD; do
 		if use nginx_modules_stream_${mod}; then
 			stream_enabled=1
 		else
-			# Treat stream upstream slightly differently
-			if ! use nginx_modules_stream_upstream; then
-				myconf+=( --without-stream_upstream_hash_module )
-				myconf+=( --without-stream_upstream_least_conn_module )
-				myconf+=( --without-stream_upstream_zone_module )
-			else
-				myconf+=( --without-stream_${mod}_module )
-			fi
+			myconf+=( --without-stream_${mod}_module )
+		fi
+	done
+
+	for mod in $NGINX_MODULES_STREAM_OPT; do
+		if use nginx_modules_stream_${mod}; then
+			stream_enabled=1
+			myconf+=( --with-stream_${mod}_module )
 		fi
 	done
 
@@ -591,13 +624,18 @@ src_configure() {
 		myconf+=( --group=${PN} )
 	fi
 
+	local WITHOUT_IPV6=
+	if ! use ipv6; then
+		WITHOUT_IPV6=" -DNGX_HAVE_INET6=0"
+	fi
+
 	./configure \
 		--prefix="${EPREFIX}"/usr \
 		--conf-path="${EPREFIX}"/etc/${PN}/${PN}.conf \
 		--error-log-path="${EPREFIX}"/var/log/${PN}/error_log \
 		--pid-path="${EPREFIX}"/run/${PN}.pid \
 		--lock-path="${EPREFIX}"/run/lock/${PN}.lock \
-		--with-cc-opt="-I${EROOT}usr/include" \
+		--with-cc-opt="-I${EROOT}usr/include${WITHOUT_IPV6}" \
 		--with-ld-opt="-L${EROOT}usr/$(get_libdir)" \
 		--http-log-path="${EPREFIX}"/var/log/${PN}/access_log \
 		--http-client-body-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/client \
@@ -605,6 +643,7 @@ src_configure() {
 		--http-fastcgi-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/fastcgi \
 		--http-scgi-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/scgi \
 		--http-uwsgi-temp-path="${EPREFIX}${NGINX_HOME_TMP}"/uwsgi \
+		--with-compat \
 		"${myconf[@]}" || die "configure failed"
 
 	# A purely cosmetic change that makes nginx -V more readable. This can be
@@ -754,11 +793,21 @@ pkg_postinst() {
 	fi
 
 	if use nginx_modules_http_spdy; then
+		ewarn ""
 		ewarn "In nginx 1.9.5 the spdy module was superseded by http2."
 		ewarn "Update your configs and package.use accordingly."
 	fi
 
+	if use nginx_modules_http_lua; then
+		ewarn ""
+		ewarn "While you can build lua 3rd party module against ${P}"
+		ewarn "the author warns that >=${PN}-1.11.11 is still not an"
+		ewarn "officially supported target yet. You are on your own."
+		ewarn "Expect runtime failures, memory leaks and other problems!"
+	fi
+
 	if use nginx_modules_http_lua && use http2; then
+		ewarn ""
 		ewarn "Lua 3rd party module author warns against using ${P} with"
 		ewarn "NGINX_MODULES_HTTP=\"lua http2\". For more info, see http://git.io/OldLsg"
 	fi
