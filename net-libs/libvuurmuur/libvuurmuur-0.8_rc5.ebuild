@@ -6,8 +6,8 @@ EAPI="2"
 
 inherit autotools multilib
 
-MY_PV=${PV/_beta/beta}
-MY_P="Vuurmuur-${MY_PV}"
+MY_PV=${PV/_/}
+MY_P="vuurmuur-${MY_PV}"
 
 DESCRIPTION="Libraries and plugins required by Vuurmuur"
 HOMEPAGE="http://www.vuurmuur.org"
@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="net-firewall/iptables[ipv6]"
+DEPEND="net-firewall/iptables[ipv6]
+        net-libs/libnetfilter_log"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"

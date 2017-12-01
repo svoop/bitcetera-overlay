@@ -7,7 +7,7 @@ EAPI="2"
 inherit multilib
 
 MY_PV=${PV/_/}
-MY_P="Vuurmuur-${MY_PV}"
+MY_P="vuurmuur-${MY_PV}"
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons"
 HOMEPAGE="http://www.vuurmuur.org"
