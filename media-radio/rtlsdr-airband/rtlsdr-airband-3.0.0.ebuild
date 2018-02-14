@@ -12,18 +12,19 @@ SRC_URI="https://github.com/szpajder/RTLSDR-Airband/archive/v${PV}.tar.gz -> ${P
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~arm"
-IUSE="nfm fftw"
+IUSE="nfm fftw pulseaudio"
 
 DEPEND="
 	dev-libs/libconfig
 "
 RDEPEND="${DEPEND}
-  net-wireless/rtl-sdr
+	net-wireless/rtl-sdr
 	media-libs/libogg
 	media-libs/libvorbis
 	media-libs/libshout
 	media-sound/lame
 	fftw? ( sci-libs/fftw )
+        pulseaudio? ( media-sound/pulseaudio )
 "
 
 S="${WORKDIR}/${MY_P}"
@@ -33,6 +34,11 @@ src_compile() {
 		nfm="1"
 	else
 		nfm="0"
+	fi
+	if use pulseaudio; then
+		pulse="1"
+	else
+		pulse="0"
 	fi
 	case `uname -m` in
 	x86*)
@@ -49,7 +55,7 @@ src_compile() {
 		;;
 	esac
 
-	emake PLATFORM="${platform}" NFM="${nfm}" || die "compiling rtlsdr-airband for ${platform} failed"
+	emake PLATFORM="${platform}" NFM="${nfm}" PULSE="${pulse}" || die "compiling rtlsdr-airband for ${platform} failed"
 }
 
 src_install() {
