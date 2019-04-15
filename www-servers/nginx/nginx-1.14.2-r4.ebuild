@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Authors
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -59,7 +59,7 @@ HTTP_FANCYINDEX_MODULE_URI="https://github.com/aperezdc/ngx-fancyindex/archive/v
 HTTP_FANCYINDEX_MODULE_WD="${WORKDIR}/ngx-fancyindex-${HTTP_FANCYINDEX_MODULE_PV}"
 
 # http_lua (https://github.com/openresty/lua-nginx-module, BSD license)
-HTTP_LUA_MODULE_PV="0.10.13"
+HTTP_LUA_MODULE_PV="0.10.14"
 HTTP_LUA_MODULE_P="ngx_http_lua-${HTTP_LUA_MODULE_PV}"
 HTTP_LUA_MODULE_URI="https://github.com/openresty/lua-nginx-module/archive/v${HTTP_LUA_MODULE_PV}.tar.gz"
 HTTP_LUA_MODULE_WD="${WORKDIR}/lua-nginx-module-${HTTP_LUA_MODULE_PV}"
@@ -101,7 +101,7 @@ RTMP_MODULE_URI="https://github.com/arut/nginx-rtmp-module/archive/v${RTMP_MODUL
 RTMP_MODULE_WD="${WORKDIR}/nginx-rtmp-module-${RTMP_MODULE_PV}"
 
 # nginx-dav-ext-module (https://github.com/arut/nginx-dav-ext-module, BSD license)
-HTTP_DAV_EXT_MODULE_PV="0.1.0"
+HTTP_DAV_EXT_MODULE_PV="3.0.0"
 HTTP_DAV_EXT_MODULE_P="ngx_http_dav_ext-${HTTP_DAV_EXT_MODULE_PV}"
 HTTP_DAV_EXT_MODULE_URI="https://github.com/arut/nginx-dav-ext-module/archive/v${HTTP_DAV_EXT_MODULE_PV}.tar.gz"
 HTTP_DAV_EXT_MODULE_WD="${WORKDIR}/nginx-dav-ext-module-${HTTP_DAV_EXT_MODULE_PV}"
@@ -114,7 +114,7 @@ HTTP_ECHO_MODULE_WD="${WORKDIR}/echo-nginx-module-${HTTP_ECHO_MODULE_PV}"
 
 # mod_security for nginx (https://modsecurity.org/, Apache-2.0)
 # keep the MODULE_P here consistent with upstream to avoid tarball duplication
-HTTP_SECURITY_MODULE_PV="2.9.2"
+HTTP_SECURITY_MODULE_PV="2.9.3"
 HTTP_SECURITY_MODULE_P="modsecurity-${HTTP_SECURITY_MODULE_PV}"
 HTTP_SECURITY_MODULE_URI="https://www.modsecurity.org/tarball/${HTTP_SECURITY_MODULE_PV}/${HTTP_SECURITY_MODULE_P}.tar.gz"
 HTTP_SECURITY_MODULE_WD="${WORKDIR}/${HTTP_SECURITY_MODULE_P}"
@@ -156,7 +156,7 @@ GEOIP2_MODULE_URI="https://github.com/leev/ngx_http_geoip2_module/archive/${GEOI
 GEOIP2_MODULE_WD="${WORKDIR}/ngx_http_geoip2_module-${GEOIP2_MODULE_PV}"
 
 # njs-module (https://github.com/nginx/njs, as-is)
-NJS_MODULE_PV="0.2.5"
+NJS_MODULE_PV="0.2.8"
 NJS_MODULE_P="njs-${NJS_MODULE_PV}"
 NJS_MODULE_URI="https://github.com/nginx/njs/archive/${NJS_MODULE_PV}.tar.gz"
 NJS_MODULE_WD="${WORKDIR}/njs-${NJS_MODULE_PV}"
@@ -165,7 +165,7 @@ NJS_MODULE_WD="${WORKDIR}/njs-${NJS_MODULE_PV}"
 SSL_DEPS_SKIP=1
 AUTOTOOLS_AUTO_DEPEND="no"
 
-inherit autotools ssl-cert toolchain-funcs perl-module flag-o-matic user systemd versionator multilib
+inherit autotools ssl-cert toolchain-funcs perl-module flag-o-matic user systemd versionator multilib pax-utils
 
 DESCRIPTION="Robust, small and high performance http and reverse proxy server"
 HOMEPAGE="https://nginx.org"
@@ -244,6 +244,7 @@ NGINX_MODULES_3RD="
 	http_vhost_traffic_status
 	stream_geoip2
 	stream_javascript
+	http_passenger
 "
 
 IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic libressl luajit +pcre
@@ -310,10 +311,10 @@ CDEPEND="
 		)
 	)
 	nginx_modules_http_xslt? ( dev-libs/libxml2:= dev-libs/libxslt )
-	nginx_modules_http_lua? ( !luajit? ( dev-lang/lua:0= ) luajit? ( dev-lang/luajit:2= ) )
+	nginx_modules_http_lua? ( dev-lang/luajit:2= )
 	nginx_modules_http_auth_pam? ( virtual/pam )
 	nginx_modules_http_metrics? ( dev-libs/yajl:= )
-	nginx_modules_http_dav_ext? ( dev-libs/expat )
+	nginx_modules_http_dav_ext? ( dev-libs/libxml2 )
 	nginx_modules_http_security? (
 		dev-libs/apr:=
 		dev-libs/apr-util:=
@@ -336,7 +337,10 @@ PDEPEND="vim-syntax? ( app-vim/nginx-syntax )"
 
 REQUIRED_USE="pcre-jit? ( pcre )
 	nginx_modules_http_grpc? ( http2 )
-	nginx_modules_http_lua? ( nginx_modules_http_rewrite )
+	nginx_modules_http_lua? (
+		luajit
+		nginx_modules_http_rewrite
+	)
 	nginx_modules_http_naxsi? ( pcre )
 	nginx_modules_http_dav_ext? ( nginx_modules_http_dav )
 	nginx_modules_http_metrics? ( nginx_modules_http_stub_status )
@@ -380,6 +384,12 @@ pkg_setup() {
 src_prepare() {
 	eapply "${FILESDIR}/${PN}-1.4.1-fix-perl-install-path.patch"
 	eapply "${FILESDIR}/${PN}-httpoxy-mitigation-r1.patch"
+
+	if use nginx_modules_http_auth_pam; then
+		cd "${HTTP_AUTH_PAM_MODULE_WD}" || die
+		eapply "${FILESDIR}"/http_auth_pam-1.5.1-adjust-loglevel-for-authentication-failures.patch
+		cd "${S}" || die
+	fi
 
 	if use nginx_modules_http_brotli; then
 		cd "${HTTP_BROTLI_MODULE_WD}" || die
@@ -479,6 +489,25 @@ src_configure() {
 		myconf+=( --with-http_realip_module )
 	fi
 
+	# passenger
+	if use nginx_modules_http_passenger; then
+	  ewarn
+	  ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
+	  ewarn "Therefore, make sure you have installed and built the Passenger"
+	  ewarn "gem through RubyGems beforehand and set the PASSENGER_ROOT"
+	  ewarn "environment variable accordingly:"
+	  ewarn "- gem install passenger"
+	  ewarn "- export PASSENGER_ROOT=\$(passenger-config --root)"
+	  ewarn "- cd \$PASSENGER_ROOT"
+	  ewarn "- rake nginx RELEASE=yes"
+	  ewarn
+	  if [ ! -n "$PASSENGER_ROOT" ]; then
+	    die "Either set PASSENGER_ROOT or remove the passenger USE flag."
+	  fi
+	  cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
+	  myconf+=( --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module )
+	fi
+
 	# third-party modules
 	if use nginx_modules_http_upload_progress; then
 		http_enabled=1
@@ -507,13 +536,8 @@ src_configure() {
 
 	if use nginx_modules_http_lua; then
 		http_enabled=1
-		if use luajit; then
-			export LUAJIT_LIB=$(pkg-config --variable libdir luajit)
-			export LUAJIT_INC=$(pkg-config --variable includedir luajit)
-		else
-			export LUA_LIB=$(pkg-config --variable libdir lua)
-			export LUA_INC=$(pkg-config --variable includedir lua)
-		fi
+		export LUAJIT_LIB=$(pkg-config --variable libdir luajit)
+		export LUAJIT_INC=$(pkg-config --variable includedir luajit)
 		myconf+=( --add-module=${DEVEL_KIT_MODULE_WD} )
 		myconf+=( --add-module=${HTTP_LUA_MODULE_WD} )
 	fi
@@ -747,6 +771,10 @@ src_install() {
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/nginx.logrotate-r1 nginx
 
+	if use luajit; then
+		pax-mark m "${ED%/}/usr/sbin/nginx"
+	fi
+
 	if use nginx_modules_http_perl; then
 		cd "${S}"/objs/src/http/modules/perl/ || die
 		emake DESTDIR="${D}" INSTALLDIRS=vendor
@@ -806,7 +834,7 @@ src_install() {
 
 	if use nginx_modules_http_security; then
 		docinto ${HTTP_SECURITY_MODULE_P}
-		dodoc "${HTTP_SECURITY_MODULE_WD}"/{CHANGES,README.TXT,authors.txt}
+		dodoc "${HTTP_SECURITY_MODULE_WD}"/{CHANGES,README.md,authors.txt}
 	fi
 
 	if use nginx_modules_http_push_stream; then
