@@ -17,8 +17,8 @@ EAPI="6"
 GENTOO_DEPEND_ON_PERL="no"
 
 # devel_kit (https://github.com/simpl/ngx_devel_kit, BSD license)
-DEVEL_KIT_MODULE_PV="0.3.0"
-DEVEL_KIT_MODULE_P="ngx_devel_kit-${DEVEL_KIT_MODULE_PV}-r1"
+DEVEL_KIT_MODULE_PV="0.3.1"
+DEVEL_KIT_MODULE_P="ngx_devel_kit-${DEVEL_KIT_MODULE_PV}"
 DEVEL_KIT_MODULE_URI="https://github.com/simpl/ngx_devel_kit/archive/v${DEVEL_KIT_MODULE_PV}.tar.gz"
 DEVEL_KIT_MODULE_WD="${WORKDIR}/ngx_devel_kit-${DEVEL_KIT_MODULE_PV}"
 
@@ -59,7 +59,7 @@ HTTP_FANCYINDEX_MODULE_URI="https://github.com/aperezdc/ngx-fancyindex/archive/v
 HTTP_FANCYINDEX_MODULE_WD="${WORKDIR}/ngx-fancyindex-${HTTP_FANCYINDEX_MODULE_PV}"
 
 # http_lua (https://github.com/openresty/lua-nginx-module, BSD license)
-HTTP_LUA_MODULE_PV="0.10.14"
+HTTP_LUA_MODULE_PV="0.10.15"
 HTTP_LUA_MODULE_P="ngx_http_lua-${HTTP_LUA_MODULE_PV}"
 HTTP_LUA_MODULE_URI="https://github.com/openresty/lua-nginx-module/archive/v${HTTP_LUA_MODULE_PV}.tar.gz"
 HTTP_LUA_MODULE_WD="${WORKDIR}/lua-nginx-module-${HTTP_LUA_MODULE_PV}"
@@ -150,13 +150,13 @@ HTTP_LDAP_MODULE_URI="https://github.com/kvspb/nginx-auth-ldap/archive/${HTTP_LD
 HTTP_LDAP_MODULE_WD="${WORKDIR}/nginx-auth-ldap-${HTTP_LDAP_MODULE_PV}"
 
 # geoip2 (https://github.com/leev/ngx_http_geoip2_module, BSD-2)
-GEOIP2_MODULE_PV="2.0"
+GEOIP2_MODULE_PV="3.2"
 GEOIP2_MODULE_P="ngx_http_geoip2_module-${GEOIP2_MODULE_PV}"
 GEOIP2_MODULE_URI="https://github.com/leev/ngx_http_geoip2_module/archive/${GEOIP2_MODULE_PV}.tar.gz"
 GEOIP2_MODULE_WD="${WORKDIR}/ngx_http_geoip2_module-${GEOIP2_MODULE_PV}"
 
 # njs-module (https://github.com/nginx/njs, as-is)
-NJS_MODULE_PV="0.2.8"
+NJS_MODULE_PV="0.3.5"
 NJS_MODULE_P="njs-${NJS_MODULE_PV}"
 NJS_MODULE_URI="https://github.com/nginx/njs/archive/${NJS_MODULE_PV}.tar.gz"
 NJS_MODULE_WD="${WORKDIR}/njs-${NJS_MODULE_PV}"
@@ -244,7 +244,6 @@ NGINX_MODULES_3RD="
 	http_vhost_traffic_status
 	stream_geoip2
 	stream_javascript
-	http_passenger
 "
 
 IUSE="aio debug +http +http2 +http-cache +ipv6 libatomic libressl luajit +pcre
@@ -487,25 +486,6 @@ src_configure() {
 
 	if use nginx_modules_http_fastcgi; then
 		myconf+=( --with-http_realip_module )
-	fi
-
-	# passenger
-	if use nginx_modules_http_passenger; then
-	  ewarn
-	  ewarn "Passenger is not supported by use of the Passenger ebuild anymore."
-	  ewarn "Therefore, make sure you have installed and built the Passenger"
-	  ewarn "gem through RubyGems beforehand and set the PASSENGER_ROOT"
-	  ewarn "environment variable accordingly:"
-	  ewarn "- gem install passenger"
-	  ewarn "- export PASSENGER_ROOT=\$(passenger-config --root)"
-	  ewarn "- cd \$PASSENGER_ROOT"
-	  ewarn "- rake nginx RELEASE=yes"
-	  ewarn
-	  if [ ! -n "$PASSENGER_ROOT" ]; then
-	    die "Either set PASSENGER_ROOT or remove the passenger USE flag."
-	  fi
-	  cp -pr "${PASSENGER_ROOT}" "${WORKDIR}/passenger-nginx-module"
-	  myconf+=( --add-module=${WORKDIR}/passenger-nginx-module/src/nginx_module )
 	fi
 
 	# third-party modules
