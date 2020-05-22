@@ -2,8 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
-		<email>gentoo@chaoslab.org</email>
-		<name>Ian Moone</name>
+		<email>gentoo@bitcetera.com</email>
+		<name>Sven Schwyn</name>
 	</maintainer>
 	<upstream>
 		<remote-id type="github">joohoi/acme-dns</remote-id>
