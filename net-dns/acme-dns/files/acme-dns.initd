@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+# Copyright 1999-2018 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+output_log="${output_log:-/dev/null}"
+error_log="${error_log:-${ACMEDNS_LOGDIR}/error.log}"
+
+command="/usr/bin/acme-dns"
+command_user="${command_user:-acme-dns:acme-dns}"
+command_background=true
+directory="${ACMEDNS_DATADIR}"
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="${directory}/config.cfg"
+start_stop_daemon_args="${SSD_OPTS}"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	checkpath -d -m 0750 -o "${command_user}" \
+		"${ACMEDNS_DATADIR}" "${ACMEDNS_LOGDIR}"
+}
