@@ -15,4 +15,3 @@ app-misc/heyu:rfxm - Support RFXMeters.
 app-misc/heyu:rfxs - Support RFXSensors.
 media-radio/rtlsdr-airband:fftw - Use fftw (required on platforms without VideoCore GPU).
 media-radio/rtlsdr-airband:nfm - Enable NFM reception.
-www-servers/nginx:passenger - Enable support for passenger installed with "gem install passenger".
