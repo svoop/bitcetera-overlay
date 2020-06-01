@@ -7,11 +7,13 @@
 
 # Keep it sorted.
 
-app-misc/heyu:cm17a - Support the X10 CM17A "Firecracker" device.
-app-misc/heyu:dmx210 - Support the Digimax 210 remote thermostat device.
-app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands.
-app-misc/heyu:ore - Support Oregon RF sensors.
-app-misc/heyu:rfxm - Support RFXMeters.
-app-misc/heyu:rfxs - Support RFXSensors.
-media-radio/rtlsdr-airband:fftw - Use fftw (required on platforms without VideoCore GPU).
-media-radio/rtlsdr-airband:nfm - Enable NFM reception.
+app-misc/heyu:cm17a - Support the X10 CM17A "Firecracker" device
+app-misc/heyu:dmx210 - Support the Digimax 210 remote thermostat device
+app-misc/heyu:ext0 - Support extended type 0 (shutter and shade) commands
+app-misc/heyu:ore - Support Oregon RF sensors
+app-misc/heyu:rfxm - Support RFXMeters
+app-misc/heyu:rfxs - Support RFXSensors
+media-radio/rtlsdr-airband:fftw - Use fftw (required on platforms without VideoCore GPU)
+media-radio/rtlsdr-airband:nfm - Enable NFM reception
+www-apps/modsecurity:geoip - Support GeoIP
+www-apps/modsecurity:afl - Support rules fuzzer

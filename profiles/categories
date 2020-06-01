@@ -1,9 +1,13 @@
 app-misc
+dev-db
 dev-libs
 mail-filter
 media-radio
+media-video
+net-dns
 net-firewall
 net-libs
 net-misc
 sys-auth
-www-servers
+www-apps
+www-nginx
