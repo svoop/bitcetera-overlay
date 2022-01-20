@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="7"
 
 inherit multilib
 
@@ -11,7 +11,7 @@ MY_P="Vuurmuur-${MY_PV}"
 
 DESCRIPTION="Frontend for iptables featuring easy to use command line utils, rule- and logdaemons"
 HOMEPAGE="http://www.vuurmuur.org"
-SRC_URI="ftp://ftp.vuurmuur.org/releases/${MY_PV}/${MY_P}.tar.gz"
+SRC_URI="https://github.com/inliniac/vuurmuur/archive/refs/tags/${MY_PV}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"

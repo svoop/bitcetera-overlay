@@ -1,0 +1,8 @@
+# config file for /etc/init.d/acme-dns
+
+ACMEDNS_DATADIR="/var/lib/acme-dns"
+ACMEDNS_LOGDIR="/var/log/acme-dns"
+
+# Logging
+#output_log="${ACMEDNS_LOGDIR}/acme-dns.log"
+#error_log="${ACMEDNS_LOGDIR}/error.log"
