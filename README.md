@@ -2,10 +2,12 @@
 
 This is a development overlay which contains a few ebuilds for Gentoo Linux.
 
-Using them is as simple as one, two, three:
+To emerge [any of these](https://github.com/svoop/bitcetera-overlay), add the overlay with [eselect/repository](https://wiki.gentoo.org/wiki/Eselect/Repository):
 
-1. [Install Layman](https://wiki.gentoo.org/wiki/Layman)
-2. Add this overlay with `layman -a bitcetera`
-3. Emerge [any of these](https://github.com/svoop/bitcetera-overlay)
+```
+emerge --ask app-eselect/eselect-repository
+eselect repository add bitcetera git https://github.com/svoop/bitcetera-overlay
+emerge --sync
+```
 
 All ebuilds are in a flux and you use them at your own risk!
