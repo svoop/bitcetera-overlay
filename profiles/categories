@@ -5,6 +5,5 @@ net-dns
 net-firewall
 net-libs
 net-misc
-sys-auth
 www-apps
 www-nginx
