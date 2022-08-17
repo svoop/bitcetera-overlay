@@ -11,7 +11,7 @@ SRC_URI="https://github.com/szpajder/RTLSDR-Airband/archive/v${PV}.tar.gz -> ${P
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~x86 ~arm"
+KEYWORDS="~arm ~x86"
 IUSE="nfm fftw pulseaudio"
 
 DEPEND="
@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}
 	media-libs/libshout
 	media-sound/lame
 	fftw? ( sci-libs/fftw )
-        pulseaudio? ( media-sound/pulseaudio )
+	pulseaudio? ( media-sound/pulseaudio )
 "
 
 S="${WORKDIR}/${MY_P}"
@@ -69,7 +69,6 @@ src_install() {
 	insinto /etc/rtlsdr-airband
 	doins config/* || die "installing sample config failed"
 }
-
 
 pkg_postinst() {
 	elog "If this is a new install, take a look at the sample configuration"

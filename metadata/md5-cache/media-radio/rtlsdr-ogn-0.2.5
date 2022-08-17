@@ -1,0 +1,13 @@
+DEFINED_PHASES=install postinst setup
+DEPEND=dev-libs/libconfig
+DESCRIPTION=OGN radio message to APRS relay
+EAPI=6
+HOMEPAGE=https://github.com/glidernet
+INHERIT=user
+KEYWORDS=~amd64 ~x86 ~arm
+LICENSE=GPL-3
+RDEPEND=dev-libs/libconfig net-misc/procserv net-wireless/rtl-sdr sci-libs/fftw media-libs/jpeg
+SLOT=0
+SRC_URI=amd64? ( http://download.glidernet.org/x64/rtlsdr-ogn-bin-x64-0.2.5.tgz ) x86? ( http://download.glidernet.org/x86/rtlsdr-ogn-bin-x86-0.2.5.tgz ) arm? ( http://download.glidernet.org/arm/rtlsdr-ogn-bin-ARM-0.2.5.tgz )
+_eclasses_=user-info	69a1ed744ec33cf2c910ff2bd6084d11	user	1f6dd43c7e925ba0272de52bcd326972
+_md5_=b0119fcc3f5ed6facd691d13856cc424
