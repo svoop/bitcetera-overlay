@@ -27,14 +27,6 @@ RDEPEND="${DEPEND}
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
 
-src_unpack() {
-	default
-	cd ${MY_P}
-	for component in vuurmuur vuurmuur_conf; do
-		unpack "./${component}-${MY_PV}.tar.gz"   # upstream supplies tarball inside tarball
-	done
-}
-
 src_configure() {
 	econf \
 		--with-libvuurmuur-includes=/usr/include \

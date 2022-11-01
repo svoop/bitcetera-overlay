@@ -24,12 +24,6 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}/${PN}-${MY_PV}"
 
-src_unpack() {
-	default
-	cd "${MY_P}"
-	unpack "./libvuurmuur-${MY_PV}.tar.gz"
-}
-
 src_configure() {
 	econf --with-plugindir=/usr/$(get_libdir)
 }
