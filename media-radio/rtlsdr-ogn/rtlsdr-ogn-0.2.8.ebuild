@@ -8,26 +8,25 @@ inherit user
 DESCRIPTION="OGN radio message to APRS relay"
 HOMEPAGE="https://github.com/glidernet"
 SRC_URI="
-  amd64? ( http://download.glidernet.org/x64/rtlsdr-ogn-bin-x64-${PV}.tgz )
-  x86?   ( http://download.glidernet.org/x86/rtlsdr-ogn-bin-x86-${PV}.tgz )
-  arm?   ( http://download.glidernet.org/arm/rtlsdr-ogn-bin-ARM-${PV}.tgz )
+	amd64? ( http://download.glidernet.org/x64/rtlsdr-ogn-bin-x64-${PV}.tgz )
+	x86?   ( http://download.glidernet.org/x86/rtlsdr-ogn-bin-x86-${PV}.tgz )
+	arm?   ( http://download.glidernet.org/arm/rtlsdr-ogn-bin-ARM-${PV}.tgz )
 "
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~arm"
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
-
 
 DEPEND="
 	dev-libs/libconfig
 "
 RDEPEND="${DEPEND}
-  net-misc/ntp
-  net-misc/procserv
+	net-misc/ntp
+	net-misc/procserv
 	net-wireless/rtl-sdr
 	sci-libs/fftw
-	media-libs/jpeg
+	media-libs/libjpeg-turbo
 "
 # might depend on media-libs/libjpeg-turbo from version 0.2.9 onwards
 
